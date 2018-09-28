@@ -1,2 +1,5 @@
-Welcome to Read The Docs
+SparC NGS sequence track plotter
 ========================
+
+
+
