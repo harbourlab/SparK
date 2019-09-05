@@ -1,5 +1,7 @@
 # SparC
 
+![alt_text](https://github.com/StefanKurtenbach/SparC/blob/master/Example1.png?raw=true?v=4&s=10)
+
 <pre>
 Plot NGS bedgraph tracks
 A simple python script to plot NGS tracks with overlay and color functions. Output files are true vectorgraphics (.svg) for easy editing.
