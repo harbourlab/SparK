@@ -30,7 +30,7 @@ Options (Not required):
 -sm   smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen with a window of 10.
 
 
-Example comparing different datatypes for 2 cell lines (K562 and HepG2):
+Example comparing different datatypes for 2 cell lines (K562 and HepG2) which was used to generate the figure above:
 
 python SparC -pt standard -ps averages -pr chr12:6533888-6539592 \
 -tf K562_H3K27AC_1.bdg K562_H3K27AC_2.bdg K562_H3K4me3_1.bdg K562_H3K4me3_2_ENCFF352VRB.bigWig.bdg K562_H3K27me3_1.bdg K562_H3K27me3_2.bdg K562_RNAseq.bdg K562_RNAseq.bdg K562_DNAseseq_1.bdg K562_DNAseseq_2.bdg \
@@ -42,5 +42,9 @@ python SparC -pt standard -ps averages -pr chr12:6533888-6539592 \
 -gff gencode.v24.primary_assembly.annotation.txt \
 -gs yes \
 -es 5
+
+
+
+
 
 </pre>
