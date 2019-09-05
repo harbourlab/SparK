@@ -43,6 +43,8 @@ python SparC -pt standard -ps averages -pr chr12:6533888-6539592 \
 -gs yes \
 -es 5
 
+
+Other examples:
  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparC/master/Picture2.png" width="400">
  
 </pre>
