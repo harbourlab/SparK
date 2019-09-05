@@ -1,6 +1,6 @@
 # SparC
 
-![](https://raw.githubusercontent.com/StefanKurtenbach/SparC/master/Example1.jpg?width="200")
+ <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparC/master/Example1.jpg" width="400">
 
 <pre>
 Plot NGS bedgraph tracks
