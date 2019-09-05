@@ -3,7 +3,7 @@
  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparC/master/Example1.jpg" width="400">
 
 <pre>
-Plot NGS bedgraph tracks with overlay and color functions. 
+Plot NGS bedgraph tracks including replicates, overlay and color functions, standard deviations and more. 
 Output files are true vector graphics (.svg) for easy editing.
 
 Requirements:
