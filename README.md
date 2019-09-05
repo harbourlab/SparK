@@ -3,8 +3,8 @@
  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparC/master/Example1.jpg" width="400">
 
 <pre>
-Plot NGS bedgraph tracks
-A simple python script to plot NGS tracks with overlay and color functions. Output files are true vectorgraphics (.svg) for easy editing.
+Plot NGS bedgraph tracks with overlay and color functions. 
+Output files are true vectorgraphics (.svg) for easy editing.
 
 Requirements:
   - numpy
