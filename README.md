@@ -4,7 +4,7 @@
 
 <pre>
 Plot NGS bedgraph tracks with overlay and color functions. 
-Output files are true vectorgraphics (.svg) for easy editing.
+Output files are true vector graphics (.svg) for easy editing.
 
 Requirements:
   - numpy
