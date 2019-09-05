@@ -14,7 +14,7 @@ Options (Required):
 -tf   treatment bedgraph files seperated by space
 -pr   region to be plotted example: chr1:1647389-272634
 -ps   which plots to show. Choices: all, averages. Plots average tracks of control and treatment files
--pt   plot type: Choices: standard, STD, sine
+-pt   plot type. Choices: standard, STD, sine
 
 
 Options (Not required):
