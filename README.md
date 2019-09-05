@@ -33,7 +33,7 @@ Options (Not required):
 
 Example comparing different datatypes for 2 cell lines (K562 and HepG2) which was used to generate the figure above:
 
-python SparC -pt standard -ps averages -pr chr12:6533888-6539592 \
+python SparC.py -pt standard -ps averages -pr chr12:6533888-6539592 \
 -tf K562_H3K27AC_1.bdg K562_H3K27AC_2.bdg K562_H3K4me3_1.bdg K562_H3K4me3_2_ENCFF352VRB.bigWig.bdg K562_H3K27me3_1.bdg K562_H3K27me3_2.bdg K562_RNAseq.bdg K562_RNAseq.bdg K562_DNAseseq_1.bdg K562_DNAseseq_2.bdg \
 -cf HepG2_H3K27AC_1.bdg HepG2_H3K27AC_2_ENCFF348RLL.bdg HepG2_H3K4me3_1.bdg HepG2_H3K4me3_2.bdg HepG2_H3K27me3_1.bdg H3K27me3_2.bdg HepG2_RNAseq_plus_1.bdg /HepG2_RNAseq_2.bdg HepG2_DNAseseq_1.bdg K562_DNAseseq_2.bdg \
 -cg 1 1 2 2 3 3 4 4 5 5 \
