@@ -1,4 +1,4 @@
-SparK_Version = "1.2.1"
+SparK_Version = "1.2.2"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@med.miami.edu
 
@@ -340,7 +340,9 @@ elif fills[0] == "all_grey":
 elif fills[0] == "blue/green":
     fills = ["#00FF12", "#005CFF"]
     opacity = 0.5
-
+elif len(fills) < 2:
+    print("Error: Track fill color input wrong." + fills + " is not available")
+    sys.exit()
 
 gff_file = args['gfffile']
 
