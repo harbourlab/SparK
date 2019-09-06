@@ -1,8 +1,8 @@
-SparK_Version = "1.2.2"
+SparK_Version = "1.2.3"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@med.miami.edu
 
-# what happens if region is smaller than 2000?
+# FIX what happens if region is smaller than 2000?
 
 import numpy as np
 import copy
@@ -337,11 +337,13 @@ elif fills[0] == "blue/grey":
 elif fills[0] == "all_grey":
     fills = ["#848484", "#848484"]
     opacity = 0.6
+
 elif fills[0] == "blue/green":
     fills = ["#00FF12", "#005CFF"]
     opacity = 0.5
+
 elif len(fills) < 2:
-    print("Error: Track fill color input wrong." + fills + " is not available")
+    print("Error: Track fill color entered wrong. '" + fills + "' is not available")
     sys.exit()
 
 gff_file = args['gfffile']
@@ -352,7 +354,7 @@ if os.path.exists(output_filename):
 
 write_to_file('''<svg viewBox="0 0 300 ''' + str(100 + (hight * 2 * nr_of_groups)) + '''" xmlns="http://www.w3.org/2000/svg">''')
 
-# make list of files ###########################################
+# make list of files and global max - useful for autoscaling only ###########################################
 temp_files = []
 for x, i in enumerate(control_groups):
     if group_autoscale_excluded is None:
@@ -368,7 +370,6 @@ for x, i in enumerate(treat_groups):
         if i not in group_autoscale_excluded:
             if i not in exclude_groups:
                 temp_files.append(all_treat_files[x])
-
 global_max_value = max([max(sublist) for sublist in make_raw_data_filled(region, temp_files, 0)])
 
 if (region[2] - region[1]) <= 2000:
@@ -393,11 +394,11 @@ for group in range(nr_of_groups):
     treat_data = make_raw_data_filled(region, treat_files, 0)
     if group_autoscale == "yes":
         if (group + 1) not in group_autoscale_excluded:
-            max_value = global_max_value ## FIX, should be global max of all that are not grouped...
+            max_value = global_max_value # global_max_value is derived only from the groups that were not excluded
         else:
             max_value = get_max_value(control_data, treat_data)
     else:
-        max_value = global_max_value
+        max_value = get_max_value(control_data, treat_data)
 
     if plot_type == "standard":
         if show_plots == "all":
@@ -581,6 +582,12 @@ if labels is not None:
     write_to_file(draw_rect(x_start - 10.5, 60, fills[0], 10, 10, opacity))
     write_to_file(draw_rect(x_start - 10.5, 60, fills[1], 10, 10, opacity))
     write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(60 - 1.788) + '''" font-size="9" >''' + "Overlap" + '''</text>''')
+
+    if spark == "yes":
+        write_to_file(draw_rect(x_start + 51.5, 34, spark_color[1], 10, 10, 0.4))
+        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 65) + '''" y="''' + str(34 - 1.788) + '''" font-size="9" >''' + str(labels[0]) + ''' up</text>''')
+        write_to_file(draw_rect(x_start + 51.5, 47, spark_color[0], 10, 10, 0.4))
+        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 65) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + ''' up</text>''')
 
 # add gene plots
 if gff_file is not None:
