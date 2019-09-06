@@ -6,7 +6,7 @@
 
 
 <pre>
-Plot NGS bedgraph tracks including replicates, overlay and color functions, standard deviations and more. 
+Plot NGS bedgraph tracks including replicates, overlay, and standard deviations. 
 Output files are true vector graphics (.svg) for easy editing.
 For plotting genes a ENCODE formatted gff file is required, which can be obtained here: 
 https://www.gencodegenes.org/human/
