@@ -1,15 +1,15 @@
-# SparK Version 1.1
+SparK_Version = "1.2"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@med.miami.edu
 
 # what happens if region is smaller than 2000?
-
 
 import numpy as np
 import copy
 import os
 import argparse
 import math
+import sys
 
 def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
     raw_data_filled = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
@@ -202,6 +202,7 @@ parser.add_argument('-o','--output_name', help='output graph name.', required=Fa
 args = vars(parser.parse_args())
 
 print(" ")
+print('''SparK Version ''' + SparK_Version + ''' initiated''')
 
 # Additional Arguments #########################################
 total_width = 150
@@ -213,7 +214,6 @@ stroke_width_spark = 0
 ################################################################
 
 # import arguments #############################################
-
 smoothen_tracks = args['smoothen']
 
 output_filename = args['output_name']
@@ -225,16 +225,17 @@ else:
 plot_type = args['plot_type']  # standard, STD, sine
 if plot_type not in ["standard", "STD", "sine"]:
     print("Error: No valid plot type entered. Choose 'standard', 'STD', or 'sine'")
+    sys.exit()
 
 show_plots = args['show_plots']  # all, averages
 if show_plots not in ["all", "averages"]:
     print("Error: Not valid option for plots selected, choose 'all' or 'averages'")
+    sys.exit()
 elif show_plots == "averages":
     print("Plotting averages")
+
 elif show_plots == "standard":
     print("Plotting individual tracks")
-
-
 
 region = [args['region'].split(":")[0], int(args['region'].split(":")[1].split("-")[0]), int(args['region'].split(":")[1].split("-")[1])] # [chr, start, stop]
 if region is None:
@@ -243,7 +244,8 @@ else:
     try:
         region = [args['region'].split(":")[0], int(args['region'].split(":")[1].split("-")[0]), int(args['region'].split(":")[1].split("-")[1])]
     except:
-        print("Error: Region defined seems to have a weird format")
+        print("Error: Region defined seems to have a weird format. Use 'chr1:123-345' format.")
+        sys.exit()
 
     print("Plotting region: " + args['region'])
     try:
@@ -259,6 +261,7 @@ if spark == "yes":
     if spark_color is not None:
         if spark_color != 2:
             print('''Error: Spark color definition not correct. Enter two hex colors e.g. "-sc #00FF12 #848484"''')
+            sys.exit()
     else:
         spark_color = ["#FF9D00", "#00FF00"]  # green/orange
         stroke_width_spark = 0.05
@@ -267,14 +270,17 @@ if spark == "yes":
 all_control_files = args['control_files']
 if all_control_files is None:
     print("Error: No control files set")
+    sys.exit()
 all_treat_files = args['treat_files']
 if all_treat_files is None:
     print("Error: No treat files set")
+    sys.exit()
 
 group_autoscale = args['group_autoscale']
 if group_autoscale is not None:
     if group_autoscale != "yes":
         print("Error: Group autoscale is set but not with 'yes'. Do you want to autoscale?")
+        sys.exit()
     else:
         print("Autoscaling enabled")
 group_autoscale_excluded = args['exclude_from_group_autoscale']
@@ -301,11 +307,13 @@ group_labels = args['group_labels']  # could do a bunch of checking here whether
 if group_labels is not None:
     if len(group_labels) != nr_of_groups:
         print("Error: Number of group lables does not match number of groups set")
+        sys.exit()
 
 labels = args['labels']
 if labels is not None:
     if len(labels) != 2:
         print("Error: Two arguments have to be provided for labels (-l), not more or less")
+        sys.exit()
 
 exclude_groups = args["exclude_groups"]
 if exclude_groups is None:
@@ -313,22 +321,26 @@ if exclude_groups is None:
 else:
     print("Excluding following groups: " + str(exclude_groups))
 
-fills = args['fills']  # left is treat
+fills = args['fills']  # left is treat, right is control
+print(fills)
 if fills is None:
-    fills = "blue/red"
-if fills == "blue/red":
+    fills = ["blue/red", "N/A"]
+if fills[0] == "blue/red":
     fills = ["#FF1800", "#005CFF"]  # right is ctrl blue
     opacity = 0.6
-elif fills == "blue/grey":
+
+elif fills[0] == "blue/grey":
     fills = ["#005CFF", "#A3A3A3"]  # right is ctrl grey
     opacity = 0.3
-elif fills == "all_grey":
+
+elif fills[0] == "all_grey":
     fills = ["#848484", "#848484"]
     opacity = 0.6
-elif fills == "blue/green":
+    print(fills)
+    print(opacity)
+elif fills[0] == "blue/green":
     fills = ["#00FF12", "#005CFF"]
     opacity = 0.5
-
 
 
 gff_file = args['gfffile']
@@ -545,20 +557,19 @@ for group in range(nr_of_groups):
 
 # Draw axis and labels
 ##################################################
-    # Y scale bars
+# Y scale bars
     write_to_file('''<line x1="''' + str(x_start - 10) + '''" y1="''' + str(y_start) + '''" x2="''' + str(x_start - 10) + '''" y2="''' + str(y_start - hight) + '''" stroke="black" stroke-width="1" />''')
     write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start) + '''" x2="''' + str(x_start - 5) + '''" y2="''' + str(y_start) + '''" stroke="black" stroke-width="1" />''')
     write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start - hight) + '''" x2="''' + str(x_start - 5) + '''" y2="''' + str(y_start - hight) + '''" stroke="black" stroke-width="1" />''')
 
-    # Y labels
+# Y labels
     write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start + 4) + '''" font-size="9" >0</text>''')
     write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start - hight + 4) + '''" font-size="9" >''' + str(round(max_value, 1)) + '''</text>''')
 
-    # Group labels
+# Group labels
 if group_labels is not None:
     for x, i in enumerate(range(nr_of_groups)):
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(100 + x * hight * 1.5 - int((hight/2)) - 1.788) + '''" font-size="9" >''' + group_labels[x] + '''</text>''')
-
 
 # Squares and labels
 if labels is not None:
@@ -570,6 +581,7 @@ if labels is not None:
     write_to_file(draw_rect(x_start - 10.5, 60, fills[1], 10, 10, opacity))
     write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(60 - 1.788) + '''" font-size="9" >''' + "Overlap" + '''</text>''')
 
+# add gene plots
 if gff_file is not None:
     with open(gff_file) as f:
         gene_names = []
