@@ -33,6 +33,7 @@ Options (Not required):
 -sc   spark color. Enter two colors in hex format for significantly increase and decreased areas. 
       Example "-sc #00FF12 #848484".
 -sm   smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen with a window of 10.
+-o    output filename. Usage: "-o Experiment1".
 
 
 Example comparing different datatypes for 2 cell lines (K562 and HepG2) which was used to generate the figure above:
