@@ -1,4 +1,4 @@
-# SparK - NGS data plotting
+# SparK - NGS data plotting (Version 1.2.1)
 
  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400">
 
