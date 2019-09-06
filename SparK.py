@@ -1,4 +1,4 @@
-# SparC Version 1.1
+# SparK Version 1.1
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@med.miami.edu
 
@@ -81,7 +81,7 @@ def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
         raw_data_filled = copy.deepcopy(raw_data_filled_smooth)
     return raw_data_filled
 def write_to_file(row):
-    with open("graph.svg", "a") as f:
+    with open(output_filename, "a") as f:
         f.write(row)
         f.write("\n")
 def get_max_value(datasets1, datasets2):
@@ -121,7 +121,7 @@ def draw_standard_spark():
         for p, i in enumerate(treat_data):
             treat_values.append(treat_data[p][x])
 
-        if abs(np.average(ctrl_values) - np.average(treat_values)) > (np.std(ctrl_values) + np.std(treat_values)):
+        if abs(np.average(max(ctrl_values)) - np.average(max(treat_values))) > (np.std(ctrl_values) + np.std(treat_values)):
             if np.average(ctrl_values) > np.average(treat_values):
                 if last_value == "" or last_value == "up":
                     if (last_xpos + 1) == x:
@@ -194,8 +194,10 @@ parser.add_argument('-eg','--exclude_groups', help='Exclude groups from the anal
 parser.add_argument('-f','--fills', help='enter two colors in hex format', required=False, nargs='+', type=str)
 parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
 parser.add_argument('-sp', '--spark', help='display significant change "yes"', required=False, type=str)
-parser.add_argument('-sc', '--sparkcolor', help='spark color', required=False, type=str, nargs='+')
-parser.add_argument('-sm', '--smoothen', help='smoothen tracks (bp)', required=False, type=int)
+parser.add_argument('-sc', '--spark_color', help='spark color', required=False, type=str, nargs='+')
+parser.add_argument('-sm', '--smoothen', help='smoothen tracks', required=False, type=int)
+parser.add_argument('-o','--output_name', help='output graph name.', required=False, type=str)
+
 args = vars(parser.parse_args())
 
 print(" ")
@@ -213,18 +215,12 @@ stroke_width_spark = 0
 
 smoothen_tracks = args['smoothen']
 
-spark = args['spark']
-if spark == "yes":
-    print("Sparcs will be drawn")
-    spark_color = args['sparkcolor']
-    if spark_color is not None:
-        if spark_color != 2:
-            print("Error: Spark color definition not correct")
-    else:
-        spark_color = ["#00FF00", "#FF9D00"]  # green/orange
-        stroke_width_spark = 0.05
-        spark_opacity = 0.5
-
+output_filename = args['output_name']
+if output_filename is None:
+    output_filename = "graph.svg"
+else:
+    output_filename += ".svg"
+    
 plot_type = args['plot_type']  # standard, STD, sine
 if plot_type not in ["standard", "STD", "sine"]:
     print("Error: No valid plot type entered. Choose 'standard', 'STD', or 'sine'")
@@ -236,6 +232,8 @@ elif show_plots == "averages":
     print("Plotting averages")
 elif show_plots == "standard":
     print("Plotting individual tracks")
+
+
 
 region = [args['region'].split(":")[0], int(args['region'].split(":")[1].split("-")[0]), int(args['region'].split(":")[1].split("-")[1])] # [chr, start, stop]
 if region is None:
@@ -252,6 +250,18 @@ else:
             region[0] = region[0][3:]
     except:
         pass
+
+spark = args['spark']
+if spark == "yes":
+    print("Sparks will be drawn")
+    spark_color = args['sparkcolor']
+    if spark_color is not None:
+        if spark_color != 2:
+            print('''Error: Spark color definition not correct. Enter two hex colors e.g. "-sc #00FF12 #848484"''')
+    else:
+        spark_color = ["#FF9D00", "#00FF00"]  # green/orange
+        stroke_width_spark = 0.05
+        spark_opacity = 0.5
 
 all_control_files = args['control_files']
 if all_control_files is None:
@@ -322,8 +332,8 @@ elif fills == "blue/green":
 
 gff_file = args['gfffile']
 
-if os.path.exists("graph.svg"):
-    os.remove("graph.svg")
+if os.path.exists(output_filename):
+    os.remove(output_filename)
 ################################################################
 
 write_to_file('''<svg viewBox="0 0 300 ''' + str(100 + (hight * 2 * nr_of_groups)) + '''" xmlns="http://www.w3.org/2000/svg">''')
