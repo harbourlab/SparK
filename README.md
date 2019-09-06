@@ -1,6 +1,9 @@
 # SparK - NGS data plotting (Version 1.2.1)
 
- <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400">
+ <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400" align="left"><img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="top">
+
+
+
 
 <pre>
 Plot NGS bedgraph tracks including replicates, overlay and color functions, standard deviations and more. 
@@ -49,8 +52,5 @@ python SparK.py -pt standard -ps averages -pr chr12:6533888-6539592 \
 -gs yes \
 -es 5
 
-
-Other examples:
- <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400">
  
 </pre>
