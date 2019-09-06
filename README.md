@@ -3,8 +3,6 @@
  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400" align="left"><img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="top">
 
 
-
-
 <pre>
 Plot NGS bedgraph tracks including replicates, overlay, and standard deviations. 
 Output files are true vector graphics (.svg) for easy editing.
@@ -32,7 +30,9 @@ Options (Not required):
 -f    fill colors. Choices: "blue/red" (default), "blue/grey", "all_grey", "blue/green".
       Two hex colors can be entered alternatively. Examples" "-f blue/grey", "-f #00FF12 #848484".
 -gff  link gff file to show genes. Get here: https://www.gencodegenes.org/human/
--sp   add significant differences in tracks aka "sparks". Usage: "-sp yes".
+-sp   add significant differences in tracks aka "sparks". Usage: "-sp yes". Significant areas are defined 
+      as areas where the delta of the means is greater than the sum of standard deviations of controls 
+      and treatment files. 
 -sc   spark color. Enter two colors in hex format for significantly increase and decreased areas. 
       Example "-sc #00FF12 #848484".
 -sm   smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen with a window of 10.
@@ -52,6 +52,21 @@ python SparK.py -pt standard -ps averages -pr chr12:6533888-6539592 \
 -gff gencode.v24.primary_assembly.annotation.txt \
 -gs yes \
 -es 5
+
+
+
+Example 2: Plot with sparks.
+
+python SparK.py -pt standard -ps all -pr chr12:6533888-6539592 \
+-tf K562_H3K27AC_1.bdg K562_H3K27AC_2.bdg K562_H3K4me3_1.bdg K562_H3K4me3_2_ENCFF352VRB.bigWig.bdg \
+-cf HepG2_H3K27AC_1.bdg HepG2_H3K27AC_2_ENCFF348RLL.bdg HepG2_H3K4me3_1.bdg HepG2_H3K4me3_2.bdg \
+-gl H3K27AC H3K4me3 \
+-l K562 HepG2 \
+-gff gencode.v24.primary_assembly.annotation.txt \
+-sp yes
+-f blue/grey
+
+<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
 
  
 </pre>
