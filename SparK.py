@@ -121,7 +121,8 @@ def draw_standard_spark():
         for p, i in enumerate(treat_data):
             treat_values.append(treat_data[p][x])
 
-        if abs(np.average(max(ctrl_values)) - np.average(max(treat_values))) > (np.std(ctrl_values) + np.std(treat_values)):
+        sum_std = np.std(ctrl_values) + np.std(treat_values)
+        if abs(np.average(ctrl_values) - np.average(treat_values)) > sum_std:
             if np.average(ctrl_values) > np.average(treat_values):
                 if last_value == "" or last_value == "up":
                     if (last_xpos + 1) == x:
@@ -220,7 +221,7 @@ if output_filename is None:
     output_filename = "graph.svg"
 else:
     output_filename += ".svg"
-    
+
 plot_type = args['plot_type']  # standard, STD, sine
 if plot_type not in ["standard", "STD", "sine"]:
     print("Error: No valid plot type entered. Choose 'standard', 'STD', or 'sine'")
@@ -254,7 +255,7 @@ else:
 spark = args['spark']
 if spark == "yes":
     print("Sparks will be drawn")
-    spark_color = args['sparkcolor']
+    spark_color = args['spark_color']
     if spark_color is not None:
         if spark_color != 2:
             print('''Error: Spark color definition not correct. Enter two hex colors e.g. "-sc #00FF12 #848484"''')
