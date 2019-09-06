@@ -1,7 +1,7 @@
-# Visualize Version 1.0
+# SparC Version 1.0
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@med.miami.edu
-# FIX stuff that is marked with FIX
+
 # what happens if region is smaller than 2000?
 
 
@@ -437,7 +437,7 @@ for group in range(nr_of_groups):
             coords.insert(0, [get_relative_hight(np.average(values) - np.std(values)), x_pos])
         write_to_file(draw_polygon(coords, 0.4, fills[1], stroke_width))
 
-        if spark != "yes":
+        if spark == "yes":
             draw_standard_spark()
 
     elif plot_type == "sine": # treat points up, control points down #FIX combined with averages does not work
