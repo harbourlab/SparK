@@ -423,7 +423,7 @@ for group in range(nr_of_groups):
             coords = []
             for x in range(len(control_data[0])):
                 averages = []
-                x_pos = x_start + (x * quantile)  #changed
+                x_pos = x_start + (x * quantile)
                 for datafile in control_data:
                     averages.append(datafile[x])
                 coords.append([get_relative_hight(np.average(averages)), x_pos])
@@ -468,7 +468,7 @@ for group in range(nr_of_groups):
 
     elif plot_type == "sine": # treat points up, control points down #FIX combined with averages does not work
         for datafile in control_data:
-            coords = []  # y/x
+            coords = []  # y, x
             for x, value in enumerate(datafile):
                 x_pos = x_start + (x * quantile)
                 coords.append([get_relative_hight(-value), x_pos])
@@ -476,7 +476,7 @@ for group in range(nr_of_groups):
             coords[0][0] = 0
             write_to_file(draw_polygon(coords, opacity, fills[0], stroke_width))
         for datafile in treat_data:
-            coords = []  # y/x
+            coords = []  # y, x
             for x, value in enumerate(datafile):
                 x_pos = x_start + (x * quantile)
                 coords.append([get_relative_hight(value), x_pos])
@@ -489,7 +489,7 @@ for group in range(nr_of_groups):
             coords = []
             last_value = ""
             for x in range(len((control_data[0]))):
-                x_pos = x_start + (x * quantile)  # y/x
+                x_pos = x_start + (x * quantile)
                 ctrl_values = []
                 treat_values = []
                 for p, i in enumerate(control_data):
