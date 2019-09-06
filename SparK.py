@@ -1,4 +1,4 @@
-SparK_Version = "1.2"
+SparK_Version = "1.2.1"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@med.miami.edu
 
@@ -322,9 +322,10 @@ else:
     print("Excluding following groups: " + str(exclude_groups))
 
 fills = args['fills']  # left is treat, right is control
-print(fills)
+
 if fills is None:
     fills = ["blue/red", "N/A"]
+
 if fills[0] == "blue/red":
     fills = ["#FF1800", "#005CFF"]  # right is ctrl blue
     opacity = 0.6
@@ -336,8 +337,6 @@ elif fills[0] == "blue/grey":
 elif fills[0] == "all_grey":
     fills = ["#848484", "#848484"]
     opacity = 0.6
-    print(fills)
-    print(opacity)
 elif fills[0] == "blue/green":
     fills = ["#00FF12", "#005CFF"]
     opacity = 0.5
