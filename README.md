@@ -21,15 +21,17 @@ Options (Required):
 
 Options (Not required):
 -cg   control groups. Will seperately plot groups. e.g. "-cg 1 1 2 2" will generate 2 plots,
-      where group one are the first two files listed in "-cf", and group 2 file 3 and 4
--tg   treatment groups. Will seperately plot groups. e.g. "-cg 1 1 2 2" will generate 2 plots
+      where plot 1 includes the first two files listed in "-cf", and plot 2 file 3 and 4
+-tg   treatment groups
 -l    labels for groups defined above. e.g. "RNaseq H3K4me3"
 -gs   group autoscale. usage: "-gs yes". Will autoscale all groups
 -es   exclude groups from autoscaling. e.g. "-es 1"
--f    fill colors. Enter two colors in hex format.
--gff  link gff file to show genes
--sp   add "sparks" - significant differences. Usage: "-sp yes"
--sc   spark color. Enter one color in hex format
+-f    fill colors. Choices: "blue/red" (default), "blue/grey", "all_grey", "blue/green".
+      Two hex colors can be entered alternatively. Examples" "-f blue/grey", "-f #00FF12 #848484".
+-gff  link gff file to show genes. Get here: https://www.gencodegenes.org/human/
+-sp   add significant differences in tracks aka "sparks". Usage: "-sp yes".
+-sc   spark color. Enter two colors in hex format for significantly increase and decreased areas. 
+      Example "-sc #00FF12 #848484".
 -sm   smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen with a window of 10.
 
 
