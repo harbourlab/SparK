@@ -69,6 +69,5 @@ python SparK.py -pt standard -ps all -pr chr12:6533888-6539592 \
 <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
 
  Known issues (to be fixed):
- - Will produce 2 Runtime Warnings. Is expected during the run and doesnt affect output.
  - Requires at least one control and one treatment file
 </pre>
