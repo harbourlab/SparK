@@ -1,4 +1,4 @@
-SparK_Version = "1.2.4"
+SparK_Version = "1.3"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@med.miami.edu
 
@@ -25,14 +25,15 @@ def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
                     pass
                 if found_chromosome == "yes" and line_split[0] != stretch[0]:
                     break
-                try:
-                    line_split[3] = float(line_split[3].split("\n")[0])
-                except:
-                    print("Warning! Could not import following row from: " + datafile2)
-                    print(line)
-                    print("Continuing to Import...")
-                    print("")
+
                 if line_split[0] == stretch[0]:
+                    try:
+                        line_split[3] = float(line_split[3].split("\n")[0])
+                    except:
+                        print("Warning! Could not import following row from: " + datafile2)
+                        print(line)
+                        print("Continuing to Import...")
+                        print("")
                     found_chromosome = "yes"
                     if int(line_split[2]) >= stretch[1] + offset:
                         if int(line_split[1]) <= stretch[2] + offset:
@@ -94,7 +95,10 @@ def get_max_value(datasets1, datasets2):
             max_v = max(datafile2)
     return max_v
 def get_relative_hight(raw_value): # FIX make sure maxvalue can be 0 too
-    return((raw_value * hight * 0.85) / max_value) # to not go up to the max
+    if raw_value == 0:
+        return(0)
+    else:
+        return((raw_value * hight * 0.85) / max_value) # to not go up to the max
 def draw_rect(x_coord, y_0, color, width, hight1, opacity):
     return '''<rect x="''' + str(x_coord) + '''" opacity="''' + str(opacity) + '''" y="''' + str(y_0 - hight1) + '''" fill="''' + color + '''" width="''' + str(width) + '''" height="''' + str(hight1) + '''"/>'''
 def draw_polygon(coordinates, opacity, color, stroke_width):
@@ -196,16 +200,16 @@ parser.add_argument('-f','--fills', help='enter two colors in hex format', requi
 parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
 parser.add_argument('-sp', '--spark', help='display significant change "yes"', required=False, type=str)
 parser.add_argument('-sc', '--spark_color', help='spark color', required=False, type=str, nargs='+')
-parser.add_argument('-sm', '--smoothen', help='smoothen tracks', required=False, type=int)
-parser.add_argument('-o','--output_name', help='output graph name.', required=False, type=str)
-
+parser.add_argument('-sm', '--smoothen', help='smoothen tracks, int', required=False, type=int)
+parser.add_argument('-o','--output_name', help='output graph name, str', required=False, type=str)
+parser.add_argument('-bed','--bed_files', help='bed files to be plotted', required=False, type=str, nargs='+')
+parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int)
 args = vars(parser.parse_args())
 
 print(" ")
 print('''SparK Version ''' + SparK_Version + ''' initiated''')
 
 # Additional Arguments #########################################
-total_width = 150
 hight = 30
 x_start = 50
 spark_opacity = 1
@@ -214,6 +218,8 @@ stroke_width_spark = 0
 ################################################################
 
 # import arguments #############################################
+bed_files = args["bed_files"]
+
 smoothen_tracks = args['smoothen']
 
 output_filename = args['output_name']
@@ -221,6 +227,13 @@ if output_filename is None:
     output_filename = "graph.svg"
 else:
     output_filename += ".svg"
+
+width = args['track_width']
+if width is not None:
+    total_width = int(width)
+else:
+    total_width = 150
+
 
 plot_type = args['plot_type']  # standard, STD, sine
 if plot_type not in ["standard", "STD", "sine"]:
@@ -248,10 +261,9 @@ else:
         sys.exit()
 
     print("Plotting region: " + args['region'])
-    try:
-        if region[0][:3] == "chr" or region[0][:3] == "Chr":
-            region[0] = region[0][3:]
-    except:
+    if region[0][:3] == "chr" or region[0][:3] == "Chr":
+        region[0] = region[0][3:]
+    else:
         pass
 
 spark = args['spark']
@@ -305,7 +317,7 @@ if control_groups is None and treat_groups is None:
 else:
     nr_of_groups = max([max(control_groups), max(treat_groups)])
 
-group_labels = args['group_labels']  # could do a bunch of checking here whether labels were correctly entered
+group_labels = args['group_labels']
 if group_labels is not None:
     if len(group_labels) != nr_of_groups:
         print("Error: Number of group lables does not match number of groups set")
@@ -345,7 +357,7 @@ elif fills[0] == "blue/green":
     opacity = 0.5
 
 elif len(fills) < 2:
-    print("Error: Track fill color entered wrong. '" + fills + "' is not available")
+    print("Error: Track fill color entered wrong.")
     sys.exit()
 
 gff_file = args['gfffile']
@@ -357,7 +369,6 @@ if os.path.exists(output_filename):
 write_to_file('''<svg viewBox="0 0 300 ''' + str(100 + (hight * 2 * nr_of_groups)) + '''" xmlns="http://www.w3.org/2000/svg">''')
 
 # make list of files and global max - useful for autoscaling only ###########################################
-
 if group_autoscale == "yes":
     ctrl_averages = []
     treat_averages = []
@@ -374,11 +385,11 @@ if group_autoscale == "yes":
                 if i == group + 1:
                     if i not in exclude_groups:
                         treat_files.append(all_treat_files[x])
-        try:
+        if control_files != []:
             ctrl_averages.append(np.average([max(sublist) for sublist in make_raw_data_filled(region, control_files, 0)]))
+        if treat_files != []:
             treat_averages.append(np.average([max(sublist) for sublist in make_raw_data_filled(region, treat_files, 0)]))
-        except:
-            pass
+
     autoscale_max = max([max(ctrl_averages), max(treat_averages)])
 #############################################################################################################
 
@@ -599,11 +610,38 @@ if labels is not None:
         write_to_file(draw_rect(x_start + 51.5, 47, spark_color[0], 10, 10, 0.5))
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + 65) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + ''' up</text>''')
 
+# add bed files
+y_position_bed = 110 + (nr_of_groups - 1) * hight * 1.5
+if bed_files is not None:
+    for bed_file in bed_files:
+        with open(bed_file) as b:
+            for line in b:
+                region_to_draw = [0, 0]
+                line_split = line.split("\t")
+                if line_split[0] != "":
+                    if line_split[0][:3] == "chr" or line_split[0][:3] == "Chr":
+                        line_split[0] = line_split[0][3:]
+                    else:
+                        pass
+                if line_split[0] == region[0]:  # if same chromosome
+                    line_split[1] = int(line_split[1])
+                    line_split[2] = int(line_split[2])
+                    if line_split[2] > region[1] and line_split[1] < region[2]:  # check if there is something to draw
+                        region_to_draw = [line_split[1], line_split[2]]
+                        if line_split[1] < region[1]:
+                            region_to_draw[0] = region[1]
+                        if line_split[2] > region[2]:
+                            region_to_draw[1] = region[2]
+                if region_to_draw != [0, 0]:
+                    write_to_file(draw_rect(x_start + (((region_to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_position_bed - 0.3 + (2 / 2), "#0B34FF", ((region_to_draw[1] - region_to_draw[0]) * 150) / float(region[2] - region[1]), 2, 1))
+        write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="9" >''' + bed_file + '''</text>''')
+        y_position_bed += 8
+
 # add gene plots
 if gff_file is not None:
     with open(gff_file) as f:
         gene_names = []
-        y_genestart = 100 + (nr_of_groups - 1) * hight * 1.5
+        y_genestart = y_position_bed
         exons = []
         UTRs = []
         for line in f:
@@ -626,7 +664,7 @@ if gff_file is not None:
             except:
                 pass
             try:
-                if line_split[0].split(".")[0].split("0")[-1] == str(region[0]):  # check if same chr
+                if line_split[0].split(".")[0].split("0")[-1] == region[0]:  # check if same chr
                     to_draw = get_region_to_draw()
                     if to_draw != 0:
                         if line_split[2] == "gene":
@@ -635,17 +673,17 @@ if gff_file is not None:
                                 y_genestart += 10
                             gene_names.append(gene)
                             write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
-                            drawhight = 1
-                            write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 5.3 + (drawhight / 2) + 5, "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                            drawhight = 1.0
+                            write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
                         if line_split[2] == "CDS":
                             if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
-                                drawhight = 6
-                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 5.3 + (drawhight / 2) + 5, "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                drawhight = 6.0
+                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
                         if line_split[2] == "exon":
                             if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
-                                drawhight = 3
-                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 5.3 + (drawhight / 2) + 5, "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
-
+                                drawhight = 3.0
+                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
             except:
                 print("excluding row:" + str(line_split))
-    write_to_file("</svg>")
+
+write_to_file("</svg>")
