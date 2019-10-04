@@ -77,4 +77,5 @@ python SparK.py -pt standard -ps all -pr chr12:6533888-6539592 \
  Known issues (to be fixed):
  - Requires at least one control and one treatment file
  - Sine plot might not work with averages
+ - region plotted should be > 2000 bp
 </pre>
