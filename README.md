@@ -1,4 +1,6 @@
-# SparK - NGS data plotting (Version 1.3)
+# SparK - NGS data plotting (Version 1.4)
+read known issues at the bottom before using!
+For help and to request features contact Stefan.Kurtenbach@me.com
 
  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400" align="left"><img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="top">
 
@@ -28,8 +30,7 @@ Options (Not required):
 -gs   group autoscale. usage: "-gs yes". Will autoscale all groups
 -es   exclude groups from autoscaling. e.g. "-es 1"
 -f    fill colors. Choices: "blue/red" (default), "blue/grey", "all_grey", "blue/green".
-      Two hex colors can be entered alternatively. Examples" "-f blue/grey", "-f #00FF12 #848484".
--gff  link gff file to show genes. Get here: https://www.gencodegenes.org/human/
+      Two hex colors can be entered alternatively. Examples" "-f blue/grey", "-f 00FF12 848484".
 -sp   add significant differences in tracks aka "sparks". Usage: "-sp yes". Significant areas are defined 
       as areas where the delta of the means is greater than the sum of standard deviations of controls 
       and treatment files. 
@@ -38,6 +39,9 @@ Options (Not required):
 -sm   smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen with a window of 10.
 -o    output filename. Usage: "-o Experiment1".
 -bed  Add bed files to plot here. Usage: "-bed bedfile1.bed bedfile2.bed"...
+-gff  link gff file to show genes. Get here: https://www.gencodegenes.org/human/
+-dg   in case not all genes in the region plotted should be displayed, enter the genes to plot here.
+      Usage: "-dg GAPDH RS1"
 
 
 Example comparing different datatypes for 2 cell lines (K562 and HepG2) 
@@ -72,5 +76,4 @@ python SparK.py -pt standard -ps all -pr chr12:6533888-6539592 \
  Known issues (to be fixed):
  - Requires at least one control and one treatment file
  - Sine plot might not work with averages
- - width (-w) function does not work properly
 </pre>
