@@ -72,7 +72,8 @@ def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
         raw_data_filled = copy.deepcopy(temp_data)
 
     if smoothen_tracks is not None:
-        raw_data_filled_smooth = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
+        #raw_data_filled_smooth = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
+        raw_data_filled_smooth = [[0] * 2000 for r in range(len(files))]
         for x, dataset in enumerate(raw_data_filled):
             temp = [dataset[0]] * smoothen_tracks
             for p, i in enumerate(dataset):
@@ -80,6 +81,7 @@ def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
                 temp.pop(0)
                 raw_data_filled_smooth[x][p] = np.average(temp)
         raw_data_filled = copy.deepcopy(raw_data_filled_smooth)
+
     return raw_data_filled
 def write_to_file(row):
     with open(output_filename, "a") as f:
@@ -204,6 +206,7 @@ parser.add_argument('-sm', '--smoothen', help='smoothen tracks, int', required=F
 parser.add_argument('-o','--output_name', help='output graph name, str', required=False, type=str)
 parser.add_argument('-bed','--bed_files', help='bed files to be plotted', required=False, type=str, nargs='+')
 parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int)
+parser.add_argument('-dg','--display_genes', help='genes to display from the gff file', nargs='+', required=False, type=str)
 args = vars(parser.parse_args())
 
 print(" ")
@@ -227,6 +230,8 @@ if output_filename is None:
     output_filename = "graph.svg"
 else:
     output_filename += ".svg"
+
+display_genes = args['display_genes']
 
 width = args['track_width']
 if width is not None:
@@ -359,6 +364,12 @@ elif fills[0] == "blue/green":
 elif len(fills) < 2:
     print("Error: Track fill color entered wrong.")
     sys.exit()
+
+elif len(fills) > 1:
+    for i in range(len(fills)):
+        fills[i] = "#" + fills[i]
+        opacity = 0.6
+
 
 gff_file = args['gfffile']
 
@@ -663,26 +674,46 @@ if gff_file is not None:
                     line_split[0] = line_split[0][3:]
             except:
                 pass
+
             try:
-                if line_split[0].split(".")[0].split("0")[-1] == region[0]:  # check if same chr
+                if line_split[0] == region[0]:  # check if same chr
                     to_draw = get_region_to_draw()
                     if to_draw != 0:
                         if line_split[2] == "gene":
                             gene = line_split[8].split("gene_name ")[1].split('''"''')[1]
-                            if gene not in gene_names:
+                            if display_genes is not None:
+                                if gene in display_genes:
+                                    if gene not in gene_names:
+                                        y_genestart += 10
+                                    gene_names.append(gene)
+                                    write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
+                                    drawhight = 1.0
+                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                            else:
                                 y_genestart += 10
-                            gene_names.append(gene)
-                            write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
-                            drawhight = 1.0
-                            write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
+                                drawhight = 1.0
+                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+
                         if line_split[2] == "CDS":
                             if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
-                                drawhight = 6.0
-                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                if display_genes is not None:
+                                    if gene in display_genes:
+                                        drawhight = 6.0
+                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                else:
+                                    drawhight = 6.0
+                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+
                         if line_split[2] == "exon":
                             if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
-                                drawhight = 3.0
-                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                if display_genes is not None:
+                                    if gene in display_genes:
+                                        drawhight = 3.0
+                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                else:
+                                    drawhight = 3.0
+                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
             except:
                 print("excluding row:" + str(line_split))
 
