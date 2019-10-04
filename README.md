@@ -1,4 +1,4 @@
-# SparK - NGS data plotting (Version 1.4)
+# SparK - NGS data plotting (Version 1.4.1)
 read known issues at the bottom before using!
 For help and to request features contact Stefan.Kurtenbach@me.com
 
@@ -42,6 +42,7 @@ Options (Not required):
 -gff  link gff file to show genes. Get here: https://www.gencodegenes.org/human/
 -dg   in case not all genes in the region plotted should be displayed, enter the genes to plot here.
       Usage: "-dg GAPDH RS1"
+-w    define plot width. Default is 150.
 
 
 Example comparing different datatypes for 2 cell lines (K562 and HepG2) 
