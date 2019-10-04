@@ -1,4 +1,4 @@
-SparK_Version = "1.4"
+SparK_Version = "1.4.1"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@med.miami.edu
 
