@@ -70,7 +70,7 @@ python SparK.py -pt standard -ps all -pr chr12:6533888-6539592 \
 -gl H3K27AC H3K4me3 \
 -l K562 HepG2 \
 -gff gencode.v24.primary_assembly.annotation.txt \
--sp yes
+-sp yes \
 -f blue/grey
 
 <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
