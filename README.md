@@ -1,4 +1,4 @@
-# SparK - NGS data plotting (Version 1.4.1)
+# SparK - NGS data plotting (Version 1.4.2)
 read known issues at the bottom before using!
 For help and to request features contact Stefan.Kurtenbach@me.com
 
@@ -35,7 +35,7 @@ Options (Not required):
       as areas where the delta of the means is greater than the sum of standard deviations of controls 
       and treatment files. 
 -sc   spark color. Enter two colors in hex format for significantly increase and decreased areas. 
-      Example "-sc #00FF12 #848484".
+      Example "-sc 00FF12 848484".
 -sm   smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen with a window of 10.
 -o    output filename. Usage: "-o Experiment1".
 -bed  Add bed files to plot here. Usage: "-bed bedfile1.bed bedfile2.bed"...
