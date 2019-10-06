@@ -1,4 +1,4 @@
-SparK_Version = "1.3.1"
+SparK_Version = "1.4.2"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
