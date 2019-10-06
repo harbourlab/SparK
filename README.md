@@ -26,7 +26,7 @@ Options (Not required):
 -cg      control groups. Will seperately plot groups. e.g. "-cg 1 1 2 2" will generate 2 plots,
          where plot 1 includes the first two files listed in "-cf", and plot 2 file 3 and 4
 -tg      treatment groups
--l       labels for groups defined above. e.g. "RNaseq H3K4me3"
+-l       labels for groups defined above. e.g. "-l RNaseq H3K4me3"
 -gs      group autoscale. usage: "-gs yes". Will autoscale all groups
 -es      exclude groups from autoscaling. e.g. "-es 1"
 -f       fill colors. Choices: "blue/red" (default), "blue/grey", "all_grey", "blue/green".
