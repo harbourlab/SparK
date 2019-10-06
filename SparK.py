@@ -1,8 +1,15 @@
-SparK_Version = "1.4.1"
+SparK_Version = "1.3.1"
 # Stefan Kurtenbach
-# Stefan.Kurtenbach@med.miami.edu
+# Stefan.Kurtenbach@me.com
 
 # FIX what happens if region is smaller than 2000?
+# make bed colors choosable
+# add tss site arrow
+# make so that onlu control tracks can be chosen too
+# make sidelines a bit smaller
+# make png output
+# averages and sine plot
+
 
 import numpy as np
 import copy
@@ -72,8 +79,7 @@ def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
         raw_data_filled = copy.deepcopy(temp_data)
 
     if smoothen_tracks is not None:
-        #raw_data_filled_smooth = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
-        raw_data_filled_smooth = [[0] * 2000 for r in range(len(files))]
+        raw_data_filled_smooth = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
         for x, dataset in enumerate(raw_data_filled):
             temp = [dataset[0]] * smoothen_tracks
             for p, i in enumerate(dataset):
@@ -81,7 +87,6 @@ def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
                 temp.pop(0)
                 raw_data_filled_smooth[x][p] = np.average(temp)
         raw_data_filled = copy.deepcopy(raw_data_filled_smooth)
-
     return raw_data_filled
 def write_to_file(row):
     with open(output_filename, "a") as f:
@@ -195,16 +200,17 @@ parser.add_argument('-cg','--control_groups', help='group numbers separate by sp
 parser.add_argument('-tg','--treat_groups', help='group numbers separate by space', required=False, nargs='+', type=int)
 parser.add_argument('-gl','--group_labels', help='set group labels', required=False, nargs='+', type=str)
 parser.add_argument('-l','--labels', help='set labels for controls and treatment', required=False, nargs='+', type=str)
-parser.add_argument('-gs','--group_autoscale', help='set to "yes" if wanted', required=False, type=str)
+parser.add_argument('-gs','--group_autoscale', help='set to "yes" to autoscale all tracks, except the ones excluded in -eg', required=False, type=str)
 parser.add_argument('-es','--exclude_from_group_autoscale', help='group numbers of groups to be excluded from autoscale', required=False, nargs='+', type=int)
 parser.add_argument('-eg','--exclude_groups', help='Exclude groups from the analysis', required=False, nargs='+', type=int)
-parser.add_argument('-f','--fills', help='enter two colors in hex format', required=False, nargs='+', type=str)
+parser.add_argument('-f','--fills', help='track fills. enter two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str)
 parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
 parser.add_argument('-sp', '--spark', help='display significant change "yes"', required=False, type=str)
 parser.add_argument('-sc', '--spark_color', help='spark color', required=False, type=str, nargs='+')
 parser.add_argument('-sm', '--smoothen', help='smoothen tracks, int', required=False, type=int)
 parser.add_argument('-o','--output_name', help='output graph name, str', required=False, type=str)
 parser.add_argument('-bed','--bed_files', help='bed files to be plotted', required=False, type=str, nargs='+')
+parser.add_argument('-bedcol','--bed_color', help='colors of bed files in hex', required=False, type=str, nargs='+')
 parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int)
 parser.add_argument('-dg','--display_genes', help='genes to display from the gff file', nargs='+', required=False, type=str)
 args = vars(parser.parse_args())
@@ -276,9 +282,12 @@ if spark == "yes":
     print("Sparks will be drawn")
     spark_color = args['spark_color']
     if spark_color is not None:
-        if spark_color != 2:
-            print('''Error: Spark color definition not correct. Enter two hex colors e.g. "-sc #00FF12 #848484"''')
+        if len(spark_color) != 2:
+            print('''Error: Spark color definition not correct. Enter two hex colors e.g. "-sc 00FF12 848484"''')
             sys.exit()
+        else:
+            spark_color[0] = "#" + spark_color[0]
+            spark_color[1] = "#" + spark_color[1]
     else:
         spark_color = ["#FF9D00", "#00FF00"]  # green/orange
         stroke_width_spark = 0.05
@@ -423,6 +432,8 @@ for group in range(nr_of_groups):
                 treat_files.append(all_treat_files[x])
 
     control_data = make_raw_data_filled(region, control_files, 0)
+    for i in control_data:
+        print(len(i))
     treat_data = make_raw_data_filled(region, treat_files, 0)
     if group_autoscale == "yes":
         if (group + 1) not in group_autoscale_excluded:
@@ -644,7 +655,7 @@ if bed_files is not None:
                         if line_split[2] > region[2]:
                             region_to_draw[1] = region[2]
                 if region_to_draw != [0, 0]:
-                    write_to_file(draw_rect(x_start + (((region_to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_position_bed - 0.3 + (2 / 2), "#0B34FF", ((region_to_draw[1] - region_to_draw[0]) * total_width) / float(region[2] - region[1]), 2, 1))
+                    write_to_file(draw_rect(x_start + (((region_to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_position_bed - 0.3 + (2 / 2), "#0B34FF", ((region_to_draw[1] - region_to_draw[0]) * 150) / float(region[2] - region[1]), 2, 1))
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="9" >''' + bed_file + '''</text>''')
         y_position_bed += 8
 
@@ -674,9 +685,8 @@ if gff_file is not None:
                     line_split[0] = line_split[0][3:]
             except:
                 pass
-
             try:
-                if line_split[0] == region[0]:  # check if same chr
+                if line_split[0].split(".")[0].split("0")[-1] == region[0]:  # check if same chr
                     to_draw = get_region_to_draw()
                     if to_draw != 0:
                         if line_split[2] == "gene":
@@ -688,32 +698,32 @@ if gff_file is not None:
                                     gene_names.append(gene)
                                     write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
                                     drawhight = 1.0
-                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
+                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
                             else:
                                 y_genestart += 10
                                 write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
                                 drawhight = 1.0
-                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
+                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
 
                         if line_split[2] == "CDS":
                             if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
                                 if display_genes is not None:
                                     if gene in display_genes:
                                         drawhight = 6.0
-                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
+                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
                                 else:
                                     drawhight = 6.0
-                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
+                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
 
                         if line_split[2] == "exon":
                             if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
                                 if display_genes is not None:
                                     if gene in display_genes:
                                         drawhight = 3.0
-                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
+                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
                                 else:
                                     drawhight = 3.0
-                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
+                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
             except:
                 print("excluding row:" + str(line_split))
 
