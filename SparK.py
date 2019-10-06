@@ -1,12 +1,11 @@
-SparK_Version = "1.4.2"
+SparK_Version = "1.4.3"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
 # FIX what happens if region is smaller than 2000?
 # make bed colors choosable
 # add tss site arrow
-# make so that onlu control tracks can be chosen too
-# make sidelines a bit smaller
+# make so that only control tracks can be chosen too
 # make png output
 # averages and sine plot
 
@@ -228,6 +227,19 @@ stroke_width_spark = 0
 
 # import arguments #############################################
 bed_files = args["bed_files"]
+bed_color = args['bed_color']
+if bed_files is not None:
+    if bed_color is not None:
+        if len(bed_color) == len(bed_files):
+            for i in range(len(bed_color)):
+                bed_color[i] = "#" + bed_color[i]
+        elif len(bed_color) == 1:
+            bed_color = ["#" + bed_color[0]] * len(bed_files)
+
+        else:
+            print("Error loading colors for bed files. Choose either one, or same number of colors as bed tracks given")
+    else:
+        bed_color = ["#0B34FF"] * len(bed_files)
 
 smoothen_tracks = args['smoothen']
 
@@ -432,8 +444,6 @@ for group in range(nr_of_groups):
                 treat_files.append(all_treat_files[x])
 
     control_data = make_raw_data_filled(region, control_files, 0)
-    for i in control_data:
-        print(len(i))
     treat_data = make_raw_data_filled(region, treat_files, 0)
     if group_autoscale == "yes":
         if (group + 1) not in group_autoscale_excluded:
@@ -604,8 +614,8 @@ for group in range(nr_of_groups):
 ##################################################
 # Y scale bars
     write_to_file('''<line x1="''' + str(x_start - 10) + '''" y1="''' + str(y_start) + '''" x2="''' + str(x_start - 10) + '''" y2="''' + str(y_start - hight) + '''" stroke="black" stroke-width="1" />''')
-    write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start) + '''" x2="''' + str(x_start - 5) + '''" y2="''' + str(y_start) + '''" stroke="black" stroke-width="1" />''')
-    write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start - hight) + '''" x2="''' + str(x_start - 5) + '''" y2="''' + str(y_start - hight) + '''" stroke="black" stroke-width="1" />''')
+    write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start) + '''" x2="''' + str(x_start - 6.5) + '''" y2="''' + str(y_start) + '''" stroke="black" stroke-width="1" />''')
+    write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start - hight) + '''" x2="''' + str(x_start - 6.5) + '''" y2="''' + str(y_start - hight) + '''" stroke="black" stroke-width="1" />''')
 
 # Y labels
     write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start + 4) + '''" font-size="9" >0</text>''')
@@ -635,7 +645,7 @@ if labels is not None:
 # add bed files
 y_position_bed = 110 + (nr_of_groups - 1) * hight * 1.5
 if bed_files is not None:
-    for bed_file in bed_files:
+    for nr_bed, bed_file in enumerate(bed_files):
         with open(bed_file) as b:
             for line in b:
                 region_to_draw = [0, 0]
@@ -655,7 +665,7 @@ if bed_files is not None:
                         if line_split[2] > region[2]:
                             region_to_draw[1] = region[2]
                 if region_to_draw != [0, 0]:
-                    write_to_file(draw_rect(x_start + (((region_to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_position_bed - 0.3 + (2 / 2), "#0B34FF", ((region_to_draw[1] - region_to_draw[0]) * 150) / float(region[2] - region[1]), 2, 1))
+                    write_to_file(draw_rect(x_start + (((region_to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_position_bed - 0.3 + (2 / 2), bed_color[nr_bed], ((region_to_draw[1] - region_to_draw[0]) * 150) / float(region[2] - region[1]), 2, 1))
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="9" >''' + bed_file + '''</text>''')
         y_position_bed += 8
 
