@@ -80,7 +80,7 @@ python SparK.py -pt standard -ps all -pr chr12:6533888-6539592 \
  - Sine plot might not work with averages
  - region plotted should be > 2000 bp
  
- Example with "blue/green" color scheme and bed files added
+ Example with "blue/green" color scheme and bed files added (with custom colors)
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
  
 </pre>
