@@ -17,13 +17,13 @@ Requirements:
  
 Options (Required):
 -cf   control bedgraph files seperated by space
--tf   treatment bedgraph files seperated by space
 -pr   region to be plotted example: "-pr chr1:1647389-272634"
 -ps   Choices: "all" or "averages". Plot all tracks or average tracks of control and treatment files
 -pt   plot type. Choices: "standard", "STD", "sine"
 
 
 Options (Not required):
+-tf      treatment bedgraph files seperated by space
 -cg      control groups. Will seperately plot groups. e.g. "-cg 1 1 2 2" will generate 2 plots,
          where plot 1 includes the first two files listed in "-cf", and plot 2 file 3 and 4
 -tg      treatment groups
