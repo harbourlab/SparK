@@ -1,9 +1,8 @@
-SparK_Version = "1.4.3"
+SparK_Version = "1.4.4"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
 # FIX what happens if region is smaller than 2000?
-# make bed colors choosable
 # add tss site arrow
 # make so that only control tracks can be chosen too
 # make png output
@@ -119,66 +118,69 @@ def draw_polygon(coordinates, opacity, color, stroke_width):
     string += '''" opacity="''' + str(opacity) + '''" fill="''' + color + '''"''' + ''' stroke="black" stroke-width="''' + str(stroke_width) + '''"/>'''
     return string
 def draw_standard_spark():
-    last_xpos = -1
-    coords = []  # y/x, spark color
-    last_value = ""
-    for x, value in enumerate(control_data[0]):
-        x_pos = x_start + (x * quantile)  # y/x
-        ctrl_values = []
-        treat_values = []
-        for p, i in enumerate(control_data):
-            ctrl_values.append(control_data[p][x])
-        for p, i in enumerate(treat_data):
-            treat_values.append(treat_data[p][x])
+    if len(control_data) > 1 and len(treat_data) > 1:
+        last_xpos = -1
+        coords = []  # y/x, spark color
+        last_value = ""
+        for x, value in enumerate(control_data[0]):
+            x_pos = x_start + (x * quantile)  # y/x
+            ctrl_values = []
+            treat_values = []
+            for p, i in enumerate(control_data):
+                ctrl_values.append(control_data[p][x])
+            for p, i in enumerate(treat_data):
+                treat_values.append(treat_data[p][x])
 
-        sum_std = np.std(ctrl_values) + np.std(treat_values)
-        if abs(np.average(ctrl_values) - np.average(treat_values)) > sum_std:
-            if np.average(ctrl_values) > np.average(treat_values):
-                if last_value == "" or last_value == "up":
-                    if (last_xpos + 1) == x:
-                        coords.append([get_relative_hight(np.average(ctrl_values) - np.std(ctrl_values)), x_pos])
-                        coords.insert(0, [get_relative_hight(np.average(treat_values) + np.std(treat_values)), x_pos])
-                        last_xpos = x
+            sum_std = np.std(ctrl_values) + np.std(treat_values)
+            if abs(np.average(ctrl_values) - np.average(treat_values)) > sum_std:
+                if np.average(ctrl_values) > np.average(treat_values):
+                    if last_value == "" or last_value == "up":
+                        if (last_xpos + 1) == x:
+                            coords.append([get_relative_hight(np.average(ctrl_values) - np.std(ctrl_values)), x_pos])
+                            coords.insert(0, [get_relative_hight(np.average(treat_values) + np.std(treat_values)), x_pos])
+                            last_xpos = x
+                        else:
+                            if len(coords) > 0:
+                                write_to_file(draw_polygon(coords, 0.8, spark_color[1], stroke_width_spark))
+                            coords = [[get_relative_hight(np.average(ctrl_values) - np.std(ctrl_values)), x_pos]]
+                            coords.insert(0, [get_relative_hight(np.average(treat_values) + np.std(treat_values)), x_pos])
+                            last_xpos = x
+                            last_value = "up"
                     else:
                         if len(coords) > 0:
-                            write_to_file(draw_polygon(coords, 0.8, spark_color[1], stroke_width_spark))
+                            write_to_file(draw_polygon(coords, 0.8, spark_color[0], stroke_width_spark))
                         coords = [[get_relative_hight(np.average(ctrl_values) - np.std(ctrl_values)), x_pos]]
                         coords.insert(0, [get_relative_hight(np.average(treat_values) + np.std(treat_values)), x_pos])
                         last_xpos = x
                         last_value = "up"
-                else:
-                    if len(coords) > 0:
-                        write_to_file(draw_polygon(coords, 0.8, spark_color[0], stroke_width_spark))
-                    coords = [[get_relative_hight(np.average(ctrl_values) - np.std(ctrl_values)), x_pos]]
-                    coords.insert(0, [get_relative_hight(np.average(treat_values) + np.std(treat_values)), x_pos])
-                    last_xpos = x
-                    last_value = "up"
 
-            if np.average(ctrl_values) < np.average(treat_values):
-                if last_value == "" or last_value == "down":
-                    if (last_xpos + 1) == x:
-                        coords.append([get_relative_hight(np.average(treat_values) - np.std(treat_values)), x_pos])
-                        coords.insert(0, [get_relative_hight(np.average(ctrl_values) + np.std(ctrl_values)), x_pos])
-                        last_xpos = x
+                if np.average(ctrl_values) < np.average(treat_values):
+                    if last_value == "" or last_value == "down":
+                        if (last_xpos + 1) == x:
+                            coords.append([get_relative_hight(np.average(treat_values) - np.std(treat_values)), x_pos])
+                            coords.insert(0, [get_relative_hight(np.average(ctrl_values) + np.std(ctrl_values)), x_pos])
+                            last_xpos = x
+                        else:
+                            if len(coords) > 0:
+                                write_to_file(draw_polygon(coords, 0.8, spark_color[0], stroke_width_spark))
+                            coords = [[get_relative_hight(np.average(treat_values) - np.std(treat_values)), x_pos]]
+                            coords.insert(0, [get_relative_hight(np.average(ctrl_values) + np.std(ctrl_values)), x_pos])
+                            last_xpos = x
+                            last_value = "down"
                     else:
                         if len(coords) > 0:
-                            write_to_file(draw_polygon(coords, 0.8, spark_color[0], stroke_width_spark))
+                            write_to_file(draw_polygon(coords, 0.8, spark_color[1], stroke_width_spark))
                         coords = [[get_relative_hight(np.average(treat_values) - np.std(treat_values)), x_pos]]
                         coords.insert(0, [get_relative_hight(np.average(ctrl_values) + np.std(ctrl_values)), x_pos])
                         last_xpos = x
                         last_value = "down"
-                else:
-                    if len(coords) > 0:
-                        write_to_file(draw_polygon(coords, 0.8, spark_color[1], stroke_width_spark))
-                    coords = [[get_relative_hight(np.average(treat_values) - np.std(treat_values)), x_pos]]
-                    coords.insert(0, [get_relative_hight(np.average(ctrl_values) + np.std(ctrl_values)), x_pos])
-                    last_xpos = x
-                    last_value = "down"
-    if len(coords) > 0:
-        if last_value == "up":
-            write_to_file(draw_polygon(coords, spark_opacity, spark_color[0], stroke_width_spark))
-        elif last_value == "down":
-            write_to_file(draw_polygon(coords, spark_opacity, spark_color[1], stroke_width_spark))
+        if len(coords) > 0:
+            if last_value == "up":
+                write_to_file(draw_polygon(coords, spark_opacity, spark_color[0], stroke_width_spark))
+            elif last_value == "down":
+                write_to_file(draw_polygon(coords, spark_opacity, spark_color[1], stroke_width_spark))
+    else:
+        print("Error: Some Sparks not plotted as sparks require at least 2 control and treatment files per plot")
 def get_region_to_draw():
     region_to_draw = 0
     if line_split[4] > region[1] and line_split[3] < region[2]: # check if there is something to draw
@@ -194,15 +196,15 @@ parser.add_argument('-pt','--plot_type', help='choices: standard, STD, sine', re
 parser.add_argument('-ps','--show_plots', help='choices: all, averages', required=True, type=str)
 parser.add_argument('-pr','--region', help='example: chr1:1647389-272634', required=True, type=str)
 parser.add_argument('-cf','--control_files', help='separate by space', required=True, nargs='+', type=str)
-parser.add_argument('-tf','--treat_files', help='separate by space', required=True, nargs='+', type=str)
-parser.add_argument('-cg','--control_groups', help='group numbers separate by spacse', required=False, nargs='+', type=int)
-parser.add_argument('-tg','--treat_groups', help='group numbers separate by space', required=False, nargs='+', type=int)
+parser.add_argument('-tf','--treat_files', help='separate by space', required=False, nargs='+', type=str, default=[])
+parser.add_argument('-cg','--control_groups', help='group numbers separate by spacse', required=False, nargs='+', type=int, default=[])
+parser.add_argument('-tg','--treat_groups', help='group numbers separate by space', required=False, nargs='+', type=int, default=[])
 parser.add_argument('-gl','--group_labels', help='set group labels', required=False, nargs='+', type=str)
 parser.add_argument('-l','--labels', help='set labels for controls and treatment', required=False, nargs='+', type=str)
 parser.add_argument('-gs','--group_autoscale', help='set to "yes" to autoscale all tracks, except the ones excluded in -eg', required=False, type=str)
 parser.add_argument('-es','--exclude_from_group_autoscale', help='group numbers of groups to be excluded from autoscale', required=False, nargs='+', type=int)
 parser.add_argument('-eg','--exclude_groups', help='Exclude groups from the analysis', required=False, nargs='+', type=int)
-parser.add_argument('-f','--fills', help='track fills. enter two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str)
+parser.add_argument('-f','--fills', help='track fills. enter two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default="blue/red")
 parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
 parser.add_argument('-sp', '--spark', help='display significant change "yes"', required=False, type=str)
 parser.add_argument('-sc', '--spark_color', help='spark color', required=False, type=str, nargs='+')
@@ -210,7 +212,7 @@ parser.add_argument('-sm', '--smoothen', help='smoothen tracks, int', required=F
 parser.add_argument('-o','--output_name', help='output graph name, str', required=False, type=str)
 parser.add_argument('-bed','--bed_files', help='bed files to be plotted', required=False, type=str, nargs='+')
 parser.add_argument('-bedcol','--bed_color', help='colors of bed files in hex', required=False, type=str, nargs='+')
-parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int)
+parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int, default=150)
 parser.add_argument('-dg','--display_genes', help='genes to display from the gff file', nargs='+', required=False, type=str)
 args = vars(parser.parse_args())
 
@@ -254,9 +256,37 @@ display_genes = args['display_genes']
 width = args['track_width']
 if width is not None:
     total_width = int(width)
-else:
-    total_width = 150
 
+fills = args['fills']  # left is treat, right is control
+if fills is None:
+    if args['control_groups'] == [] and args['treat_groups'] == []:  # color if all tracks are plotted separat
+        fills = ["0000C1", "0"]
+        opacity = 1
+
+elif fills[0] == "blue/red":
+    fills = ["#FF1800", "#005CFF"]  # right is ctrl blue
+    opacity = 0.6
+
+elif fills[0] == "blue/grey":
+    fills = ["#005CFF", "#A3A3A3"]  # right is ctrl grey
+    opacity = 0.3
+
+elif fills[0] == "all_grey":
+    fills = ["#848484", "#848484"]
+    opacity = 0.6
+
+elif fills[0] == "blue/green":
+    fills = ["#00FF12", "#005CFF"]
+    opacity = 0.5
+
+elif len(fills) < 2:
+    print("Error: Track fill color entered wrong.")
+    sys.exit()
+
+elif len(fills) > 1:
+    for i in range(len(fills)):
+        fills[i] = "#" + fills[i]
+        opacity = 0.6
 
 plot_type = args['plot_type']  # standard, STD, sine
 if plot_type not in ["standard", "STD", "sine"]:
@@ -286,8 +316,6 @@ else:
     print("Plotting region: " + args['region'])
     if region[0][:3] == "chr" or region[0][:3] == "Chr":
         region[0] = region[0][3:]
-    else:
-        pass
 
 spark = args['spark']
 if spark == "yes":
@@ -310,9 +338,6 @@ if all_control_files is None:
     print("Error: No control files set")
     sys.exit()
 all_treat_files = args['treat_files']
-if all_treat_files is None:
-    print("Error: No treat files set")
-    sys.exit()
 
 group_autoscale = args['group_autoscale']
 if group_autoscale is not None:
@@ -329,11 +354,9 @@ else:
 
 control_groups = args["control_groups"]
 treat_groups = args["treat_groups"]
-if control_groups is None and treat_groups is None:
+if control_groups == [] and treat_groups == []:
     nr_of_groups = len(all_treat_files + all_control_files)
     number = 1
-    control_groups = []
-    treat_groups = []
     for i in range(len(all_control_files)):
         control_groups.append(number)
         number += 1
@@ -341,7 +364,10 @@ if control_groups is None and treat_groups is None:
         treat_groups.append(number)
         number += 1
 else:
-    nr_of_groups = max([max(control_groups), max(treat_groups)])
+    if treat_groups == []:
+        nr_of_groups = max(control_groups)
+    else:
+        nr_of_groups = max([max(control_groups), max(treat_groups)])
 
 group_labels = args['group_labels']
 if group_labels is not None:
@@ -360,36 +386,6 @@ if exclude_groups is None:
     exclude_groups = []
 else:
     print("Excluding following groups: " + str(exclude_groups))
-
-fills = args['fills']  # left is treat, right is control
-
-if fills is None:
-    fills = ["blue/red", "N/A"]
-
-if fills[0] == "blue/red":
-    fills = ["#FF1800", "#005CFF"]  # right is ctrl blue
-    opacity = 0.6
-
-elif fills[0] == "blue/grey":
-    fills = ["#005CFF", "#A3A3A3"]  # right is ctrl grey
-    opacity = 0.3
-
-elif fills[0] == "all_grey":
-    fills = ["#848484", "#848484"]
-    opacity = 0.6
-
-elif fills[0] == "blue/green":
-    fills = ["#00FF12", "#005CFF"]
-    opacity = 0.5
-
-elif len(fills) < 2:
-    print("Error: Track fill color entered wrong.")
-    sys.exit()
-
-elif len(fills) > 1:
-    for i in range(len(fills)):
-        fills[i] = "#" + fills[i]
-        opacity = 0.6
 
 
 gff_file = args['gfffile']
@@ -422,7 +418,10 @@ if group_autoscale == "yes":
         if treat_files != []:
             treat_averages.append(np.average([max(sublist) for sublist in make_raw_data_filled(region, treat_files, 0)]))
 
-    autoscale_max = max([max(ctrl_averages), max(treat_averages)])
+    if treat_averages == []:
+        autoscale_max = max(ctrl_averages)
+    else:
+        autoscale_max = max([max(ctrl_averages), max(treat_averages)])
 #############################################################################################################
 
 if (region[2] - region[1]) <= 2000:
@@ -484,131 +483,139 @@ for group in range(nr_of_groups):
             coords[0][0] = 0
             write_to_file(draw_polygon(coords, opacity, fills[0], stroke_width))
             coords = []
-            for x in range(len(treat_data[0])):
-                averages = []
-                x_pos = x_start + (x * quantile)
-                for datafile in treat_data:
-                    averages.append(datafile[x])
-                coords.append([get_relative_hight(np.average(averages)), x_pos])
-            coords[-1][0] = 0  # make first and last value zero FIX
-            coords[0][0] = 0
-            write_to_file(draw_polygon(coords, opacity, fills[1], stroke_width))
+            if treat_data != []:
+                for x in range(len(treat_data[0])):
+                    averages = []
+                    x_pos = x_start + (x * quantile)
+                    for datafile in treat_data:
+                        averages.append(datafile[x])
+                    coords.append([get_relative_hight(np.average(averages)), x_pos])
+                coords[-1][0] = 0  # make first and last value zero FIX
+                coords[0][0] = 0
+                write_to_file(draw_polygon(coords, opacity, fills[1], stroke_width))
         if spark == "yes":
+
             draw_standard_spark()
 
     elif plot_type == "STD":
-        coords = []
-        for x in range(len((control_data[0]))):
-            x_pos = x_start + (x * quantile)  # y/x
-            values = []
-            for p, i in enumerate(control_data):
-                values.append(control_data[p][x])
-            coords.append([get_relative_hight(np.average(values) + np.std(values)), x_pos])
-            coords.insert(0, [get_relative_hight(np.average(values) - np.std(values)), x_pos])
-        write_to_file(draw_polygon(coords, 0.4, fills[0], stroke_width))
-        coords = []
-        for x in range(len((treat_data[0]))):
-            x_pos = x_start + (x * quantile)  # y/x
-            values = []
-            for p, i in enumerate(treat_data):
-                values.append(treat_data[p][x])
-            coords.append([get_relative_hight(np.average(values) + np.std(values)), x_pos])
-            coords.insert(0, [get_relative_hight(np.average(values) - np.std(values)), x_pos])
-        write_to_file(draw_polygon(coords, 0.4, fills[1], stroke_width))
+        if len(control_data) > 1 and len(treat_data) > 1:
+            coords = []
+            for x in range(len((control_data[0]))):
+                x_pos = x_start + (x * quantile)  # y/x
+                values = []
+                for p, i in enumerate(control_data):
+                    values.append(control_data[p][x])
+                coords.append([get_relative_hight(np.average(values) + np.std(values)), x_pos])
+                coords.insert(0, [get_relative_hight(np.average(values) - np.std(values)), x_pos])
+            write_to_file(draw_polygon(coords, 0.4, fills[0], stroke_width))
+            coords = []
+            for x in range(len((treat_data[0]))):
+                x_pos = x_start + (x * quantile)  # y/x
+                values = []
+                for p, i in enumerate(treat_data):
+                    values.append(treat_data[p][x])
+                coords.append([get_relative_hight(np.average(values) + np.std(values)), x_pos])
+                coords.insert(0, [get_relative_hight(np.average(values) - np.std(values)), x_pos])
+            write_to_file(draw_polygon(coords, 0.4, fills[1], stroke_width))
 
-        if spark == "yes":
-            draw_standard_spark()
+            if spark == "yes":
+                draw_standard_spark()
+        else:
+            print("Error: Some tracks not plotted as STD plots require at least 2 control and treatment files per plot")
 
     elif plot_type == "sine": # treat points up, control points down #FIX combined with averages does not work
-        for datafile in control_data:
-            coords = []  # y, x
-            for x, value in enumerate(datafile):
-                x_pos = x_start + (x * quantile)
-                coords.append([get_relative_hight(-value), x_pos])
-            coords[-1][0] = 0
-            coords[0][0] = 0
-            write_to_file(draw_polygon(coords, opacity, fills[0], stroke_width))
-        for datafile in treat_data:
-            coords = []  # y, x
-            for x, value in enumerate(datafile):
-                x_pos = x_start + (x * quantile)
-                coords.append([get_relative_hight(value), x_pos])
-            coords[-1][0] = 0
-            coords[0][0] = 0
-            write_to_file(draw_polygon(coords, opacity, fills[1], stroke_width))
+        if len(control_data) > 1 and len(treat_data) > 1:
+            for datafile in control_data:
+                coords = []  # y, x
+                for x, value in enumerate(datafile):
+                    x_pos = x_start + (x * quantile)
+                    coords.append([get_relative_hight(-value), x_pos])
+                coords[-1][0] = 0
+                coords[0][0] = 0
+                write_to_file(draw_polygon(coords, opacity, fills[0], stroke_width))
+            for datafile in treat_data:
+                coords = []  # y, x
+                for x, value in enumerate(datafile):
+                    x_pos = x_start + (x * quantile)
+                    coords.append([get_relative_hight(value), x_pos])
+                coords[-1][0] = 0
+                coords[0][0] = 0
+                write_to_file(draw_polygon(coords, opacity, fills[1], stroke_width))
 
-        if spark == "yes":
-            last_xpos = -1
-            coords = []
-            last_value = ""
-            for x in range(len((control_data[0]))):
-                x_pos = x_start + (x * quantile)
-                ctrl_values = []
-                treat_values = []
-                for p, i in enumerate(control_data):
-                    ctrl_values.append(control_data[p][x])
-                for p, i in enumerate(treat_data):
-                    treat_values.append(treat_data[p][x])
-                if abs(np.average(ctrl_values) - np.average(treat_values)) > (np.std(ctrl_values) + np.std(treat_values)):
-                    if np.average(ctrl_values) > np.average(treat_values):
-                        if last_value == "" or last_value == "ctrl_up":
-                            if (last_xpos + 1) == x:
+            if spark == "yes":
+                last_xpos = -1
+                coords = []
+                last_value = ""
+                for x in range(len((control_data[0]))):
+                    x_pos = x_start + (x * quantile)
+                    ctrl_values = []
+                    treat_values = []
+                    for p, i in enumerate(control_data):
+                        ctrl_values.append(control_data[p][x])
+                    for p, i in enumerate(treat_data):
+                        treat_values.append(treat_data[p][x])
+                    if abs(np.average(ctrl_values) - np.average(treat_values)) > (np.std(ctrl_values) + np.std(treat_values)):
+                        if np.average(ctrl_values) > np.average(treat_values):
+                            if last_value == "" or last_value == "ctrl_up":
+                                if (last_xpos + 1) == x:
+                                    coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
+                                    coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
+                                    last_xpos = x
+                                else:
+                                    if len(coords) > 0:
+                                        coords.insert(0, [get_relative_hight(0), coords[0][1] - quantile])
+                                        coords.append([get_relative_hight(0), coords[-1][1] + quantile])
+                                        write_to_file(draw_polygon(coords, 1, spark_color[1], stroke_width_spark))
+                                    coords = []
+                                    coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
+                                    coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
+                                    last_xpos = x
+                                    last_value = "ctrl_up"
+                            elif last_value == "treat_up":
+                                if len(coords) > 0:
+                                    coords.insert(0, [get_relative_hight(0), coords[0][1]-quantile])
+                                    coords.append([get_relative_hight(0), coords[-1][1] + quantile])
+                                    write_to_file(draw_polygon(coords, 1, spark_color[0], stroke_width_spark))
+                                coords = []
                                 coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
                                 coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
                                 last_xpos = x
+                                last_value = "ctrl_up"
+                        elif np.average(ctrl_values) < np.average(treat_values):
+                            if last_value == "" or last_value == "treat_up":
+                                if (last_xpos + 1) == x:
+                                    coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
+                                    coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
+                                    last_xpos = x
+                                else:
+                                    if len(coords) > 0:
+                                        coords.insert(0, [get_relative_hight(0), coords[0][1] - quantile])
+                                        coords.append([get_relative_hight(0), coords[-1][1] + quantile])
+                                        write_to_file(draw_polygon(coords, 1, spark_color[0], stroke_width_spark))
+                                    coords = []
+                                    coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
+                                    coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
+                                last_xpos = x
+                                last_value = "treat_up"
                             else:
                                 if len(coords) > 0:
                                     coords.insert(0, [get_relative_hight(0), coords[0][1] - quantile])
                                     coords.append([get_relative_hight(0), coords[-1][1] + quantile])
                                     write_to_file(draw_polygon(coords, 1, spark_color[1], stroke_width_spark))
                                 coords = []
-                                coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
-                                coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
-                                last_xpos = x
-                                last_value = "ctrl_up"
-                        elif last_value == "treat_up":
-                            if len(coords) > 0:
-                                coords.insert(0, [get_relative_hight(0), coords[0][1]-quantile])
-                                coords.append([get_relative_hight(0), coords[-1][1] + quantile])
-                                write_to_file(draw_polygon(coords, 1, spark_color[0], stroke_width_spark))
-                            coords = []
-                            coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
-                            coords.append([-1 * get_relative_hight((abs(np.average(ctrl_values)-np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
-                            last_xpos = x
-                            last_value = "ctrl_up"
-                    elif np.average(ctrl_values) < np.average(treat_values):
-                        if last_value == "" or last_value == "treat_up":
-                            if (last_xpos + 1) == x:
                                 coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
                                 coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
                                 last_xpos = x
-                            else:
-                                if len(coords) > 0:
-                                    coords.insert(0, [get_relative_hight(0), coords[0][1] - quantile])
-                                    coords.append([get_relative_hight(0), coords[-1][1] + quantile])
-                                    write_to_file(draw_polygon(coords, 1, spark_color[0], stroke_width_spark))
-                                coords = []
-                                coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
-                                coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
-                            last_xpos = x
-                            last_value = "treat_up"
-                        else:
-                            if len(coords) > 0:
-                                coords.insert(0, [get_relative_hight(0), coords[0][1] - quantile])
-                                coords.append([get_relative_hight(0), coords[-1][1] + quantile])
-                                write_to_file(draw_polygon(coords, 1, spark_color[1], stroke_width_spark))
-                            coords = []
-                            coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
-                            coords.append([get_relative_hight((abs(np.average(ctrl_values) - np.average(treat_values)) - np.std(treat_values) - np.std(ctrl_values))), x_pos])
-                            last_xpos = x
-                            last_value = "treat_up"
-            if len(coords) > 0:
-                if last_value == "ctrl_up":
-                    coords.insert(0, [get_relative_hight(0), coords[0][1] - quantile])
-                    coords.append([get_relative_hight(0), coords[-1][1] + quantile])
-                    write_to_file(draw_polygon(coords, 0.8, spark_color[0], stroke_width_spark))
-                elif last_value == "treat_up":
-                    write_to_file(draw_polygon(coords, 0.8, spark_color[1], stroke_width_spark))
+                                last_value = "treat_up"
+                if len(coords) > 0:
+                    if last_value == "ctrl_up":
+                        coords.insert(0, [get_relative_hight(0), coords[0][1] - quantile])
+                        coords.append([get_relative_hight(0), coords[-1][1] + quantile])
+                        write_to_file(draw_polygon(coords, 0.8, spark_color[0], stroke_width_spark))
+                    elif last_value == "treat_up":
+                        write_to_file(draw_polygon(coords, 0.8, spark_color[1], stroke_width_spark))
+        else:
+            print("Error: Some tracks not plotted as Sine plots require at least 2 control and treatment files per plot")
 
 # Draw axis and labels
 ##################################################
