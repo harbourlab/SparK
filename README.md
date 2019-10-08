@@ -1,4 +1,4 @@
-# SparK - Publication quality NGS data plotting (Version 1.4.3)
+# SparK - Publication quality NGS data plotting (Version 1.4.4)
 
 read known issues at the bottom before using!
 For help and to request features contact Stefan.Kurtenbach@me.com
@@ -77,8 +77,6 @@ python SparK.py -pt standard -ps all -pr chr12:6533888-6539592 \
 <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
 
  Known issues (to be fixed):
- - Requires at least one control and one treatment file
- - Sine plot might not work with averages
  - region plotted should be > 2000 bp
  
  Example with "blue/green" color scheme and bed files added (with custom colors)
