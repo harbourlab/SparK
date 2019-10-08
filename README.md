@@ -1,7 +1,7 @@
 # SparK - Publication quality NGS data plotting (Version 1.4.4)
 
-read known issues at the bottom before using!
-For help and to request features contact Stefan.Kurtenbach@me.com
+Read known issues at the bottom before using!
+For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 
  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400" align="left"><img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="top">
 
