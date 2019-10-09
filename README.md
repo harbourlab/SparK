@@ -1,6 +1,4 @@
 # SparK - Publication quality NGS data plotting (Version 1.4.5)
-
-Read known issues at the bottom before using!
 For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 
  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400" align="left"><img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="top">
@@ -71,9 +69,8 @@ Example plot with "blue/grey" color scheme and sparks.
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
  
  Example of a larger stretch (110kb) beeing plotted with standard colors, subset of genes, and TSS sites with direction of transcription.
+ 
  <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch.png" width="400".
   
   
-  Known issues (to be fixed):
- - region plotted should be > 2000 bp
 </pre>
