@@ -63,10 +63,10 @@ python SparK.py -pt standard -ps averages -pr chr12:6533888-6539592 \
 
 
 
-Example plot with sparks.
+Example plot with "blue/grey" color scheme and sparks.
 <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
  
- Example with "blue/green" color scheme and bed files added (with custom colors)
+ Example with "blue/green" color scheme and bed files (with custom colors)
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
  
  
