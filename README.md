@@ -72,5 +72,7 @@ Example plot with "blue/grey" color scheme and sparks.
  and TSS sites with direction of transcription.
  <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch.png" width="400">
   
+ Example of different smoothing windows.
+ <img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing.png" width="400">
   
 </pre>
