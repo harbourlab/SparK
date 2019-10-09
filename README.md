@@ -47,7 +47,7 @@ Options (Not required):
 
 Left: Example of a larger stretch (110kb) beeing plotted with standard colors, subset of genes,
 TSS sites with direction of transcription, and scale bar. Right: Example with "blue/green" color 
-scheme and bed files with custom colors.
+scheme and bed files with custom colors. Scale bar and TSS sites were not plotted.
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
 Left: Example of different smoothing windows. Right: Example of sparks beeing added to a plot 
