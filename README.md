@@ -45,9 +45,9 @@ Options (Not required):
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
 
-Left: Example of a larger stretch (110kb) beeing plotted with standard colors, subset of genes, 
-and TSS sites with direction of transcription. Right: Example with "blue/green" color scheme and 
-bed files with custom colors.
+Left: Example of a larger stretch (110kb) beeing plotted with standard colors, subset of genes,
+TSS sites with direction of transcription, and scale bar. Right: Example with "blue/green" color 
+scheme and bed files with custom colors.
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
 Left: Example of different smoothing windows. Right: Example of sparks beeing added to a plot 
