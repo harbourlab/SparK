@@ -72,6 +72,12 @@ python SparK.py -pt standard -ps averages -pr chr12:6533888-6539592 \
 -es 5
 
 
+
+
+
+
+
+
 <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="top">
 Example of other plot types.
 
