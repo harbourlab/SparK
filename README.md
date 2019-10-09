@@ -55,7 +55,7 @@ Left: Example of different smoothing windows. Right: Example of sparks beeing ad
 with blue/grey color scheme.
 
 
-<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400" align="left">
+<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400">
 
 Example comparing different datatypes for 2 cell lines (K562 and HepG2) 
 which was used to generate the left figure above:
@@ -72,7 +72,7 @@ python SparK.py -pt standard -ps averages -pr chr12:6533888-6539592 \
 -es 5
 
 
-<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="left">
+<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400">
 Example of other plot types.
 
 
