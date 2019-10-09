@@ -1,9 +1,5 @@
 # SparK - Publication quality NGS data plotting (Version 1.4.7)
 For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
-
- <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400" align="left"><img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="top">
-
-
 <pre>
 Plot NGS bedgraph tracks including replicates, overlay, and standard deviations. 
 Output files are true vector graphics (.svg) for easy editing.
@@ -47,6 +43,20 @@ Options (Not required):
 -scale   set to "no" if no scalebar should be plotted. Default "yes"
 
 
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
+
+Left: Example with "blue/green" color scheme and bed files (with custom colors). Example of a larger 
+stretch (110kb) beeing plotted with standard colors, subset of genes, and TSS sites with direction of 
+transcription. Right: Example with blue/green color scheme and bed files added. 
+
+
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
+Left: Example of different smoothing windows. Right: Example of sparks beeing added to a plot 
+with blue/grey color scheme.
+
+
+<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400" align="left"><img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="top">
+
 Example comparing different datatypes for 2 cell lines (K562 and HepG2) 
 which was used to generate the left figure above:
 
@@ -61,14 +71,5 @@ python SparK.py -pt standard -ps averages -pr chr12:6533888-6539592 \
 -gs yes \
 -es 5
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
 
-Left: Example with "blue/green" color scheme and bed files (with custom colors). Example of a larger 
-stretch (110kb) beeing plotted with standard colors, subset of genes, and TSS sites with direction of 
-transcription. Right: Example with blue/green color scheme and bed files added. 
-
-
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
-Left: Example of different smoothing windows. Right: Example of sparks beeing added to a plot 
-with blue/grey color scheme.
 </pre>
