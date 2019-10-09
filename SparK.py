@@ -1,11 +1,10 @@
-SparK_Version = "1.4.6"
+SparK_Version = "1.4.7"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
 # FIX what happens if region is smaller than 2000?
 # make png output
-plot_all_TSS = False  ## could plot all TSS sites
-
+# could make resolution choosable.. 2000 now
 
 import numpy as np
 import copy
@@ -213,6 +212,7 @@ parser.add_argument('-bed','--bed_files', help='bed files to be plotted', requir
 parser.add_argument('-bedcol','--bed_color', help='colors of bed files in hex', required=False, type=str, nargs='+')
 parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int, default=150)
 parser.add_argument('-dg','--display_genes', help='genes to display from the gff file', nargs='+', required=False, type=str)
+parser.add_argument('-scale','--display_scalebar', help='set to "no" to remove scalebar', nargs='+', required=False, type=str, default="yes")
 args = vars(parser.parse_args())
 
 print(" ")
@@ -224,6 +224,7 @@ x_start = 50
 spark_opacity = 1
 stroke_width = 0  # 0.1 stroke widths good
 stroke_width_spark = 0
+plot_all_TSS = False  ## could plot all TSS sites
 ################################################################
 
 # import arguments #############################################
@@ -319,6 +320,8 @@ else:
     print("Plotting region: " + args['region'])
     if region[0][:3] == "chr" or region[0][:3] == "Chr":
         region[0] = region[0][3:]
+
+display_scalebar = args['display_scalebar']
 
 spark = args['spark']
 if spark == "yes":
@@ -430,11 +433,12 @@ if group_autoscale == "yes":
         autoscale_max = max([max(ctrl_averages), max(treat_averages)])
 #############################################################################################################
 
+
+# Plot NGS tracks
 if (region[2] - region[1]) <= 2000:
     quantile = float(total_width)/(region[2] - region[1])
 else:
     quantile = float(total_width)/2000
-
 for group in range(nr_of_groups):
     y_start = 100 + group * hight * 1.5
     control_files = []
@@ -634,12 +638,40 @@ for group in range(nr_of_groups):
     write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start + 4) + '''" font-size="9" >0</text>''')
     write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start - hight + 4) + '''" font-size="9" >''' + str(round(max_value, 1)) + '''</text>''')
 
+# Scalebar
+if display_scalebar == "yes":
+    delta_region = region[2] - region[1]
+    fivepercent = int(delta_region * 0.05)
+    scalebar_width = "1"
+    for i in range(len(str(fivepercent))):
+        scalebar_width += "0"
+    scalebar_width = float(scalebar_width)
+    scalebar_display = str(int(scalebar_width))
+    scalebar_units = [" bp", " kb", " Mb", " Gb", " Tb", " Pb", " Eb", " Zb", " Yb"]
+    counter = 0
+    while len(scalebar_display) > 3:
+        counter += 1
+        scalebar_display = scalebar_display[:-3]
+
+    normalized_scalebar_width = (scalebar_width * total_width) / float((region[2] - region[1]))
+
+    if normalized_scalebar_width/2 > 15:
+        normalized_scalebar_width /= 2
+        scalebar_display = str((int(scalebar_display)*1000/2))
+        scalebar_display += scalebar_units[counter-1]
+    else:
+        scalebar_display += scalebar_units[counter]
+
+
+    write_to_file(draw_rect(total_width + x_start - normalized_scalebar_width, 100-hight+8, "000000", normalized_scalebar_width, 1, 1))
+    write_to_file('''<text text-anchor="middle" x="''' + str(total_width + x_start - (normalized_scalebar_width/2)) + '''" y="''' + str(96-hight+8) + '''" font-size="7" >''' + scalebar_display + '''</text>''')
+
 # Group labels
 if group_labels is not None:
     for x, i in enumerate(range(nr_of_groups)):
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(100 + x * hight * 1.5 - int((hight/2)) - 1.788) + '''" font-size="9" >''' + group_labels[x] + '''</text>''')
 
-# Squares and labels
+# Squares and labels for groups
 if labels is not None:
     write_to_file(draw_rect(x_start - 10.5, 34, fills[0], 10, 10, opacity))
     write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(34 - 1.788) + '''" font-size="9" >''' + str(labels[0]) + '''</text>''')
@@ -682,7 +714,7 @@ if bed_files is not None:
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="9" >''' + bed_file + '''</text>''')
         y_position_bed += 8
 
-# add gene plots
+# add gene plots from gff file
 if gff_file is not None:
     with open(gff_file) as f:
         gene_names = []
