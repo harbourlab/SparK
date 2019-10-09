@@ -67,7 +67,7 @@ Example with "blue/green" color scheme and bed files (with custom colors)
  
 Example of a larger stretch (110kb) beeing plotted with standard colors, subset of genes, 
 and TSS sites with direction of transcription.
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch.png" width="400">
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">
   
 Example of different smoothing windows.
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">
