@@ -44,6 +44,7 @@ Options (Not required):
 -gff     link gff file to show genes. Get here: https://www.gencodegenes.org/human/
 -dg      in case not all genes in the region plotted should be displayed, enter the genes to plot here.
          Usage: "-dg GAPDH RS1"
+-tss     set to "yes" for TSS sites and direction of transcription being indicated with arrows.
 -w       define plot width. Default is 150.
 
 
@@ -69,8 +70,8 @@ Example plot with "blue/grey" color scheme and sparks.
  Example with "blue/green" color scheme and bed files (with custom colors)
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
  
- Example of a large stretch (210kb) beeing plotted with standard colors and subset of genes displayed.
- <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch.png" width="400">
+ Example of a largeer stretch (110kb) beeing plotted with standard colors and subset of genes displayed.
+ <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch.png" width="400", and TSS sites indicated.
  
   Known issues (to be fixed):
  - region plotted should be > 2000 bp
