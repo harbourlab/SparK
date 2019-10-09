@@ -69,8 +69,7 @@ Example plot with "blue/grey" color scheme and sparks.
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
  
  Example of a larger stretch (110kb) beeing plotted with standard colors, subset of genes, and TSS sites with direction of transcription.
- 
- <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch.png" width="400".
+ <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch.png" width="400>
   
   
 </pre>
