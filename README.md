@@ -1,4 +1,4 @@
-# SparK - Publication quality NGS data plotting (Version 1.4.6)
+# SparK - Publication quality NGS data plotting (Version 1.4.7)
 For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 
  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400" align="left"><img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400" align="top">
@@ -44,6 +44,7 @@ Options (Not required):
          Usage: "-dg GAPDH RS1"
 -tss     set to "yes" for TSS sites and direction of transcription being indicated with arrows.
 -w       define plot width. Default is 150.
+-scale   set to "no" if no scalebar should be plotted. Default "yes"
 
 
 Example comparing different datatypes for 2 cell lines (K562 and HepG2) 
