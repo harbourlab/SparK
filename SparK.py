@@ -1,12 +1,10 @@
-SparK_Version = "1.4.4"
+SparK_Version = "1.4.5"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
 # FIX what happens if region is smaller than 2000?
-# add tss site arrow
-# make so that only control tracks can be chosen too
 # make png output
-# averages and sine plot
+plot_all_TSS = False  ## could plot all TSS sites
 
 
 import numpy as np
@@ -15,6 +13,8 @@ import os
 import argparse
 import math
 import sys
+
+
 
 def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
     raw_data_filled = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
@@ -204,8 +204,9 @@ parser.add_argument('-l','--labels', help='set labels for controls and treatment
 parser.add_argument('-gs','--group_autoscale', help='set to "yes" to autoscale all tracks, except the ones excluded in -eg', required=False, type=str)
 parser.add_argument('-es','--exclude_from_group_autoscale', help='group numbers of groups to be excluded from autoscale', required=False, nargs='+', type=int)
 parser.add_argument('-eg','--exclude_groups', help='Exclude groups from the analysis', required=False, nargs='+', type=int)
-parser.add_argument('-f','--fills', help='track fills. enter two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default="blue/red")
+parser.add_argument('-f','--fills', help='track fills. enter two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default=None)
 parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
+parser.add_argument('-tss', '--drawtss', help='set to "yes" if TSS sites should be indicated', required=False, type=str, default="no")
 parser.add_argument('-sp', '--spark', help='display significant change "yes"', required=False, type=str)
 parser.add_argument('-sc', '--spark_color', help='spark color', required=False, type=str, nargs='+')
 parser.add_argument('-sm', '--smoothen', help='smoothen tracks, int', required=False, type=int)
@@ -230,6 +231,7 @@ stroke_width_spark = 0
 # import arguments #############################################
 bed_files = args["bed_files"]
 bed_color = args['bed_color']
+draw_TSS = args['drawtss']
 if bed_files is not None:
     if bed_color is not None:
         if len(bed_color) == len(bed_files):
@@ -259,9 +261,12 @@ if width is not None:
 
 fills = args['fills']  # left is treat, right is control
 if fills is None:
-    if args['control_groups'] == [] and args['treat_groups'] == []:  # color if all tracks are plotted separat
-        fills = ["0000C1", "0"]
+    if args['treat_groups'] == []:  # color if all tracks are plotted separat
+        fills = ["#0000C1", "0"]
         opacity = 1
+    elif args['treat_groups'] != []:
+        fills = ["#FF1800", "#005CFF"]  # blue/red as default
+        opacity = 0.6
 
 elif fills[0] == "blue/red":
     fills = ["#FF1800", "#005CFF"]  # right is ctrl blue
@@ -394,7 +399,10 @@ if os.path.exists(output_filename):
     os.remove(output_filename)
 #############################################################################################################
 
-write_to_file('''<svg viewBox="0 0 300 ''' + str(100 + (hight * 2 * nr_of_groups)) + '''" xmlns="http://www.w3.org/2000/svg">''')
+
+#check how many genes will be plotted in that region to make file size correct... for the future
+hight_bed = 0
+write_to_file('''<svg viewBox="0 0 300 ''' + str(150 + (hight * 2 * nr_of_groups) + hight_bed) + '''" xmlns="http://www.w3.org/2000/svg">''')
 
 # make list of files and global max - useful for autoscaling only ###########################################
 if group_autoscale == "yes":
@@ -680,6 +688,7 @@ if bed_files is not None:
 if gff_file is not None:
     with open(gff_file) as f:
         gene_names = []
+        tss_plotted_genes = []
         y_genestart = y_position_bed
         exons = []
         UTRs = []
@@ -741,6 +750,27 @@ if gff_file is not None:
                                 else:
                                     drawhight = 3.0
                                     write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+
+                        if line_split[2] == "start_codon":
+                            if draw_TSS == "yes":
+                                if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
+                                    plotted_TSS = True
+                                    if gene not in tss_plotted_genes:
+                                        plotted_TSS = False
+                                        tss_plotted_genes.append(gene)
+                                    if plotted_TSS == False or plot_all_TSS == True:
+                                        hight = 5
+                                        width = 6.156
+                                        thickness = 0.7
+                                        x_0 = x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1])))
+                                        y_0 = 4
+                                        y_start = y_genestart # Dirty... quick fix as the polygon function uses y_start...
+                                        if line_split[6] == "+":
+                                            arrow_coords = [[y_0, x_0], [y_0 + (hight * 0.8), x_0], [y_0 + (hight * 0.8), x_0 + (width * 0.8)], [y_0 + hight, x_0 + (width * 0.8)], [(y_0 + (hight * 0.8)) - (float(thickness) / 2), x_0 + width], [y_0 + (hight * 0.8) - thickness - hight * 0.2, x_0 + (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 + (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 + thickness], [y_0, x_0 + thickness]]
+                                        if line_split[6] == "-":
+                                            arrow_coords = [[y_0, x_0], [y_0 + (hight * 0.8), x_0], [y_0 + (hight * 0.8), x_0 - (width * 0.8)], [y_0 + hight, x_0 - (width * 0.8)], [(y_0 + (hight * 0.8)) - (float(thickness) / 2), x_0 - width], [y_0 + (hight * 0.8) - thickness - hight * 0.2, x_0 - (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 - (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 - thickness], [y_0, x_0 - thickness]]
+                                        write_to_file(draw_polygon(arrow_coords,1,"#000000",0))
+                                        plotted_TSS = True
             except:
                 print("excluding row:" + str(line_split))
 
