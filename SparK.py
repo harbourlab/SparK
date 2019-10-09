@@ -14,8 +14,6 @@ import argparse
 import math
 import sys
 
-
-
 def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
     raw_data_filled = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
     for a, datafile2 in enumerate(files):
@@ -77,7 +75,7 @@ def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
         raw_data_filled = copy.deepcopy(temp_data)
 
     if smoothen_tracks is not None:
-        raw_data_filled_smooth = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
+        raw_data_filled_smooth = [[0] * 2000 for r in range(len(files))]
         for x, dataset in enumerate(raw_data_filled):
             temp = [dataset[0]] * smoothen_tracks
             for p, i in enumerate(dataset):
