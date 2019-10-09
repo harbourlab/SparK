@@ -62,10 +62,13 @@ python SparK.py -pt standard -ps averages -pr chr12:6533888-6539592 \
 -es 5
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
+
 Left: Example with "blue/green" color scheme and bed files (with custom colors). Example of a larger 
 stretch (110kb) beeing plotted with standard colors, subset of genes, and TSS sites with direction of 
 transcription. Right: Example with blue/green color scheme and bed files added. 
 
+
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
-Left: Example of different smoothing windows. Right: Example of sparks beeing added to a plot with blue/grey color scheme.
+Left: Example of different smoothing windows. Right: Example of sparks beeing added to a plot 
+with blue/grey color scheme.
 </pre>
