@@ -69,7 +69,8 @@ Example plot with "blue/grey" color scheme and sparks.
  Example with "blue/green" color scheme and bed files (with custom colors)
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
  
- 
+ Example of a large stretch (210kb) beeing plotted with standard colors and subset of genes displayed.
+ <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch.png" width="400">
  
   Known issues (to be fixed):
  - region plotted should be > 2000 bp
