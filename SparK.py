@@ -1,4 +1,4 @@
-SparK_Version = "1.4.8"
+SparK_Version = "1.4.9"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -716,7 +716,7 @@ if bed_files is not None:
                         if line_split[2] > region[2]:
                             region_to_draw[1] = region[2]
                 if region_to_draw != [0, 0]:
-                    write_to_file(draw_rect(x_start + (((region_to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_position_bed - 0.3 + (2 / 2), bed_color[nr_bed], ((region_to_draw[1] - region_to_draw[0]) * 150) / float(region[2] - region[1]), 2, 1))
+                    write_to_file(draw_rect(x_start + (((region_to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_position_bed - 0.3 + (2 / 2), bed_color[nr_bed], ((region_to_draw[1] - region_to_draw[0]) * total_width) / float(region[2] - region[1]), 2, 1))
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="9" >''' + bed_file + '''</text>''')
         y_position_bed += 8
 
@@ -760,32 +760,32 @@ if gff_file is not None:
                                     gene_names.append(gene)
                                     write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
                                     drawhight = 1.0
-                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
                             else:
                                 y_genestart += 10
                                 write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
                                 drawhight = 1.0
-                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
 
                         if line_split[2] == "CDS":
                             if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
                                 if display_genes is not None:
                                     if gene in display_genes:
                                         drawhight = 6.0
-                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
                                 else:
                                     drawhight = 6.0
-                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
 
                         if line_split[2] == "exon":
                             if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
                                 if display_genes is not None:
                                     if gene in display_genes:
                                         drawhight = 3.0
-                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
                                 else:
                                     drawhight = 3.0
-                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * 150) / float(region[2] - region[1]), drawhight, 1))
+                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
 
                         if line_split[2] == "start_codon":
                             if draw_TSS == "yes":
