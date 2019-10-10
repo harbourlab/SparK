@@ -1,4 +1,4 @@
-SparK_Version = "1.4.7"
+SparK_Version = "1.4.8"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -203,7 +203,8 @@ parser.add_argument('-es','--exclude_from_group_autoscale', help='group numbers 
 parser.add_argument('-eg','--exclude_groups', help='Exclude groups from the analysis', required=False, nargs='+', type=int)
 parser.add_argument('-f','--fills', help='track fills. enter two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default=None)
 parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
-parser.add_argument('-tss', '--drawtss', help='set to "yes" if TSS sites should be indicated', required=False, type=str, default="no")
+parser.add_argument('-tss', '--drawtss', help='set to "no" if TSS sites should not be indicated', required=False, type=str, default="yes")
+parser.add_argument('-genestart', '--draw_genestart', help='set to "yes" if TSS sites should be indicated', required=False, type=str, default="no")
 parser.add_argument('-sp', '--spark', help='display significant change "yes"', required=False, type=str)
 parser.add_argument('-sc', '--spark_color', help='spark color', required=False, type=str, nargs='+')
 parser.add_argument('-sm', '--smoothen', help='smoothen tracks, int', required=False, type=int)
@@ -212,7 +213,7 @@ parser.add_argument('-bed','--bed_files', help='bed files to be plotted', requir
 parser.add_argument('-bedcol','--bed_color', help='colors of bed files in hex', required=False, type=str, nargs='+')
 parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int, default=150)
 parser.add_argument('-dg','--display_genes', help='genes to display from the gff file', nargs='+', required=False, type=str)
-parser.add_argument('-scale','--display_scalebar', help='set to "no" to remove scalebar', nargs='+', required=False, type=str, default="yes")
+parser.add_argument('-scale','--display_scalebar', help='set to "no" to remove scalebar', required=False, type=str, default="yes")
 args = vars(parser.parse_args())
 
 print(" ")
@@ -253,6 +254,8 @@ else:
     output_filename += ".svg"
 
 display_genes = args['display_genes']
+
+display_genestart = args['draw_genestart']
 
 width = args['track_width']
 if width is not None:
@@ -658,10 +661,13 @@ if display_scalebar == "yes":
     if normalized_scalebar_width/2 > 15:
         normalized_scalebar_width /= 2
         scalebar_display = str((int(scalebar_display)*1000/2))
-        scalebar_display += scalebar_units[counter-1]
+        counter -= 1
+        if len(str(scalebar_display)) > 3:
+            scalebar_display = scalebar_display[:-3]
+            counter += 1
+        scalebar_display += scalebar_units[counter]
     else:
         scalebar_display += scalebar_units[counter]
-
 
     write_to_file(draw_rect(total_width + x_start - normalized_scalebar_width, 100-hight+8, "000000", normalized_scalebar_width, 1, 1))
     write_to_file('''<text text-anchor="middle" x="''' + str(total_width + x_start - (normalized_scalebar_width/2)) + '''" y="''' + str(96-hight+8) + '''" font-size="7" >''' + scalebar_display + '''</text>''')
@@ -742,7 +748,7 @@ if gff_file is not None:
             except:
                 pass
             try:
-                if line_split[0].split(".")[0].split("0")[-1] == region[0]:  # check if same chr
+                if line_split[0] == region[0]:  # check if same chr
                     to_draw = get_region_to_draw()
                     if to_draw != 0:
                         if line_split[2] == "gene":
@@ -788,7 +794,12 @@ if gff_file is not None:
                                     if gene not in tss_plotted_genes:
                                         plotted_TSS = False
                                         tss_plotted_genes.append(gene)
+                                    plot = False
                                     if plotted_TSS == False or plot_all_TSS == True:
+                                        plot = True
+                                    if display_genes is not None and gene not in display_genes:
+                                        plot = False
+                                    if plot == True:
                                         hight = 5
                                         width = 6.156
                                         thickness = 0.7
@@ -797,7 +808,7 @@ if gff_file is not None:
                                         y_start = y_genestart # Dirty... quick fix as the polygon function uses y_start...
                                         if line_split[6] == "+":
                                             arrow_coords = [[y_0, x_0], [y_0 + (hight * 0.8), x_0], [y_0 + (hight * 0.8), x_0 + (width * 0.8)], [y_0 + hight, x_0 + (width * 0.8)], [(y_0 + (hight * 0.8)) - (float(thickness) / 2), x_0 + width], [y_0 + (hight * 0.8) - thickness - hight * 0.2, x_0 + (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 + (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 + thickness], [y_0, x_0 + thickness]]
-                                        if line_split[6] == "-":
+                                        elif line_split[6] == "-":
                                             arrow_coords = [[y_0, x_0], [y_0 + (hight * 0.8), x_0], [y_0 + (hight * 0.8), x_0 - (width * 0.8)], [y_0 + hight, x_0 - (width * 0.8)], [(y_0 + (hight * 0.8)) - (float(thickness) / 2), x_0 - width], [y_0 + (hight * 0.8) - thickness - hight * 0.2, x_0 - (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 - (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 - thickness], [y_0, x_0 - thickness]]
                                         write_to_file(draw_polygon(arrow_coords,1,"#000000",0))
                                         plotted_TSS = True
