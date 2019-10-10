@@ -675,7 +675,7 @@ if display_scalebar == "yes":
 # Group labels
 if group_labels is not None:
     for x, i in enumerate(range(nr_of_groups)):
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(100 + x * hight * 1.5 - int((hight/2)) - 1.788) + '''" font-size="9" >''' + group_labels[x] + '''</text>''')
+        write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(100 + x * hight * 1.5 - int((hight/2)) + 2.401) + '''" font-size="9" >''' + group_labels[x] + '''</text>''')
 
 # Squares and labels for groups
 if labels is not None:
