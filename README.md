@@ -1,5 +1,5 @@
 # SparK - Publication quality NGS data plotting (Version 1.4.9)
-For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
+Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 <pre>
 Plot NGS bedgraph tracks including replicates, overlay, and standard deviations. 
 Output files are true vector graphics (.svg) for easy editing.
