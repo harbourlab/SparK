@@ -29,7 +29,8 @@ Options (Not required):
          and treatment files. 
 -sc      spark color. Enter two colors in hex format for significantly increase and decreased areas. 
          Example "-sc 00FF12 848484".
--sm      smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen with a window of 10.
+-sm      smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen 
+         with a window of 10.
 -o       output filename. Usage: "-o Experiment1".
 -bed     Add bed files to plot here. Usage: "-bed bedfile1.bed bedfile2.bed"...
 -bedcol  choose colors for bed tracks (in hex). Default is blue. Choose either one color, or same amount as bed tracks given
