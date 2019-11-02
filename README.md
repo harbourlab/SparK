@@ -24,16 +24,17 @@ Options (Not required):
 -es      exclude groups from autoscaling. e.g. "-es 1"
 -f       fill colors. Choices: "blue/red" (default), "blue/grey", "all_grey", "blue/green".
          Two hex colors can be entered alternatively. Examples" "-f blue/grey", "-f 00FF12 848484".
--sp      add significant differences in tracks aka "sparks". Usage: "-sp yes". Significant areas are defined 
-         as areas where the delta of the means is greater than the sum of standard deviations of controls 
-         and treatment files. 
+-sp      add significant differences in tracks aka "sparks". Usage: "-sp yes". Significant areas 
+         are defined as areas where the delta of the means is greater than the sum of standard deviations 
+         of controls and treatment files. 
 -sc      spark color. Enter two colors in hex format for significantly increase and decreased areas. 
          Example "-sc 00FF12 848484".
 -sm      smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen 
          with a window of 10.
 -o       output filename. Usage: "-o Experiment1".
 -bed     Add bed files to plot here. Usage: "-bed bedfile1.bed bedfile2.bed"...
--bedcol  choose colors for bed tracks (in hex). Default is blue. Choose either one color, or same amount as bed tracks given
+-bedcol  choose colors for bed tracks (in hex). Default is blue. Choose either one color, or same amount 
+         as bed tracks given
 -gff     link gff file to show genes. Get here: https://www.gencodegenes.org/human/
 -dg      in case not all genes in the region plotted should be displayed, enter the genes to plot here.
          Usage: "-dg GAPDH RS1"
