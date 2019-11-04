@@ -67,7 +67,7 @@ python SparK.py \
 Note: The -dg option is optional and was used to plot only the five major genes in this area.
 
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/Figure1.png" width="400">  
 
 
 
