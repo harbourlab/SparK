@@ -1,4 +1,4 @@
-# SparK - Publication quality NGS data plotting (Version 1.4.9)
+# SparK - Publication quality NGS data plotting (Version 2)
 Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 <pre>
 Plot NGS bedgraph tracks including replicates, overlay, and standard deviations. 
@@ -9,20 +9,21 @@ Requirements:
  
 Options (Required):
 -cf   control bedgraph files seperated by space
--pr   region to be plotted example: "-pr chr1:1647389-272634"
--ps   Choices: "all" or "averages". Plot all tracks or average tracks of control and treatment files
+-pr   region to be plotted. Example: "-pr chr1:1647389-272634"
 -pt   plot type. Choices: "standard", "STD", "sine"
 
 
 Options (Not required):
--tf      treatment bedgraph files seperated by space
 -cg      control groups. Will seperately plot groups. e.g. "-cg 1 1 2 2" will generate 2 plots,
          where plot 1 includes the first two files listed in "-cf", and plot 2 file 3 and 4
--tg      treatment groups
--l       labels for groups defined above. e.g. "-l RNaseq H3K4me3"
--gs      group autoscale. usage: "-gs yes". Will autoscale all groups
+-tg      Define treatment groups here.
+-tf      treatment bedgraph files seperated by space
+-l       labels for groups defined above. e.g. "-l RNaseq H3K4me3" will label groups 1 with RNAseq, and groups 2 with
+         H3K4me3.
+-gs      group autoscale. usage: "-gs yes". Will autoscale all groups.
 -es      exclude groups from autoscaling. e.g. "-es 1"
--f       fill colors. Choices: "blue/red" (default), "blue/grey", "all_grey", "blue/green".
+-ps      Set to "averages" if control and treatment tracks should be averaged.
+-f       fill colors for the tracks. Choices: "blue/red" (default), "blue/grey", "all_grey", "blue/green".
          Two hex colors can be entered alternatively. Examples" "-f blue/grey", "-f 00FF12 848484".
 -sp      add significant differences in tracks aka "sparks". Usage: "-sp yes". Significant areas 
          are defined as areas where the delta of the means is greater than the sum of standard deviations 
@@ -38,12 +39,27 @@ Options (Not required):
 -gff     link gff file to show genes. Get here: https://www.gencodegenes.org/human/
 -dg      in case not all genes in the region plotted should be displayed, enter the genes to plot here.
          Usage: "-dg GAPDH RS1"
--tss     set to "yes" for TSS sites and direction of transcription being indicated with arrows.
--w       define plot width. Default is 150.
--scale   set to "no" if no scalebar should be plotted. Default "yes"
+-dt      Display transcripts. By default, all available transcripts for a gene will be merged and plotted as one. If 
+         If all annotated transcripts should be plotted, set this to "all". Alternatively, transcript IDs can be listed 
+         to plot only certain transcripts
+-wg      If all or individual transcripts are beeing plotted (-dt function) instead of the merged default, then "-wg yes" can
+         be used to plot gene name instead of transcript ID.
+-tss     set to "no" to avoid TSS sites and direction of transcription being indicated with arrows.
+-scale   Plot scalebar. Set to "no" if no scalebar should be plotted.
+-w       Define plot width. Default is 150.
 
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  <img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
+Getting started:
+
+
+Example of a plot of 4 ChIP-seq tracks with standard settings.
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  
+
+
+
+
+
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
 
 Left: Example of a larger stretch (110kb) beeing plotted with standard colors, subset of genes,
 TSS sites with direction of transcription, and scale bar. Right: Example with "blue/green" color 
