@@ -55,7 +55,9 @@ Options (Not required):
 Getting started:
 
 Plotting multiple NGS tracks. Example of a plot of 4 ChIP-seq tracks with standard settings.
+
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureA.png" width="400">  
+
 Code:
 python SparK.py \
 -pr chr12:6520512-6640512 \
