@@ -7,13 +7,14 @@ Output files are true vector graphics (.svg) for easy editing.
 Requirements:
   - numpy
  
+ 
 Options (Required):
 -cf   control bedgraph files seperated by space
 -pr   region to be plotted. Example: "-pr chr1:1647389-272634"
--pt   plot type. Choices: "standard", "STD", "sine"
 
 
 Options (Not required):
+-pt      plot type. Choices: "standard", "STD", "sine"
 -cg      control groups. Will seperately plot groups. e.g. "-cg 1 1 2 2" will generate 2 plots,
          where plot 1 includes the first two files listed in "-cf", and plot 2 file 3 and 4
 -tg      Define treatment groups here.
@@ -57,14 +58,13 @@ Plotting multiple NGS tracks. Example of a plot of 4 ChIP-seq tracks with standa
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  
 Code:
 python SparK.py \
--pt standard \
 -pr chr12:6520512-6640512 \
 -cf HepG2_H3K27AC_1_ENCFF495QSO.bigWig.bdg HepG2_H3K27AC_2_ENCFF348RLL.bigWig.bdg HepG2_H3K4me3_1_ENCFF699DRO.bigWig.bdg HepG2_H3K4me3_2_ENCFF400FYO.bigWig.bdg \
 -gff gencode.v24.primary_assembly.annotation.txt \
--gl H3K27AC H3K4me3 H3K27AC H3K4me3 \
+-gl H3K27AC H3K4me3 H3K27AC-2 H3K4me3-2 \
 -dg GAPDH IFFO1 NOP2 CHD4 LPAR5
 
-Note: The -dg option was used to plot only 5 genes here.
+Note: The -dg option is optional and was used to plot only the five major genes in this area.
 
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  
