@@ -17,9 +17,11 @@ Options (Not required):
 -cg      control groups. Will seperately plot groups. e.g. "-cg 1 1 2 2" will generate 2 plots,
          where plot 1 includes the first two files listed in "-cf", and plot 2 file 3 and 4
 -tg      Define treatment groups here.
+-gl      Label the groups defined in -cg and -tg. e.g. "-gl RNAseq H3K4me3" will label group 1 with RNAseq, 
+         and group 2 with H3K4me3
 -tf      treatment bedgraph files seperated by space
--l       labels for groups defined above. e.g. "-l RNaseq H3K4me3" will label groups 1 with RNAseq, and groups 2 with
-         H3K4me3.
+-l       labels for control and treatment groups. defined above. e.g. "-l brain_cells tumor_cells". 1st
+         1st is controls, second entry treatment group
 -gs      group autoscale. usage: "-gs yes". Will autoscale all groups.
 -es      exclude groups from autoscaling. e.g. "-es 1"
 -ps      Set to "averages" if control and treatment tracks should be averaged.
@@ -51,8 +53,12 @@ Options (Not required):
 
 Getting started:
 
+Plotting multiple NGS tracks. Example of a plot of 4 ChIP-seq tracks with standard settings.
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  
 
-Example of a plot of 4 ChIP-seq tracks with standard settings.
+
+
+
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/large_stretch2.png" width="400">  
 
 
