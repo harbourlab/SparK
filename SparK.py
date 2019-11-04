@@ -1,4 +1,4 @@
-SparK_Version = "1.4.9"
+SparK_Version = "2.0_WIP"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -189,8 +189,8 @@ def get_region_to_draw():
     return(region_to_draw)
 
 parser = argparse.ArgumentParser(description='SparC_args')
-parser.add_argument('-pt','--plot_type', help='choices: standard, STD, sine', required=True, type=str)
-parser.add_argument('-ps','--show_plots', help='choices: all, averages', required=True, type=str)
+parser.add_argument('-pt','--plot_type', help='choices: standard, STD, sine', required=False, type=str, default="standard")
+parser.add_argument('-ps','--show_plots', help='choices: all, averages', required=False, type=str, default="all")
 parser.add_argument('-pr','--region', help='example: chr1:1647389-272634', required=True, type=str)
 parser.add_argument('-cf','--control_files', help='separate by space', required=True, nargs='+', type=str)
 parser.add_argument('-tf','--treat_files', help='separate by space', required=False, nargs='+', type=str, default=[])
@@ -201,7 +201,7 @@ parser.add_argument('-l','--labels', help='set labels for controls and treatment
 parser.add_argument('-gs','--group_autoscale', help='set to "yes" to autoscale all tracks, except the ones excluded in -eg', required=False, type=str)
 parser.add_argument('-es','--exclude_from_group_autoscale', help='group numbers of groups to be excluded from autoscale', required=False, nargs='+', type=int)
 parser.add_argument('-eg','--exclude_groups', help='Exclude groups from the analysis', required=False, nargs='+', type=int)
-parser.add_argument('-f','--fills', help='track fills. enter two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default=None)
+parser.add_argument('-f','--fills', help='track colors. Enter two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default=None)
 parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
 parser.add_argument('-tss', '--drawtss', help='set to "no" if TSS sites should not be indicated', required=False, type=str, default="yes")
 parser.add_argument('-genestart', '--draw_genestart', help='set to "yes" if TSS sites should be indicated', required=False, type=str, default="no")
@@ -213,6 +213,9 @@ parser.add_argument('-bed','--bed_files', help='bed files to be plotted', requir
 parser.add_argument('-bedcol','--bed_color', help='colors of bed files in hex', required=False, type=str, nargs='+')
 parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int, default=150)
 parser.add_argument('-dg','--display_genes', help='genes to display from the gff file', nargs='+', required=False, type=str)
+parser.add_argument('-dt','--display_transcripts', help='display custom transcripts. By default, all transcripts annotated in the gff file will be merged and displayed as one gene. Alternatively all can be plotted seperatelly by setting this to "all". Further, Transcript IDs can be listed to plot only certain transcripts', nargs='+', required=False, type=str, default=["mergeall"])
+parser.add_argument('-wg','--write_genenames', help='write genename instead of transcript ID when transcripts are plotted. Set to "yes".', required=False, type=str, default="no")
+
 parser.add_argument('-scale','--display_scalebar', help='set to "no" to remove scalebar', required=False, type=str, default="yes")
 args = vars(parser.parse_args())
 
@@ -232,6 +235,11 @@ plot_all_TSS = False  ## could plot all TSS sites
 bed_files = args["bed_files"]
 bed_color = args['bed_color']
 draw_TSS = args['drawtss']
+
+display_transcripts = args['display_transcripts']
+plot_gene_name_instead_transcriptID = args['write_genenames']
+if plot_gene_name_instead_transcriptID not in ["yes", "no"]:
+    print("Error: 'write_genenames' is not set to 'yes' or 'no'.")
 if bed_files is not None:
     if bed_color is not None:
         if len(bed_color) == len(bed_files):
@@ -249,7 +257,7 @@ smoothen_tracks = args['smoothen']
 
 output_filename = args['output_name']
 if output_filename is None:
-    output_filename = "graph.svg"
+    output_filename = "SparK_graph.svg"
 else:
     output_filename += ".svg"
 
@@ -406,7 +414,7 @@ if os.path.exists(output_filename):
 
 #check how many genes will be plotted in that region to make file size correct... for the future
 hight_bed = 0
-write_to_file('''<svg viewBox="0 0 300 ''' + str(150 + (hight * 2 * nr_of_groups) + hight_bed) + '''" xmlns="http://www.w3.org/2000/svg">''')
+write_to_file('''<svg viewBox="0 0 320 ''' + str(150 + (hight * 2 * nr_of_groups) + hight_bed) + '''" xmlns="http://www.w3.org/2000/svg">''')
 
 # make list of files and global max - useful for autoscaling only ###########################################
 if group_autoscale == "yes":
@@ -722,8 +730,11 @@ if bed_files is not None:
 
 # add gene plots from gff file
 if gff_file is not None:
+    plot_transcripts = False
+
     with open(gff_file) as f:
-        gene_names = []
+        gene_or_transcript_names_to_plot = []
+        transcripts = []
         tss_plotted_genes = []
         y_genestart = y_position_bed
         exons = []
@@ -747,58 +758,98 @@ if gff_file is not None:
                     line_split[0] = line_split[0][3:]
             except:
                 pass
-            try:
-                if line_split[0] == region[0]:  # check if same chr
-                    to_draw = get_region_to_draw()
-                    if to_draw != 0:
-                        if line_split[2] == "gene":
-                            gene = line_split[8].split("gene_name ")[1].split('''"''')[1]
-                            if display_genes is not None:
-                                if gene in display_genes:
-                                    if gene not in gene_names:
-                                        y_genestart += 10
-                                    gene_names.append(gene)
-                                    write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
-                                    drawhight = 1.0
-                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
+            if line_split[0] == region[0]:  # check if same chr
+                to_draw = get_region_to_draw()
+                if to_draw != 0:
+
+                    # the following gets either the gene name, or the transcript name, plot_transcripts indicates what
+                    if line_split[2] in ["gene", "CDS", "exon", "transcript", "start_codon"]:
+                        gene_or_transcript_name = ""
+                        if display_transcripts[0] == "mergeall":
+                            if display_genes is None: # aka all are plotted
+                                gene_or_transcript_name = line_split[8].split("gene_name ")[1].split('''"''')[1] # if mergeall, plot all lines
                             else:
-                                y_genestart += 10
-                                write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene + '''</text>''')
+                                if line_split[8].split("gene_name ")[1].split('''"''')[1] in display_genes:
+                                    gene_or_transcript_name = line_split[8].split("gene_name ")[1].split('''"''')[1]
+                        else: # if individual transcripts should be plotted
+                            if "transcript_id " in line_split[8]:
+                                if display_transcripts[0] == "all":
+                                    gene_or_transcript_name = line_split[8].split("transcript_id ")[1].split('''"''')[1]
+                                    plot_transcripts = True # mark that instead of only genes, transcripts will be plotted
+                                else:
+                                    if line_split[8].split("transcript_id ")[1].split('''"''')[1] in display_transcripts:
+                                        gene_or_transcript_name = line_split[8].split("transcript_id ")[1].split('''"''')[1]
+                                        plot_transcripts = True  # mark that instead of only genes, transcripts will be plotted
+
+                                        
+
+                        plot_gene = False
+                        if gene_or_transcript_name != "":  # only if transcript name is not empty it will be plotted
+                            if gene_or_transcript_name not in gene_or_transcript_names_to_plot: # checks which genes have been plotted
+                                if display_transcripts[0] != "mergeall":
+                                    if gene_or_transcript_name in display_transcripts:
+                                        y_genestart += 12
+                                        gene_or_transcript_names_to_plot.append(gene_or_transcript_name)
+                                else:
+                                    y_genestart += 12
+                                    gene_or_transcript_names_to_plot.append(gene_or_transcript_name)
+
+
+
+
+
+                            if display_transcripts[0] != "mergeall": # if transcripts to plot were defined
+                                if gene_or_transcript_name in display_transcripts: # check if this one should be plotted
+                                    plot_gene = True
+                                elif display_transcripts[0] == "all":
+                                    plot_gene = True
+
+                            elif display_genes is not None:
+                                if gene_or_transcript_name in display_genes:
+                                    plot_gene = True
+                            else:
+                                plot_gene = True
+
+
+
+
+                        if plot_gene == True:
+                            draw_gene_or_transcript = False
+                            if plot_transcripts == True:
+                                if line_split[2] == "transcript":
+                                    draw_gene_or_transcript = True #plot only transcripts
+                            elif line_split[2] == "gene":
+                                draw_gene_or_transcript = True # plot only genes if transcripts are not defined
+
+                            if draw_gene_or_transcript == True:
+                                if plot_gene_name_instead_transcriptID == "yes":
+                                    gene_label = line_split[8].split("gene_name ")[1].split('''"''')[1]
+                                else:
+                                    gene_label = gene_or_transcript_name
+                                write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene_label + '''</text>''')
                                 drawhight = 1.0
+                            elif line_split[2] == "CDS":
+                                drawhight = 6.0
+                            elif line_split[2] == "exon":
+                                drawhight = 3.0
+
+                            if draw_gene_or_transcript == True or line_split[2] in ["CDS", "exon"]:
                                 write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
 
-                        if line_split[2] == "CDS":
-                            if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
-                                if display_genes is not None:
-                                    if gene in display_genes:
-                                        drawhight = 6.0
-                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
-                                else:
-                                    drawhight = 6.0
-                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
-
-                        if line_split[2] == "exon":
-                            if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
-                                if display_genes is not None:
-                                    if gene in display_genes:
-                                        drawhight = 3.0
-                                        write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
-                                else:
-                                    drawhight = 3.0
-                                    write_to_file(draw_rect(x_start + (((to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_genestart - 0.3 + (drawhight / 2), "#0B34FF", ((to_draw[1] - to_draw[0]) * total_width) / float(region[2] - region[1]), drawhight, 1))
-
-                        if line_split[2] == "start_codon":
-                            if draw_TSS == "yes":
-                                if line_split[8].split("gene_name ")[1].split('''"''')[1] == gene:
-                                    plotted_TSS = True
-                                    if gene not in tss_plotted_genes:
-                                        plotted_TSS = False
-                                        tss_plotted_genes.append(gene)
-                                    plot = False
-                                    if plotted_TSS == False or plot_all_TSS == True:
-                                        plot = True
-                                    if display_genes is not None and gene not in display_genes:
+                            if line_split[2] == "start_codon":
+                                if draw_TSS == "yes":
+                                    plot = True
+                                    if plot_transcripts == False:  # makes sure there is only one TSS plotted if merged gene is selected
                                         plot = False
+                                        plotted_TSS = True
+                                        if gene_or_transcript_name not in tss_plotted_genes:
+                                            plotted_TSS = False
+                                            tss_plotted_genes.append(gene_or_transcript_name)
+                                        plot = False
+                                        if plotted_TSS == False or plot_all_TSS == True:
+                                            plot = True
+                                        if display_genes is not None and gene_or_transcript_name not in display_genes:
+                                            plot = False
                                     if plot == True:
                                         hight = 5
                                         width = 6.156
@@ -812,7 +863,5 @@ if gff_file is not None:
                                             arrow_coords = [[y_0, x_0], [y_0 + (hight * 0.8), x_0], [y_0 + (hight * 0.8), x_0 - (width * 0.8)], [y_0 + hight, x_0 - (width * 0.8)], [(y_0 + (hight * 0.8)) - (float(thickness) / 2), x_0 - width], [y_0 + (hight * 0.8) - thickness - hight * 0.2, x_0 - (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 - (width * 0.8)], [y_0 + (hight * 0.8) - thickness, x_0 - thickness], [y_0, x_0 - thickness]]
                                         write_to_file(draw_polygon(arrow_coords,1,"#000000",0))
                                         plotted_TSS = True
-            except:
-                print("excluding row:" + str(line_split))
 
 write_to_file("</svg>")
