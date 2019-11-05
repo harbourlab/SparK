@@ -104,7 +104,7 @@ python SparK.py \
 -gff gencode.v24.primary_assembly.annotation.txt \
 -ps averages \
 -f CE358B 005CFF \
--bed bedtest.txt bedtest.txt \
+-bed bedfile1.bed bedfile2.bed \
 -bedcol EF1414 FFBC00
 
 
