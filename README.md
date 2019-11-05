@@ -58,7 +58,7 @@ Plotting multiple NGS tracks. Example of a plot of 4 ChIP-seq tracks with standa
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureA.png" width="400">  
 
-Code:
+Code used to generate this plot:
 python SparK.py \
 -pr chr12:6520512-6640512 \
 -cf HepG2_H3K27AC_1_ENCFF495QSO.bigWig.bdg HepG2_H3K27AC_2_ENCFF348RLL.bigWig.bdg HepG2_H3K4me3_1_ENCFF699DRO.bigWig.bdg HepG2_H3K4me3_2_ENCFF400FYO.bigWig.bdg \
@@ -73,6 +73,7 @@ Example of plotting the comparison of ChIP-seq data of two cell lines (HepG2 and
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureB.png" width="400"> 
 
+Code used to generate this plot:
 python SparK.py \
 -pr chr12:6527512-6550512 \
 -tf K562_H3K27AC_1_ENCFF779QTH.bigWig.bdg K562_H3K27AC_2_ENCFF945XHA.bigWig.bdg K562_H3K4me3_1_ENCFF804OLI.bigWig.bdg K562_H3K4me3_2_ENCFF352VRB.bigWig.bdg \
@@ -85,7 +86,6 @@ python SparK.py \
 -ps averages \
 -dg GAPDH
 
-Note: In this example figure, using -dg only GAPDH was plotted.
 
 
 
