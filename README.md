@@ -88,13 +88,30 @@ python SparK.py \
 
 
 
+Exaple of custom coloring tracks, and adding bed files with custom colors.
+
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureC.png" width="400"> 
+
+Code used to generate this plot:
+python SparK.py \
+-pr chr12:6527512-6550512 \
+-tf K562_H3K27AC_1_ENCFF779QTH.bigWig.bdg K562_H3K27AC_2_ENCFF945XHA.bigWig.bdg K562_H3K4me3_1_ENCFF804OLI.bigWig.bdg K562_H3K4me3_2_ENCFF352VRB.bigWig.bdg \
+-cf HepG2_H3K27AC_1_ENCFF495QSO.bigWig.bdg HepG2_H3K27AC_2_ENCFF348RLL.bigWig.bdg HepG2_H3K4me3_1_ENCFF699DRO.bigWig.bdg HepG2_H3K4me3_2_ENCFF400FYO.bigWig.bdg \
+-tg 1 1 2 2 \
+-cg 1 1 2 2 \
+-gl H3K27AC RNA-seq \
+-l HepG2_cells K562_cells \
+-gff gencode.v24.primary_assembly.annotation.txt \
+-ps averages \
+-f CE358B 005CFF \
+-bed bedtest.txt bedtest.txt \
+-bedcol EF1414 FFBC00
 
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/bedfile%20examples.png" width="400">
 
-Left: Example of a larger stretch (110kb) beeing plotted with standard colors, subset of genes,
-TSS sites with direction of transcription, and scale bar. Right: Example with "blue/green" color 
-scheme and bed files with custom colors. Scale bar and TSS sites were not plotted.
+
+
+
 
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
