@@ -692,8 +692,9 @@ if labels is not None:
     write_to_file(draw_rect(x_start - 10.5, 47, fills[1], 10, 10, opacity))
     write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + '''</text>''')
     write_to_file(draw_rect(x_start - 10.5, 60, fills[0], 10, 10, opacity))
-    write_to_file(draw_rect(x_start - 10.5, 60, fills[1], 10, 10, opacity))
-    write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(60 - 1.788) + '''" font-size="9" >''' + "Overlap" + '''</text>''')
+    if show_plots == "averages":
+        write_to_file(draw_rect(x_start - 10.5, 60, fills[1], 10, 10, opacity))
+        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(60 - 1.788) + '''" font-size="9" >''' + "Overlap" + '''</text>''')
 
     if spark == "yes":
         write_to_file(draw_rect(x_start + 51.5, 34, spark_color[1], 10, 10, 0.5))
