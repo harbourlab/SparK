@@ -88,14 +88,19 @@ def write_to_file(row):
         f.write(row)
         f.write("\n")
 def get_max_value(datasets1, datasets2):
-    max_v = 0
+    plottingaverages = False
+    if show_plots == "averages":
+        plottingaverages = True
+    max_1 = []
     for datafile1 in datasets1:
-        if max(datafile1) > max_v:
-            max_v = max(datafile1)
+        max_1.append(max(datafile1))
+    max_2 = []
     for datafile2 in datasets2:
-        if max(datafile2) > max_v:
-            max_v = max(datafile2)
-    return max_v
+        max_2.append(max(datafile2))
+    if plottingaverages == True:
+        return max([np.average(max_1), np.average(max_2)])
+    elif plottingaverages == False:
+        return max([max(max_1), max(max_2)])
 def get_relative_hight(raw_value): # FIX make sure maxvalue can be 0 too
     if raw_value == 0:
         return(0)
@@ -346,7 +351,7 @@ if spark == "yes":
             spark_color[0] = "#" + spark_color[0]
             spark_color[1] = "#" + spark_color[1]
     else:
-        spark_color = ["#FF9D00", "#00FF00"]  # green/orange
+        spark_color = ["#00FF00", "#4BFF00"]  # red/green
         stroke_width_spark = 0.05
         spark_opacity = 0.5
 
@@ -471,7 +476,8 @@ for group in range(nr_of_groups):
         else:
             max_value = get_max_value(control_data, treat_data)
     else:
-        max_value = get_max_value(control_data, treat_data)
+            max_value = get_max_value(control_data, treat_data)
+
 
     if plot_type == "standard":
         if show_plots == "all":
