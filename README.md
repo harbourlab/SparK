@@ -115,10 +115,15 @@ python SparK.py \
 
 
 
+Example of different smoothing windows. 
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
-Left: Example of different smoothing windows. Right: Example of sparks beeing added to a plot 
-with blue/grey color scheme.
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  
+
+
+
+
+<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
+Example of sparks beeing added to a plot with blue/grey color scheme.
 
 
 <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400">
