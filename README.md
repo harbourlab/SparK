@@ -89,7 +89,6 @@ python SparK.py \
 -dg GAPDH
 
 
-
 Exaple of custom coloring tracks, and adding bed files with custom colors.
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureC.png" width="400"> 
