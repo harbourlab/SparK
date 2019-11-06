@@ -113,8 +113,6 @@ python SparK.py \
 
 
 
-
-
 Example of different smoothing windows. 
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  
