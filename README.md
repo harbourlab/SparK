@@ -117,9 +117,22 @@ Example of different smoothing windows.
 
 
 
+Example of sparks (significant changes) beeing added to a plot with blue/grey color scheme.
 
-<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/sparks.png" width="400">
-Example of sparks beeing added to a plot with blue/grey color scheme.
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureD.png" width="400"> 
+
+Code used to generate this figure:
+python SparK.py \
+-pr chr12:6527512-6550512 \
+-tf K562_H3K27AC_1_ENCFF779QTH.bigWig.bdg K562_H3K27AC_2_ENCFF945XHA.bigWig.bdg K562_H3K4me3_1_ENCFF804OLI.bigWig.bdg K562_H3K4me3_2_ENCFF352VRB.bigWig.bdg \
+-cf HepG2_H3K27AC_1_ENCFF495QSO.bigWig.bdg HepG2_H3K27AC_2_ENCFF348RLL.bigWig.bdg HepG2_H3K4me3_1_ENCFF699DRO.bigWig.bdg HepG2_H3K4me3_2_ENCFF400FYO.bigWig.bdg \
+-tg 1 1 2 2 \
+-cg 1 1 2 2 \
+-gl H3K27AC H3K4me3 \
+-l HepG2_cells K562_cells \
+-gff gencode.v24.primary_assembly.annotation.txt \
+-f all_grey \
+-sp yes
 
 
 <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400">
