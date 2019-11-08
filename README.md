@@ -93,8 +93,23 @@ python SparK.py \
 -ps averages \
 -dg GAPDH
 
-Of note! The overlap label will only be plotted when averages are selected. Else, due to transparency issues the overlap
-plotting multiple tracks is not clearly visible.
+
+Example comparing histone acetylation with RNA-seq. Of note! The overlap label will only be plotted when averages are selected. Else, due to transparency issues the overlap plotting multiple tracks is not clearly visible.
+
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureE.png" width="400"> 
+
+Code:
+python SparK.py \
+-pr chr12:6533612-6539012 \
+-tf K562_H3K27AC_1_ENCFF779QTH.bigWig.bdg K562_H3K27AC_2_ENCFF945XHA.bigWig.bdg K562_RNAseq_plus_1_ENCFF682BLJ.bigWig.bdg K562_RNAseq_plus_2_ENCFF745PIR.bigWig.bdg \
+-cf HepG2_H3K27AC_1_ENCFF495QSO.bigWig.bdg HepG2_H3K27AC_2_ENCFF348RLL.bigWig.bdg HepG2_RNAseq_plus_1_ENCFF576COO.bigWig.bdg HepG2_RNAseq_plus_2_ENCFF599HGT.bigWig.bdg \
+-tg 1 1 2 2 \
+-cg 1 1 2 2 \
+-gl H3K27AC RNA-seq \
+-l HepG2_cells K562_cells \
+-gff gencode.v24.primary_assembly.annotation.txt \
+-dg GAPDH
+
 
 Exaple of custom coloring tracks, and adding bed files with custom colors.
 
