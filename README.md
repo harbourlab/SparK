@@ -4,8 +4,14 @@ Feature requests are welcome! For help, bug reports, and to request features con
 Plot NGS bedgraph tracks including replicates, overlay, and standard deviations. 
 Output files are true vector graphics (.svg) for easy editing.
 
+This tool uses bedgraph files to generate the figures. To convert BAM files to bedgraph files, I reccomend using deeptools:
+With "bamCoverage -b bamfile.bam -o outputfilename.bdg -bs 1 -of bedgraph".
+To convert bigwig (bw) files to bedgraph files use bigWigToBedGraph.
+
+
 Requirements:
   - numpy
+ 
  
  
 Options (Required):
