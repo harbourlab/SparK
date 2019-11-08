@@ -141,25 +141,6 @@ python SparK.py \
 -sp yes
 
 
-<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Example1.jpg" width="400">
-
-Example comparing different datatypes for 2 cell lines (K562 and HepG2) 
-which was used to generate the left figure above:
-
-python SparK.py \
--pr chr12:6527512-6550512 \
--tf K562_H3K27AC_1_ENCFF779QTH.bigWig.bdg K562_H3K27AC_2_ENCFF945XHA.bigWig.bdg K562_H3K4me3_1_ENCFF804OLI.bigWig.bdg K562_H3K4me3_2_ENCFF352VRB.bigWig.bdg \
--cf HepG2_H3K27AC_1_ENCFF495QSO.bigWig.bdg HepG2_H3K27AC_2_ENCFF348RLL.bigWig.bdg HepG2_H3K4me3_1_ENCFF699DRO.bigWig.bdg HepG2_H3K4me3_2_ENCFF400FYO.bigWig.bdg \
--tg 1 1 2 2 \
--cg 1 1 2 2 \
--gl H3K27AC H3K4me3 \
--l HepG2_cells K562_cells \
--gff gencode.v24.primary_assembly.annotation.txt \
--ps averages \
--f CE358B 005CFF \
--bed bedtest.txt bedtest.txt \
--bedcol EF1414 00B7FF
-
 
 <img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400">
 Example of other plot types.
