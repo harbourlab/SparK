@@ -41,8 +41,8 @@ Options (Not required):
          with a window of 10.
 -o       output filename. Usage: "-o Experiment1".
 -bed     Add bed files to plot here. Usage: "-bed bedfile1.bed bedfile2.bed"...
--bedcol  choose colors for bed tracks (in hex). Default is blue. Choose either one color, or same amount 
-         as bed tracks given. If tracks are overlayed, SparK will add transparancy to the color, 
+-bedcol  choose colors for bed tracks (in hex). Default is blue. Choose either one color, or same 
+         amount as bed tracks given. If tracks are overlayed, SparK will add transparancy to the color, 
          leading to a less intense color than anticipated. Transparency is required to see all overlayed 
          tracks, but can be changed with any SVG editor if desired.
 -gff     link gff file to show genes. Get here: https://www.gencodegenes.org/human/
@@ -138,10 +138,6 @@ python SparK.py \
 -f all_grey \
 -sp yes
 
-
-
-<img src="https://raw.githubusercontent.com/StefanKurtenbach/SparK/master/Picture2.png" width="400">
-Example of other plot types.
 
 
 
