@@ -36,8 +36,8 @@ Options (Not required):
          "blue/green". Two hex colors can be entered alternatively. Examples" "-f blue/grey", 
          "-f 00FF12 848484".
 -sp      add significant differences in tracks aka "sparks". Usage: "-sp yes". Significant areas 
-         are defined as areas where the delta of the means is greater than the sum of standard deviations 
-         of controls and treatment files. 
+         are defined as areas where the delta of the means is greater than the sum of standard 
+         deviations of controls and treatment files. 
 -sc      spark color. Enter two colors in hex format for significantly increase and decreased areas. 
          Example "-sc 00FF12 848484".
 -sm      smoothen tracks. Integer value. (plots are 2000 data points wide. "-sm 10" will smoothen 
