@@ -12,8 +12,8 @@ Requirements:
  
 
 Options (Required):
--cf   control bedgraph files seperated by space
--pr   region to be plotted. Example: "-pr chr1:1647389-272634"
+-cf      control bedgraph files seperated by space
+-pr      region to be plotted. Example: "-pr chr1:1647389-272634"
 
 
 Options (Not required):
