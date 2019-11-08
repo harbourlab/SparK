@@ -94,7 +94,8 @@ python SparK.py \
 -dg GAPDH
 
 
-Example comparing histone acetylation with RNA-seq. Of note! The overlap label will only be plotted when averages are selected. Else, due to transparency issues the overlap plotting multiple tracks is not clearly visible.
+Example comparing histone acetylation with RNA-seq. Of note! The overlap label will only be plotted when averages are plotted.
+Else, due to transparency issues, the overlap plotting multiple tracks is not clearly visible.
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureE.png" width="400"> 
 
