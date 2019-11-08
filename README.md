@@ -1,6 +1,6 @@
 # SparK - Publication quality NGS data plotting (Version 2)
 Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
-<pre>
+
 Plot NGS bedgraph tracks including replicates, overlay, and standard deviations. 
 Output files are true vector graphics (.svg) for easy editing.
 
@@ -10,10 +10,10 @@ To convert bigwig (bw) files to bedgraph files use bigWigToBedGraph.
 
 
 Requirements:
-  - numpy
+  - nump
  
  
- 
+ <pre>
 Options (Required):
 -cf   control bedgraph files seperated by space
 -pr   region to be plotted. Example: "-pr chr1:1647389-272634"
