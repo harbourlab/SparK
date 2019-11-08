@@ -93,6 +93,8 @@ python SparK.py \
 -ps averages \
 -dg GAPDH
 
+Of note! The overlap label will only be plotted when averages are selected. Else, due to transparency issues the overlap
+plotting multiple tracks is not clearly visible.
 
 Exaple of custom coloring tracks, and adding bed files with custom colors.
 
