@@ -17,7 +17,7 @@ Options (Required):
 
 
 Options (Not required):
--pt      plot type. Choices: "standard", "STD", "sine"
+-pt      plot type. Choices: "STD", "sine"
 -cg      control groups. Will seperately plot groups. e.g. "-cg 1 1 2 2" will generate 2 plots,
          where plot 1 includes the first two files listed in "-cf", and plot 2 file 3 and 4
 -tg      Define treatment groups here.
