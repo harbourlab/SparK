@@ -26,9 +26,10 @@ Options (Not required):
 -tf      treatment bedgraph files seperated by space
 -l       labels for control and treatment groups. defined above. e.g. "-l brain_cells tumor_cells". 
          1st is controls, second entry treatment group
+-ps      Set to "averages" if control and treatment tracks should be averaged. If "averages" is selected, then
+         a "overlap" color box will be plotted.
 -gs      group autoscale. usage: "-gs yes". Will autoscale all groups.
 -es      exclude groups from autoscaling. e.g. "-es 1"
--ps      Set to "averages" if control and treatment tracks should be averaged.
 -f       fill colors for the tracks. Choices: "blue/red" (default), "blue/grey", "all_grey", 
          "blue/green". Two hex colors can be entered alternatively. Examples" "-f blue/grey", 
          "-f 00FF12 848484".
