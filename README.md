@@ -161,7 +161,7 @@ python SparK.py \
 Other plot types:
 Spark allows to plot the standard deviation of NGS replicates:
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureE.png" width="400"> 
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureF.png" width="400"> 
 
 Code used:
 python SparK.py \
