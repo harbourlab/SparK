@@ -1,4 +1,13 @@
 # SparK - Publication quality NGS data plotting (Version 2)
+
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/Summary.png" width="800">  
+
+
+
+
+
+
+
 Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 
 Plot NGS bedgraph tracks including replicates, overlay, and standard deviations. 
