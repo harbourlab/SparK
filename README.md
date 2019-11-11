@@ -149,7 +149,7 @@ Example of different smoothing windows.
 
 
 
-Example of sparks (significant changes) beeing added to a plot with blue/grey color scheme.
+Example of sparks (significant changes) beeing added to a plot with grey color scheme.
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureD.png" width="400"> 
 
