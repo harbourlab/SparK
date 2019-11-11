@@ -13,6 +13,16 @@ import argparse
 import math
 import sys
 
+def draw_line(coordinates, thickness, color):
+    output = '''<path d="'''
+    for x, i in enumerate(coordinates):
+        if x == 0:
+            output += "M "
+        else:
+            output += " L "
+        output += str(i[1]) + " " + str(y_start - i[0])
+    output += '''" style="stroke:'''+ color + '''; stroke-width:'''+ str(thickness) +'''; fill:none "/>'''
+    return(output)
 def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
     raw_data_filled = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
     for a, datafile2 in enumerate(files):
@@ -285,7 +295,7 @@ if fills is None:
 
 elif fills[0] == "blue/red":
     fills = ["#FF1800", "#005CFF"]  # right is ctrl blue
-    opacity = 0.6
+    opacity = 0.5
 
 elif fills[0] == "blue/grey":
     fills = ["#005CFF", "#A3A3A3"]  # right is ctrl grey
@@ -351,7 +361,7 @@ if spark == "yes":
             spark_color[0] = "#" + spark_color[0]
             spark_color[1] = "#" + spark_color[1]
     else:
-        spark_color = ["#00FF00", "#4BFF00"]  # red/green
+        spark_color = ["#FF0000", "#00FF00"]  # red/green
         stroke_width_spark = 0.05
         spark_opacity = 0.5
 
@@ -527,6 +537,7 @@ for group in range(nr_of_groups):
     elif plot_type == "STD":
         if len(control_data) > 1 and len(treat_data) > 1:
             coords = []
+            ctrl_line = []
             for x in range(len((control_data[0]))):
                 x_pos = x_start + (x * quantile)  # y/x
                 values = []
@@ -534,8 +545,11 @@ for group in range(nr_of_groups):
                     values.append(control_data[p][x])
                 coords.append([get_relative_hight(np.average(values) + np.std(values)), x_pos])
                 coords.insert(0, [get_relative_hight(np.average(values) - np.std(values)), x_pos])
+                ctrl_line.append([get_relative_hight(np.average(values)), x_pos])
             write_to_file(draw_polygon(coords, 0.4, fills[0], stroke_width))
+            write_to_file(draw_line(ctrl_line, 0.3, str(fills[0])))
             coords = []
+            treat_line = []
             for x in range(len((treat_data[0]))):
                 x_pos = x_start + (x * quantile)  # y/x
                 values = []
@@ -543,7 +557,9 @@ for group in range(nr_of_groups):
                     values.append(treat_data[p][x])
                 coords.append([get_relative_hight(np.average(values) + np.std(values)), x_pos])
                 coords.insert(0, [get_relative_hight(np.average(values) - np.std(values)), x_pos])
+                treat_line.append([get_relative_hight(np.average(values)), x_pos])
             write_to_file(draw_polygon(coords, 0.4, fills[1], stroke_width))
+            write_to_file(draw_line(treat_line, 0.3, str(fills[1])))
 
             if spark == "yes":
                 draw_standard_spark()
@@ -697,16 +713,17 @@ if labels is not None:
     write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(34 - 1.788) + '''" font-size="9" >''' + str(labels[0]) + '''</text>''')
     write_to_file(draw_rect(x_start - 10.5, 47, fills[1], 10, 10, opacity))
     write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + '''</text>''')
-    write_to_file(draw_rect(x_start - 10.5, 60, fills[0], 10, 10, opacity))
+
     if show_plots == "averages":
         write_to_file(draw_rect(x_start - 10.5, 60, fills[1], 10, 10, opacity))
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(60 - 1.788) + '''" font-size="9" >''' + "Overlap" + '''</text>''')
+        write_to_file(draw_rect(x_start - 10.5, 60, fills[0], 10, 10, opacity))
 
     if spark == "yes":
-        write_to_file(draw_rect(x_start + 51.5, 34, spark_color[1], 10, 10, 0.5))
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 65) + '''" y="''' + str(34 - 1.788) + '''" font-size="9" >''' + str(labels[0]) + ''' up</text>''')
-        write_to_file(draw_rect(x_start + 51.5, 47, spark_color[0], 10, 10, 0.5))
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 65) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + ''' up</text>''')
+        write_to_file(draw_rect(x_start + 59.5, 34, spark_color[1], 10, 10, 0.75))
+        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 73) + '''" y="''' + str(34 - 1.788) + '''" font-size="9" >''' + str(labels[0]) + ''' up</text>''')
+        write_to_file(draw_rect(x_start + 59.5, 47, spark_color[0], 10, 10, 0.75))
+        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 73) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + ''' up</text>''')
 
 # add bed files
 y_position_bed = 110 + (nr_of_groups - 1) * hight * 1.5
