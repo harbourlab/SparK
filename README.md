@@ -198,10 +198,10 @@ python SparK.py \
 -l HepG2_cells K562_cells \
 -gff gencode.v24.primary_assembly.annotation.txt \
 -pt sine
-</pre>
 
 
-Modyfie gene annotations:
+
+Modify gene annotations:
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/summary_genes.png" width="900">  
 
@@ -215,4 +215,6 @@ C Selected transcripts can be plotted using the "-dt" setting followed by the re
 
 D Instead of transcript IDs, the gene can be plotted instead, with "-wg yes".
 
-Of note, as the output of SparK are true vector graphics, all text can be easily changed in any SVG editor manually.
+Of note, as the output of SparK are true vector graphics, all text, as well as any coloring, lines ect. can be easily changed in any SVG editor manually after plotting.
+
+</pre>
