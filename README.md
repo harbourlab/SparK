@@ -205,16 +205,17 @@ Modify gene annotations:
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/summary_genes.png" width="900">  
 
-A Standard plot settings, all transcript IDs in the gff file will be merged for each gene, and the first TSS
-site annotated
+A: Standard plot settings, all transcript IDs in the gff file will be merged for each gene, and the 
+first TSS site annotated
 
-B All known transcripts can be plotted, using the setting "-dt all"
+B: All known transcripts can be plotted, using the setting "-dt all"
 
-C Selected transcripts can be plotted using the "-dt" setting followed by the relevant transcripts. Here:
-"-dt ENST00000396859.5 ENST00000436152.6"
+C: Selected transcripts can be plotted using the "-dt" setting followed by the relevant transcripts. 
+Here: "-dt ENST00000396859.5 ENST00000436152.6"
 
-D Instead of transcript IDs, the gene can be plotted instead, with "-wg yes".
+D: Instead of transcript IDs, the gene can be plotted instead, with "-wg yes".
 
-Of note, as the output of SparK are true vector graphics, all text, as well as any coloring, lines ect. can be easily changed in any SVG editor manually after plotting.
+Of note, as the output of SparK are true vector graphics, all text, as well as any coloring, lines ect. 
+can be easily changed in any SVG editor manually after plotting.
 
 </pre>
