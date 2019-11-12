@@ -199,3 +199,20 @@ python SparK.py \
 -gff gencode.v24.primary_assembly.annotation.txt \
 -pt sine
 </pre>
+
+
+Modyfie gene annotations:
+
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/Summary_genes.png" width="900">  
+
+A Standard plot settings, all transcript IDs in the gff file will be merged for each gene, and the first TSS
+site annotated
+
+B All known transcripts can be plotted, using the setting "-dt all"
+
+C Selected transcripts can be plotted using the "-dt" setting followed by the relevant transcripts. Here:
+"-dt ENST00000396859.5 ENST00000436152.6"
+
+D Instead of transcript IDs, the gene can be plotted instead, with "-wg yes".
+
+Of note, as the output of SparK are true vector graphics, all text can be easily changed in any SVG editor manually.
