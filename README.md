@@ -58,9 +58,9 @@ Options (Not required):
 -gff     link gff file to show genes. Get here: https://www.gencodegenes.org/human/
 -dg      in case not all genes in the region plotted should be displayed, enter the genes to plot here.
          Usage: "-dg GAPDH RS1"
--dt      Display transcripts. By default, all available transcripts for a gene will be merged and plotted 
-         as one. If all annotated transcripts should be plotted, set this to "all". Alternatively, transcript 
-         IDs can be listed to plot only certain transcripts
+-dt      Display transcripts. By default, all available transcripts for a gene will be merged and 
+         plotted as one. If all annotated transcripts should be plotted, set this to "all". Alternatively, 
+         transcript IDs can be listed to plot only certain transcripts
 -wg      If all or individual transcripts are beeing plotted (-dt function) instead of the merged 
          default, then "-wg yes" can be used to plot gene name instead of transcript ID.
 -tss     set to "no" to avoid TSS sites and direction of transcription being indicated with arrows.
