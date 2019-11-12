@@ -203,7 +203,7 @@ python SparK.py \
 
 Modyfie gene annotations:
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/Summary_genes.png" width="900">  
+<img src="https://github.com/StefanKurtenbach/SparK/blob/master/summary_genes.png" width="900">  
 
 A Standard plot settings, all transcript IDs in the gff file will be merged for each gene, and the first TSS
 site annotated
