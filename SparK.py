@@ -1,4 +1,4 @@
-SparK_Version = "2.0_WIP"
+SparK_Version = "2.1"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
