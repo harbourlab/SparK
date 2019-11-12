@@ -805,21 +805,20 @@ if gff_file is not None:
                                         gene_or_transcript_name = line_split[8].split("transcript_id ")[1].split('''"''')[1]
                                         plot_transcripts = True  # mark that instead of only genes, transcripts will be plotted
 
-                                        
-
                         plot_gene = False
                         if gene_or_transcript_name != "":  # only if transcript name is not empty it will be plotted
                             if gene_or_transcript_name not in gene_or_transcript_names_to_plot: # checks which genes have been plotted
                                 if display_transcripts[0] != "mergeall":
-                                    if gene_or_transcript_name in display_transcripts:
+                                    if display_transcripts[0] == "all":
                                         y_genestart += 12
                                         gene_or_transcript_names_to_plot.append(gene_or_transcript_name)
+                                    else:
+                                        if gene_or_transcript_name in display_transcripts:
+                                            y_genestart += 12
+                                            gene_or_transcript_names_to_plot.append(gene_or_transcript_name)
                                 else:
                                     y_genestart += 12
                                     gene_or_transcript_names_to_plot.append(gene_or_transcript_name)
-
-
-
 
 
                             if display_transcripts[0] != "mergeall": # if transcripts to plot were defined
