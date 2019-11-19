@@ -73,7 +73,7 @@ Getting started:
 
 Plotting multiple NGS tracks. Example of a plot of 4 ChIP-seq tracks with standard settings.
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureA.png" width="400">  
+<img src="https://github.com/harbourlab/SparK/blob/master/FigureA.png" width="400">  
 
 Code used to generate this plot:
 python SparK.py \
@@ -88,7 +88,7 @@ Note: The -dg option is optional and was used to plot only the five major genes 
 
 Example of plotting the comparison of ChIP-seq data of two cell lines (HepG2 and K562).
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureB.png" width="400"> 
+<img src="https://github.com/harbourlab/SparK/blob/master/FigureB.png" width="400"> 
 
 Code used to generate this plot:
 python SparK.py \
@@ -107,7 +107,7 @@ python SparK.py \
 Example comparing histone acetylation with RNA-seq. Of note! The overlap label will only be plotted when averages are plotted.
 Else, due to transparency issues, the overlap plotting multiple tracks is not clearly visible.
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureE.png" width="400"> 
+<img src="https://github.com/harbourlab/SparK/blob/master/FigureE.png" width="400"> 
 
 Code:
 python SparK.py \
@@ -124,7 +124,7 @@ python SparK.py \
 
 Exaple of custom coloring tracks, and adding bed files with custom colors.
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureC.png" width="400"> 
+<img src="https://github.com/harbourlab/SparK/blob/master/FigureC.png" width="400"> 
 
 Code used to generate this plot:
 python SparK.py \
@@ -146,13 +146,13 @@ python SparK.py \
 
 Example of different smoothing windows, applied with "-sm".
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/smoothing2.png" width="400">  
+<img src="https://github.com/harbourlab/SparK/blob/master/smoothing2.png" width="400">  
 
 
 
 Example of sparks (significant changes) beeing added to a plot with grey color scheme.
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureD.png" width="400"> 
+<img src="https://github.com/habourlab/SparK/blob/master/FigureD.png" width="400"> 
 
 Code used to generate this figure:
 python SparK.py \
@@ -171,7 +171,7 @@ python SparK.py \
 Other plot types:
 Spark allows to plot the standard deviation of NGS replicates:
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureF.png" width="400"> 
+<img src="https://github.com/harbourlab/SparK/blob/master/FigureF.png" width="400"> 
 
 Code used:
 python SparK.py \
@@ -187,7 +187,7 @@ python SparK.py \
 
 Sine plot (experimental). 
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/FigureG.png" width="400"> 
+<img src="https://github.com/harbourlab/SparK/blob/master/FigureG.png" width="400"> 
 
 python SparK.py \
 -pr chr12:6533612-6539012 \
@@ -204,7 +204,7 @@ python SparK.py \
 
 Modify gene annotations:
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/summary_genes.png" width="900">  
+<img src="https://github.com/harbourlab/SparK/blob/master/summary_genes.png" width="900">  
 
 A: Standard plot settings, all transcript IDs in the gff file will be merged for each gene, and the 
 first TSS site annotated
