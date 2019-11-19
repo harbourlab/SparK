@@ -1,4 +1,5 @@
-# SparK - Publication quality NGS data plotting (Version 2.1)
+# SparK - Publication quality NGS data plotting (Version 2.2)
+Update: Error fix, preventing version 1.1 to run properly
 
 <img src="https://github.com/StefanKurtenbach/SparK/blob/master/Summary.png" width="900">  
 
