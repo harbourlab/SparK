@@ -152,7 +152,7 @@ Example of different smoothing windows, applied with "-sm".
 
 Example of sparks (significant changes) beeing added to a plot with grey color scheme.
 
-<img src="https://github.com/habourlab/SparK/blob/master/FigureD.png" width="400"> 
+<img src="https://github.com/harbourlab/SparK/blob/master/FigureD.png" width="400"> 
 
 Code used to generate this figure:
 python SparK.py \
