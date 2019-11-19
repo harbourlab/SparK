@@ -1,4 +1,4 @@
-SparK_Version = "2.1"
+SparK_Version = "2.2"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -101,10 +101,10 @@ def get_max_value(datasets1, datasets2):
     plottingaverages = False
     if show_plots == "averages":
         plottingaverages = True
-    max_1 = []
+    max_1 = [0]
     for datafile1 in datasets1:
         max_1.append(max(datafile1))
-    max_2 = []
+    max_2 = [0]
     for datafile2 in datasets2:
         max_2.append(max(datafile2))
     if plottingaverages == True:
