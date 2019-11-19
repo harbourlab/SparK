@@ -1,7 +1,7 @@
 # SparK - Publication quality NGS data plotting (Version 2.2)
 Update: Error fix, preventing version 1.1 to run properly
 
-<img src="https://github.com/StefanKurtenbach/SparK/blob/master/Summary.png" width="900">  
+<img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="900">  
 
 
 
