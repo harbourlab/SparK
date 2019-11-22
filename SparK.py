@@ -1,4 +1,4 @@
-SparK_Version = "2.2"
+SparK_Version = "2.3"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -690,7 +690,7 @@ if display_scalebar == "yes":
 
     if normalized_scalebar_width/2 > 15:
         normalized_scalebar_width /= 2
-        scalebar_display = str((int(scalebar_display)*1000/2))
+        scalebar_display = str(int(int(scalebar_display)*1000/2))
         counter -= 1
         if len(str(scalebar_display)) > 3:
             scalebar_display = scalebar_display[:-3]
