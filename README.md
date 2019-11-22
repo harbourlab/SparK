@@ -1,7 +1,7 @@
 # SparK - Publication quality NGS data plotting (Version 2.3)
 Please always use the latest version!
 
-Update: Error fix, Version 2.2 was placing wrong labels on scalebar in some cases
+Update: Error fix, Version 2.2 was placing wrong labels on scalebar in some cases \n
 Update: Error fix, preventing version 2.1 to run properly
 
 <img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="900">  
