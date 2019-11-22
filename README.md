@@ -18,6 +18,7 @@ This tool uses bedgraph files to generate the figures. To convert BAM files to b
 
 <pre>
 Requirements:
+  - Python 3
   - numpy
  
 
