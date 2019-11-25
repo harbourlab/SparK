@@ -1,4 +1,4 @@
-SparK_Version = "2.3"
+SparK_Version = "2.3.1"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -12,6 +12,12 @@ import os
 import argparse
 import math
 import sys
+
+def get_gene_name():
+    return(line_split[8].split("gene_name ")[1].split('''"''')[1])
+
+def get_transcript_name():
+    return(line_split[8].split("transcript_id ")[1].split('''"''')[1])
 
 def draw_line(coordinates, thickness, color):
     output = '''<path d="'''
@@ -790,19 +796,19 @@ if gff_file is not None:
                     if line_split[2] in ["gene", "CDS", "exon", "transcript", "start_codon"]:
                         gene_or_transcript_name = ""
                         if display_transcripts[0] == "mergeall":
-                            if display_genes is None: # aka all are plotted
-                                gene_or_transcript_name = line_split[8].split("gene_name ")[1].split('''"''')[1] # if mergeall, plot all lines
+                            if display_genes is None:
+                                gene_or_transcript_name = get_gene_name() # Get gene name if all merged genes are to be plotted
                             else:
-                                if line_split[8].split("gene_name ")[1].split('''"''')[1] in display_genes:
-                                    gene_or_transcript_name = line_split[8].split("gene_name ")[1].split('''"''')[1]
+                                if get_gene_name() in display_genes:
+                                    gene_or_transcript_name = get_gene_name() # Get gene name only certain merged genes are to be plotted
                         else: # if individual transcripts should be plotted
                             if "transcript_id " in line_split[8]:
                                 if display_transcripts[0] == "all":
-                                    gene_or_transcript_name = line_split[8].split("transcript_id ")[1].split('''"''')[1]
+                                    gene_or_transcript_name = get_transcript_name() # Get transcript ID if all individual transcripts instead of genes are to be plotted
                                     plot_transcripts = True # mark that instead of only genes, transcripts will be plotted
                                 else:
-                                    if line_split[8].split("transcript_id ")[1].split('''"''')[1] in display_transcripts:
-                                        gene_or_transcript_name = line_split[8].split("transcript_id ")[1].split('''"''')[1]
+                                    if get_transcript_name() in display_transcripts:
+                                        gene_or_transcript_name = get_transcript_name()
                                         plot_transcripts = True  # mark that instead of only genes, transcripts will be plotted
 
                         plot_gene = False
@@ -832,9 +838,6 @@ if gff_file is not None:
                                     plot_gene = True
                             else:
                                 plot_gene = True
-
-
-
 
                         if plot_gene == True:
                             draw_gene_or_transcript = False
