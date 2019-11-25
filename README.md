@@ -1,8 +1,7 @@
-# SparK - Publication quality NGS data plotting (Version 2.3)
-Please always use the latest version!
+# SparK - Publication quality NGS data plotting (Version 2.3.1)
 
-Update: Error fix, Version 2.2 was placing wrong labels on scalebar in some cases <br/>
-Update: Error fix, preventing version 2.1 to run properly
+Update: Version 2.3: Error fix, Version 2.2 was placing wrong labels on scalebar in some cases <br/>
+Update: Version 2.2: Error fix, 2.1 failed to run properly <br/>
 
 <img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="900">  
 
@@ -60,7 +59,8 @@ Options (Not required):
          amount as bed tracks given. If tracks are overlayed, SparK will add transparancy to the color, 
          leading to a less intense color than anticipated. Transparency is required to see all 
          overlayed tracks, but can be changed with any SVG editor if desired.
--gff     link gff file to show genes. Get here: https://www.gencodegenes.org/human/
+-gff     link gff file to show genes. Get here: https://www.gencodegenes.org/human/ Please read the section
+         on gff files below if you encounter errors or want to use a custom gff file.
 -dg      in case not all genes in the region plotted should be displayed, enter the genes to plot here.
          Usage: "-dg GAPDH RS1"
 -dt      Display transcripts. By default, all available transcripts for a gene will be merged and 
@@ -222,5 +222,20 @@ D: Instead of transcript IDs, the gene can be plotted instead, with "-wg yes".
 
 Of note, as the output of SparK are true vector graphics, all text, as well as any coloring, lines ect. 
 can be easily changed in any SVG editor manually after plotting.
+
+
+
+Problems with gff files/use of custom gff files:
+SparK expects the gene name, and transcript name to be in column 9 of the gff file. It will try extract the
+information from ... ; gene_name "DDX11L1"; ... and ... ; transcript_id "ENST00000456328.2"; ... .
+You can download a standard gff file from the link mentioned above and have a look at how these gff files
+are built. If encountering problems with your gff file please check if those two entries are present in the 
+same format. If not, download an updated version of your gff files that includes these entries in the same
+format. If this is not available, e.g. when working with custom genomes, then there are two options: Either 
+those entries need to be added to the file (e.g. with Excel), or, the pyhton file can be modified to recognize
+other formats. Where Python extracts the gene name and transcript ID's is specified in the "get_gene_name" and 
+"get_transcript_name" functions at the beginning of the script, and can be easily changed. Of note, the 
+"transcript_ID) is only neccecary if individual transcriptd were to be plotted. If only genes are plotted, 
+then a "gene_name" entry is enough in the gff file.
 
 </pre>
