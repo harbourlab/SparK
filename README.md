@@ -31,9 +31,15 @@ Options (Required):
 
 Options (Not required):
 -pt      plot type. Choices: "STD", "sine"
--cg      control groups. Will seperately plot groups. e.g. "-cg 1 1 2 2" will generate 2 plots,
-         where plot 1 includes the first two files listed in "-cf", and plot 2 file 3 and 4
--tg      Define treatment groups here.
+
+-cg      control groups. Defines which plot nr to place the files in
+-tg      treatment groups. Defines which plot nr to place the files in
+Both, the -cg and -tg option define in which plot number the list of files defined in -cf and -tf will be. 
+E.g., for a list of 5 files, say 2 replicates of RNAseq, and 3 replicates of ChIPseq, "-cg 1 1 2 2 2"
+and "-tg 1 1 2 2 2" will generate 2 plots, where plot 1 includes the first two files of both, treatment
+and control as listed in "-cf" "-tf". The latter 3 files of both will be in plot 2. See examples below for 
+more.
+
 -gl      Label the groups defined in -cg and -tg. e.g. "-gl RNAseq H3K4me3" will label group 1 with 
          RNAseq, and group 2 with H3K4me3
 -tf      treatment bedgraph files seperated by space
