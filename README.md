@@ -226,6 +226,9 @@ can be easily changed in any SVG editor manually after plotting.
 
 </pre>
 
+
+
+
 ### Problems with gff files/use of custom gff files:
 SparK expects the gene name, and transcript name to be in column 9 of the gff file. It will try extract the information from ... ; gene_name "XXX"; ... and ... ; transcript_id "XXX"; ... . You can download a standard gff file from the link mentioned above and have a look at how these gff files are built. If encountering problems with your gff file please check if those two entries are present in the same format. If not, download an updated version of your gff files that includes these entries in the same format. If this is not available, e.g. when working with custom genomes, then there are two options: Either those entries need to be added to the file (e.g. with Excel), or, the SparK pyhton file can be easily modified to recognize other formats. Where Python extracts the gene name and transcript ID's is specified in the "get_gene_name" and "get_transcript_name" functions at the beginning of the script. Of note, the  entry transcript_ID is only neccecary if individual transcriptd were to be plotted. If only genes are plotted, then a "gene_name" entry is enough in the gff file.
 
