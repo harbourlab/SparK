@@ -1,4 +1,4 @@
-SparK_Version = "2.4"
+SparK_Version = "2.4.1"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -730,9 +730,9 @@ if labels is not None:
     write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + '''</text>''')
 
     if show_plots == "averages":
-        write_to_file(draw_rect(x_start - 10.5, 60, fills[1], 10, 10, opacity))
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(60 - 1.788) + '''" font-size="9" >''' + "Overlap" + '''</text>''')
         write_to_file(draw_rect(x_start - 10.5, 60, fills[0], 10, 10, opacity))
+        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(60 - 1.788) + '''" font-size="9" >''' + "Overlap" + '''</text>''')
+        write_to_file(draw_rect(x_start - 10.5, 60, fills[1], 10, 10, opacity))
 
     if spark == "yes":
         write_to_file(draw_rect(x_start + 59.5, 34, spark_color[1], 10, 10, 0.75))
