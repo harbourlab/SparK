@@ -1,4 +1,4 @@
-# SparK - Publication quality NGS data plotting (Version 2.4)
+# SparK - Publication quality NGS data plotting (Version 2.4.1)
 
 Update: Version 2.4: Changed track hights to max 90% of the y-axis. Averave tracks were plotted a little too high.
 Update: Version 2.3: Error fix, Version 2.2 was placing wrong labels on scalebar in some cases <br/>
