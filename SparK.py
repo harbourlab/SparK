@@ -1,10 +1,11 @@
-SparK_Version = "2.3.1"
+SparK_Version = "2.4"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
 # FIX what happens if region is smaller than 2000?
 # make png output
-# could make resolution choosable.. 2000 now
+# could make resolution choosable. 2000 now
+# y-axis lable is rounded to 1, meaning values below 0.1 wouldnt work.
 
 import numpy as np
 import copy
@@ -107,21 +108,28 @@ def get_max_value(datasets1, datasets2):
     plottingaverages = False
     if show_plots == "averages":
         plottingaverages = True
-    max_1 = [0]
+    max_1 = []
     for datafile1 in datasets1:
         max_1.append(max(datafile1))
-    max_2 = [0]
+    max_2 = []
     for datafile2 in datasets2:
         max_2.append(max(datafile2))
     if plottingaverages == True:
-        return max([np.average(max_1), np.average(max_2)])
+        if max_2 != []:
+            if max_2 != []:
+                return max([np.average(max_1), np.average(max_2)])
+            else:
+                return(np.average(max_1))
     elif plottingaverages == False:
-        return max([max(max_1), max(max_2)])
+        if max_2 != []:
+            return max([max(max_1), max(max_2)])
+        else:
+            return(max(max_1))
 def get_relative_hight(raw_value): # FIX make sure maxvalue can be 0 too
     if raw_value == 0:
         return(0)
     else:
-        return((raw_value * hight * 0.85) / max_value) # to not go up to the max
+        return((raw_value * hight * relative_track_hight_percentage) / max_value) # to not go up to the max
 def draw_rect(x_coord, y_0, color, width, hight1, opacity):
     return '''<rect x="''' + str(x_coord) + '''" opacity="''' + str(opacity) + '''" y="''' + str(y_0 - hight1) + '''" fill="''' + color + '''" width="''' + str(width) + '''" height="''' + str(hight1) + '''"/>'''
 def draw_polygon(coordinates, opacity, color, stroke_width):
@@ -250,6 +258,7 @@ spark_opacity = 1
 stroke_width = 0  # 0.1 stroke widths good
 stroke_width_spark = 0
 plot_all_TSS = False  ## could plot all TSS sites
+relative_track_hight_percentage = 0.9
 ################################################################
 
 # import arguments #############################################
@@ -675,7 +684,7 @@ for group in range(nr_of_groups):
 
 # Y labels
     write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start + 4) + '''" font-size="9" >0</text>''')
-    write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start - hight + 4) + '''" font-size="9" >''' + str(round(max_value, 1)) + '''</text>''')
+    write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start - hight + 4) + '''" font-size="9" >''' + str(round(max_value*(1-relative_track_hight_percentage), 1)) + '''</text>''')
 
 # Scalebar
 if display_scalebar == "yes":
