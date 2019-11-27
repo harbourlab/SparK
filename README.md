@@ -75,7 +75,7 @@ more.
          Alternatively, transcript IDs can be listed to plot only certain transcripts
 -wg      If all or individual transcripts are beeing plotted (-dt function) instead of the merged 
          default, then "-wg yes" can be used to plot gene name instead of transcript ID.
--tss     set to "no" to avoid TSS sites and direction of transcription being indicated with arrows.
+-tss     set to "no" to avoid start_codons and direction of transcription being indicated with arrows.
 -scale   Plot scalebar. Set to "no" if no scalebar should be plotted.
 -w       Define plot width. Default is 150.
 
@@ -218,7 +218,7 @@ Modify gene annotations:
 <img src="https://github.com/harbourlab/SparK/blob/master/summary_genes.png" width="900">  
 
 A: Standard plot settings, all transcript IDs in the gff file will be merged for each gene, and the 
-first TSS site annotated
+first start_codon is annotated
 
 B: All known transcripts can be plotted, using the setting "-dt all"
 
