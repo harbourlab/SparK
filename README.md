@@ -14,7 +14,7 @@ Update: v2.2: Error fix, v2.1 failed to run properly <br/>
 
 Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 
-Plot NGS bedgraph tracks including replicates, overlay, and standard deviations. 
+Plot NGS bedgraph tracks including replicates, averaging replicates, overlay, and standard deviations. 
 Output files are true high-resolution vector graphics (.svg), for easy editing and customization.
 
 This tool uses bedgraph files to generate the figures. To convert BAM files to bedgraph files, you can use deeptools, with "bamCoverage -b bamfile.bam -o outputfilename.bdg -bs 1 -of bedgraph". Make sure to use the "-bs 1" option. This should not be done for ChIP-seq data. For ChIP-seq, use the bedgraphs from the MACS2 output (or any other ChIP-seq pipeline). To convert bigwig (bw) files to bedgraph files you can use for instance the USCS bigWigToBedGraph tool (https://genome.ucsc.edu/goldenpath/help/bigWig.html).
