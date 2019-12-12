@@ -68,8 +68,8 @@ more.
          overlayed tracks, but can be changed with any SVG editor if desired.
 -gff     link gff file to show genes. Get here: https://www.gencodegenes.org/human/ Please read the section
          on gff files below if you encounter errors or want to use a custom gff file.
--dg      in case not all genes in the region plotted should be displayed, enter the genes to plot here.
-         Usage: "-dg GAPDH RS1"
+-dg      in case not all genes in the region should be plotted, enter the genes to plot here.
+         Usage: "-dg GAPDH RS1" Without this option all genes will be shown.
 -dt      Display transcripts. By default, all available transcripts for a gene will be merged and 
          plotted as one. If all annotated transcripts should be plotted, set this to "all". 
          Alternatively, transcript IDs can be listed to plot only certain transcripts
@@ -94,7 +94,8 @@ python SparK.py \
 -gl H3K27AC H3K4me3 H3K27AC-2 H3K4me3-2 \
 -dg GAPDH IFFO1 NOP2 CHD4 LPAR5
 
-Note: The -dg option is optional and was used to plot only the five major genes in this area.
+Note: The -dg option is optional and was used to plot only the five major genes in this area, to avoid having
+too many genes displayed here. To display all genes, run this without "-dg"
 
 
 Example of plotting the comparison of ChIP-seq data of two cell lines (HepG2 and K562).
