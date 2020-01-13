@@ -1,8 +1,8 @@
 # SparK - Publication quality NGS data plotting (Version 2.4.1)
 
-Update: v2.4: Changed track hights to max 90% of the y-axis. Averave tracks were plotted a little too high in v2.3.<br/>
-Update: v2.3: Error fix, Version v2.2 was placing wrong labels on scalebar in some cases <br/>
-Update: v2.2: Error fix, v2.1 failed to run properly <br/>
+Please cite our article in bioRxive:
+https://www.biorxiv.org/content/10.1101/845529v1.full
+
 
 <img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="900">  
 
