@@ -5,9 +5,9 @@ https://www.biorxiv.org/content/10.1101/845529v1.full
 Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 
 
-<img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="900">  
+<img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="300">  
 
-Coming soon... interaction arcs for e.g. Hi-C, ChIA-PET, Hi-ChIP or any other interaction data!
+Coming soon... interaction arcs for e.g. Hi-C, ChIA-PET, Hi-ChIP or any other interaction data! Preview:
 <img src="https://github.com/harbourlab/SparK/blob/master/Screen%20Shot%202020-01-23%20at%2010.32.30%20PM.png" width="900">  
 
 
@@ -31,11 +31,11 @@ Options (Not required):
 
 -cg      control groups. Defines which plot nr to place the files in
 -tg      treatment groups. Defines which plot nr to place the files in
-Both, the -cg and -tg option define in which plot number the list of files defined in -cf and -tf will be. 
-E.g., for a list of 5 files, say 2 replicates of RNAseq, and 3 replicates of ChIPseq, "-cg 1 1 2 2 2"
-and "-tg 1 1 2 2 2" will generate 2 plots, where plot 1 includes the first two files of both, treatment
-and control as listed in "-cf" "-tf". The latter 3 files of both will be in plot 2. See examples below for 
-more.
+Both, the -cg and -tg option define in which plot number the list of files defined in -cf and -tf will 
+be in. E.g., for a list of 5 files, say 2 replicates of RNAseq, and 3 replicates of ChIPseq, 
+"-cg 1 1 2 2 2" and "-tg 1 1 2 2 2" will generate 2 plots, where plot 1 includes the first two files of 
+both, treatment and control as listed in "-cf" "-tf". The latter 3 files of both will be in plot 2. See 
+examples below.
 
 -gl      Label the groups defined in -cg and -tg. e.g. "-gl RNAseq H3K4me3" will label group 1 with 
          RNAseq, and group 2 with H3K4me3
