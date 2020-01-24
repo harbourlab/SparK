@@ -7,7 +7,8 @@ Feature requests are welcome! For help, bug reports, and to request features con
 
 <img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="900">  
 
-Coming soon... plotting interaction arcs for e.g. Hi-C, ChIA-PET, Hi-ChIP or any other interaction data!
+Coming soon... interaction arcs for e.g. Hi-C, ChIA-PET, Hi-ChIP or any other interaction data!
+<img src="https://github.com/harbourlab/SparK/blob/master/Screen%20Shot%202020-01-23%20at%2010.32.30%20PM.png" width="900">  
 
 
 Plot NGS bedgraph tracks including replicates, averaging of replicates, track overlay, standard deviations, and a smart scale bar. Output files are true high-resolution vector graphics (.svg), for easy editing and customization.
