@@ -5,10 +5,10 @@ https://www.biorxiv.org/content/10.1101/845529v1.full
 Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 
 
-<img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="300">  
+<img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="900">  
 
 Coming soon... interaction arcs for e.g. Hi-C, ChIA-PET, Hi-ChIP or any other interaction data! Preview:
-<img src="https://github.com/harbourlab/SparK/blob/master/Screen%20Shot%202020-01-23%20at%2010.32.30%20PM.png" width="900">  
+<img src="https://github.com/harbourlab/SparK/blob/master/Screen%20Shot%202020-01-23%20at%2010.32.30%20PM.png" width="300">  
 
 
 Plot NGS bedgraph tracks including replicates, averaging of replicates, track overlay, standard deviations, and a smart scale bar. Output files are true high-resolution vector graphics (.svg), for easy editing and customization.
