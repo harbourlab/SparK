@@ -2,7 +2,6 @@
 
 Please cite our article in bioRxiv:
 https://www.biorxiv.org/content/10.1101/845529v1.full
-
 Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
 
 
