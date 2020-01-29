@@ -301,9 +301,9 @@ width = args['track_width']
 if width is not None:
     total_width = int(width)
 
-fills = args['fills']  # left is treat, right is control
+fills = args['fills']  # [0] is control, [1] is treatment group
 if fills is None:
-    if args['treat_groups'] == []:  # color if all tracks are plotted separat
+    if args['treat_groups'] == []:  # color if there is no treat group
         fills = ["#0000C1", "0"]
         opacity = 1
     elif args['treat_groups'] != []:
@@ -312,7 +312,7 @@ if fills is None:
 
 elif fills[0] == "blue/red":
     fills = ["#FF1800", "#005CFF"]  # right is ctrl blue
-    opacity = 0.5
+    opacity = 0.6
 
 elif fills[0] == "blue/grey":
     fills = ["#005CFF", "#A3A3A3"]  # right is ctrl grey
