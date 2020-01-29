@@ -1,4 +1,4 @@
-# SparK - Publication quality NGS data plotting (Version 2.4.1)
+# SparK - Publication quality NGS data plotting (Version 2.4.2)
 
 Please cite our article in bioRxiv:
 https://www.biorxiv.org/content/10.1101/845529v1.full
@@ -46,9 +46,10 @@ examples below.
          selected, then a "overlap" color box will be plotted.
 -gs      group autoscale. usage: "-gs yes". Will autoscale all groups.
 -es      exclude groups from autoscaling. e.g. "-es 1"
--f       fill colors for the tracks. Choices: "blue/red" (default), "blue/grey", "all_grey", 
-         "blue/green". Two hex colors can be entered alternatively. Examples" "-f blue/grey", 
-         "-f 00FF12 848484".
+-f       fill colors for the tracks. One or two hex colors can be entered. In case two colors are
+         entered, the first one is used for the treatment group, the right one for the control group.
+         Examples" "-f blue/grey", "-f 00FF12 848484", "-f #000000". The presets "blue/red" (default), 
+         "blue/grey", "all_grey", or "blue/green" can be entered alternatively.
 -sp      add significant differences in tracks aka "sparks". Usage: "-sp yes". Significant areas 
          are defined as areas where the delta of the means is greater than the sum of standard 
          deviations of controls and treatment files. 
