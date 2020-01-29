@@ -1,4 +1,4 @@
-SparK_Version = "2.4.1"
+SparK_Version = "2.4.2"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -6,6 +6,8 @@ SparK_Version = "2.4.1"
 # make png output
 # could make resolution choosable. 2000 now
 # y-axis lable is rounded to 1, meaning values below 0.1 wouldnt work.
+
+#v2.4.2 allowed for only one fill color to be entered
 
 import numpy as np
 import copy
@@ -230,7 +232,7 @@ parser.add_argument('-l','--labels', help='set labels for controls and treatment
 parser.add_argument('-gs','--group_autoscale', help='set to "yes" to autoscale all tracks, except the ones excluded in -eg', required=False, type=str)
 parser.add_argument('-es','--exclude_from_group_autoscale', help='group numbers of groups to be excluded from autoscale', required=False, nargs='+', type=int)
 parser.add_argument('-eg','--exclude_groups', help='Exclude groups from the analysis', required=False, nargs='+', type=int)
-parser.add_argument('-f','--fills', help='track colors. Enter two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default=None)
+parser.add_argument('-f','--fills', help='track colors. One or two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default=None)
 parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
 parser.add_argument('-tss', '--drawtss', help='set to "no" if TSS sites should not be indicated', required=False, type=str, default="yes")
 parser.add_argument('-genestart', '--draw_genestart', help='set to "yes" if TSS sites should be indicated', required=False, type=str, default="no")
@@ -324,11 +326,11 @@ elif fills[0] == "blue/green":
     fills = ["#00FF12", "#005CFF"]
     opacity = 0.5
 
-elif len(fills) < 2:
-    print("Error: Track fill color entered wrong.")
-    sys.exit()
+elif len(fills) == 1:
+    fills = ["#" + fills[0], "#" + fills[0]] # fills has to be len 2 for code below
+    opacity = 1
 
-elif len(fills) > 1:
+elif len(fills) == 2:
     for i in range(len(fills)):
         fills[i] = "#" + fills[i]
         opacity = 0.6
