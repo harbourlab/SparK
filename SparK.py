@@ -1,4 +1,4 @@
-SparK_Version = "2.4.2"
+SparK_Version = "2.4.3"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -254,7 +254,7 @@ print(" ")
 print('''SparK Version ''' + SparK_Version + ''' initiated''')
 
 # Additional Arguments #########################################
-hight = 30
+hight = 30  # hight of plots
 x_start = 50
 spark_opacity = 1
 stroke_width = 0  # 0.1 stroke widths good
@@ -482,8 +482,9 @@ if (region[2] - region[1]) <= 2000:
     quantile = float(total_width)/(region[2] - region[1])
 else:
     quantile = float(total_width)/2000
+additional_hight = 0
 for group in range(nr_of_groups):
-    y_start = 100 + group * hight * 1.5
+    y_start = 100 + group * hight * 1.5 + additional_hight # neccessary for sine plots
     control_files = []
     treat_files = []
     for x, i in enumerate(control_groups):
@@ -581,10 +582,10 @@ for group in range(nr_of_groups):
             if spark == "yes":
                 draw_standard_spark()
         else:
-            print("Error: Some tracks not plotted as STD plots require at least 2 control and treatment files per plot")
+            print("Error: STD plots require at least 2 control and treatment files per plot")
 
     elif plot_type == "sine": # treat points up, control points down #FIX combined with averages does not work
-        if len(control_data) > 1 and len(treat_data) > 1:
+        if len(control_data) >= 1 and len(treat_data) >= 1:
             for datafile in control_data:
                 coords = []  # y, x
                 for x, value in enumerate(datafile):
@@ -601,7 +602,7 @@ for group in range(nr_of_groups):
                 coords[-1][0] = 0
                 coords[0][0] = 0
                 write_to_file(draw_polygon(coords, opacity, fills[1], stroke_width))
-
+            additional_hight += 30  # sine plots need extra hight
             if spark == "yes":
                 last_xpos = -1
                 coords = []
@@ -675,7 +676,7 @@ for group in range(nr_of_groups):
                     elif last_value == "treat_up":
                         write_to_file(draw_polygon(coords, 0.8, spark_color[1], stroke_width_spark))
         else:
-            print("Error: Some tracks not plotted as Sine plots require at least 2 control and treatment files per plot")
+            print("Error: no input files for treatment and/or control")
 
 # Draw axis and labels
 ##################################################
@@ -743,7 +744,7 @@ if labels is not None:
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + 73) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + ''' up</text>''')
 
 # add bed files
-y_position_bed = 110 + (nr_of_groups - 1) * hight * 1.5
+y_position_bed = 110 + (nr_of_groups - 1) * hight * 1.5 + additional_hight # dirty. y_position_bed is also start for gff genes
 if bed_files is not None:
     for nr_bed, bed_file in enumerate(bed_files):
         with open(bed_file) as b:
