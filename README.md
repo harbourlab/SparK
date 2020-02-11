@@ -202,12 +202,13 @@ python SparK.py \
 -pr chr12:6533612-6539012 \
 -tf K562_H3K27AC_1_ENCFF779QTH.bigWig.bdg K562_H3K27AC_2_ENCFF945XHA.bigWig.bdg K562_H3K4me3_1_ENCFF804OLI.bigWig.bdg K562_H3K4me3_2_ENCFF352VRB.bigWig.bdg \
 -cf HepG2_H3K27AC_1_ENCFF495QSO.bigWig.bdg HepG2_H3K27AC_2_ENCFF348RLL.bigWig.bdg HepG2_H3K4me3_1_ENCFF699DRO.bigWig.bdg HepG2_H3K4me3_2_ENCFF400FYO.bigWig.bdg \
--tg 1 1 2 2 \
--cg 1 1 2 2 \
+-tg 1 1 2 \
+-cg 1 1 2 \
 -gl H3K27AC H3K4me3 \
 -l HepG2_cells K562_cells \
 -gff gencode.v24.primary_assembly.annotation.txt \
--pt sine
+-pt sine \
+-o 10_sine
 
 
 
