@@ -2,7 +2,7 @@
 
 Please cite our article in bioRxiv:
 https://www.biorxiv.org/content/10.1101/845529v1.full
-Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com
+Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com or start an issue here on GitHub.
 
 
 <img src="https://github.com/harbourlab/SparK/blob/master/Summary.png" width="900">  
