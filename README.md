@@ -239,9 +239,6 @@ Here: "-dt ENST00000396859.5 ENST00000436152.6"
 D: When plotting transcript IDs, the gene names can be plotted instead. Here same plot as in C, 
 but with "-wg yes".
 
-Of note, as the output of SparK are true vector graphics, all text, as well as any coloring, lines ect. 
-can be easily changed in any SVG editor manually after plotting.
-
 </pre>
 
 
