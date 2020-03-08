@@ -51,6 +51,7 @@ By default, sparc will automatically pick y-axis for all groups.
          use "D" to not change settings of y-axis. E.g, if you plot 4 groups, "-cs 1.2 12 D 100" will
          scale y-axis of group 1 to 1.2, group 2 to 12, not change settings for group 3, and scale 
          group 4 to 100. 
+         
 -dc      this setting can be used to change how the chromosome location is plotted. Options:
          top_left (default), top_right, bottom_left, bottom_right. Set to "no" to not plot the
          chromosomal location.
