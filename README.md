@@ -1,4 +1,4 @@
-# SparK - Publication quality NGS data plotting (Version 2.4.3)
+# SparK - Publication quality NGS data plotting (Version 2.5)
 
 Please cite our article in bioRxiv:
 https://www.biorxiv.org/content/10.1101/845529v1.full
@@ -42,10 +42,19 @@ examples below.
 -tf      treatment bedgraph files seperated by space
 -l       labels for control and treatment groups. defined above. e.g. "-l brain_cells tumor_cells". 
          1st is controls, second entry treatment group
--ps      Set to "averages" if control and treatment tracks should be averaged. If "averages" is 
-         selected, then a "overlap" color box will be plotted.
--gs      group autoscale. usage: "-gs yes". Will autoscale all groups.
+-ps      Set to "averages" if replicates of control and treatment tracks should be averaged for all groups.
+ 
+y-axis scaling options:
+By default, sparc will automatically pick y-axis for all groups. 
+-gs      group autoscale. usage: "-gs yes". This will autoscale all groups to the same y-axis.
 -es      exclude groups from autoscaling. e.g. "-es 1"
+-cs      custom scaling. This can be used together with -gs and -es. Enter values for y-axis of groups.
+         use "D" to not change settings of y-axis. E.g, if you plot 4 groups, "-cs 1.2 12 D 100" will
+         scale y-axis of group 1 to 1.2, group 2 to 12, not change settings for group 3, and scale 
+         group 4 to 100. 
+-dc      this setting can be used to change how the chromosome location is plotted. Options:
+         top_left (default), top_right, bottom_left, bottom_right. Set to "no" to not plot the
+         chromosomal location.
 -f       fill colors for the tracks. One or two hex colors can be entered. In case two colors are
          entered, the first one is used for the treatment group, the right one for the control group.
          Examples" "-f blue/grey", "-f 00FF12 848484", "-f #000000". The presets "blue/red" (default), 
