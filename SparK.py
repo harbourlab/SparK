@@ -397,8 +397,6 @@ if group_autoscale_excluded is not None:
 else:
     group_autoscale_excluded = []
 
-
-`
 control_groups = args["control_groups"]
 treat_groups = args["treat_groups"]
 if control_groups == [] and treat_groups == []:
