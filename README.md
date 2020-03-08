@@ -28,7 +28,6 @@ Options (Required):
 
 Options (Not required):
 -pt      plot type. Choices: "STD", "sine"
-
 -cg      control groups. Defines which plot nr to place the files in
 -tg      treatment groups. Defines which plot nr to place the files in
 Both, the -cg and -tg option define in which plot number the list of files defined in -cf and -tf will 
