@@ -1,13 +1,9 @@
-SparK_Version = "2.4.3"
+SparK_Version = "2.5"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
 # FIX what happens if region is smaller than 2000?
-# make png output
 # could make resolution choosable. 2000 now
-# y-axis lable is rounded to 1, meaning values below 0.1 wouldnt work.
-
-#v2.4.2 allowed for only one fill color to be entered
 
 import numpy as np
 import copy
@@ -18,10 +14,8 @@ import sys
 
 def get_gene_name():
     return(line_split[8].split("gene_name ")[1].split('''"''')[1])
-
 def get_transcript_name():
     return(line_split[8].split("transcript_id ")[1].split('''"''')[1])
-
 def draw_line(coordinates, thickness, color):
     output = '''<path d="'''
     for x, i in enumerate(coordinates):
@@ -229,10 +223,12 @@ parser.add_argument('-cg','--control_groups', help='group numbers separate by sp
 parser.add_argument('-tg','--treat_groups', help='group numbers separate by space', required=False, nargs='+', type=int, default=[])
 parser.add_argument('-gl','--group_labels', help='set group labels', required=False, nargs='+', type=str)
 parser.add_argument('-l','--labels', help='set labels for controls and treatment', required=False, nargs='+', type=str)
-parser.add_argument('-gs','--group_autoscale', help='set to "yes" to autoscale all tracks, except the ones excluded in -eg', required=False, type=str)
+parser.add_argument('-gs','--group_autoscale', help='set to "yes" to autoscale all groups(plots), except the groups excluded in -eg', required=False, type=str)
 parser.add_argument('-es','--exclude_from_group_autoscale', help='group numbers of groups to be excluded from autoscale', required=False, nargs='+', type=int)
 parser.add_argument('-eg','--exclude_groups', help='Exclude groups from the analysis', required=False, nargs='+', type=int)
 parser.add_argument('-f','--fills', help='track colors. One or two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default=None)
+parser.add_argument('-cs','--custom_y_axis_scales', help='Enter y-axis values for all groups(plots). All groups need a value. Enter "D" for each group no value should be assigned, e.g. to keep autoscaling functionality for some groups', required=False, nargs='+', type=str)
+parser.add_argument('-dc','--display_chrom_location', help='set to "no" if you do not want to plot the chromosomal coordinates', required=False, type=str, default="top_left")
 parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
 parser.add_argument('-tss', '--drawtss', help='set to "no" if TSS sites should not be indicated', required=False, type=str, default="yes")
 parser.add_argument('-genestart', '--draw_genestart', help='set to "yes" if TSS sites should be indicated', required=False, type=str, default="no")
@@ -401,6 +397,8 @@ if group_autoscale_excluded is not None:
 else:
     group_autoscale_excluded = []
 
+
+`
 control_groups = args["control_groups"]
 treat_groups = args["treat_groups"]
 if control_groups == [] and treat_groups == []:
@@ -417,6 +415,12 @@ else:
         nr_of_groups = max(control_groups)
     else:
         nr_of_groups = max([max(control_groups), max(treat_groups)])
+
+custom_scales = args["custom_y_axis_scales"]
+if custom_scales is not None:
+    if len(custom_scales) != nr_of_groups:
+        print("Error: Number of custom y-scales is not the same as number of groups(plots)")
+        sys.exit()
 
 group_labels = args['group_labels']
 if group_labels is not None:
@@ -483,6 +487,7 @@ if (region[2] - region[1]) <= 2000:
 else:
     quantile = float(total_width)/2000
 additional_hight = 0
+
 for group in range(nr_of_groups):
     y_start = 100 + group * hight * 1.5 + additional_hight # neccessary for sine plots
     control_files = []
@@ -498,6 +503,8 @@ for group in range(nr_of_groups):
 
     control_data = make_raw_data_filled(region, control_files, 0)
     treat_data = make_raw_data_filled(region, treat_files, 0)
+
+# here the max value for the group(plot) is determined
     if group_autoscale == "yes":
         if (group + 1) not in group_autoscale_excluded:
             max_value = autoscale_max # global_max_value is derived only from the groups that were not excluded
@@ -505,6 +512,9 @@ for group in range(nr_of_groups):
             max_value = get_max_value(control_data, treat_data)
     else:
             max_value = get_max_value(control_data, treat_data)
+    if custom_scales is not None:
+        if custom_scales[group] != "D":
+            max_value = float(custom_scales[group])
 
 
     if plot_type == "standard":
@@ -686,8 +696,8 @@ for group in range(nr_of_groups):
     write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start - hight) + '''" x2="''' + str(x_start - 6.5) + '''" y2="''' + str(y_start - hight) + '''" stroke="black" stroke-width="1" />''')
 
 # Y labels
-    write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start + 4) + '''" font-size="9" >0</text>''')
-    write_to_file('''<text text-anchor="end" x="''' + str(x_start - 14) + '''" y="''' + str(y_start - hight + 4) + '''" font-size="9" >''' + str(round(max_value*(1-relative_track_hight_percentage), 1)) + '''</text>''')
+    write_to_file('''<text text-anchor="end" font-family="Arial" x="''' + str(x_start - 14) + '''" y="''' + str(y_start + 4) + '''" font-size="8" >0</text>''')
+    write_to_file('''<text text-anchor="end" font-family="Arial" x="''' + str(x_start - 14) + '''" y="''' + str(y_start - hight + 4) + '''" font-size="8" >''' + str(round(max_value*(1+(1-relative_track_hight_percentage)), 1)) + '''</text>''')
 
 # Scalebar
 if display_scalebar == "yes":
@@ -718,30 +728,52 @@ if display_scalebar == "yes":
         scalebar_display += scalebar_units[counter]
 
     write_to_file(draw_rect(total_width + x_start - normalized_scalebar_width, 100-hight+8, "000000", normalized_scalebar_width, 1, 1))
-    write_to_file('''<text text-anchor="middle" x="''' + str(total_width + x_start - (normalized_scalebar_width/2)) + '''" y="''' + str(96-hight+8) + '''" font-size="7" >''' + scalebar_display + '''</text>''')
+    write_to_file('''<text text-anchor="middle" font-family="Arial" x="''' + str(total_width + x_start - (normalized_scalebar_width/2)) + '''" y="''' + str(96-hight+8) + '''" font-size="7" >''' + scalebar_display + '''</text>''')
 
 # Group labels
 if group_labels is not None:
     for x, i in enumerate(range(nr_of_groups)):
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(100 + x * hight * 1.5 - int((hight/2)) + 2.401) + '''" font-size="9" >''' + group_labels[x] + '''</text>''')
+        write_to_file('''<text text-anchor="start" font-family="Arial" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(100 + x * hight * 1.5 - int((hight/2)) + 2.401) + '''" font-size="8" >''' + group_labels[x] + '''</text>''')
+
+
 
 # Squares and labels for groups
 if labels is not None:
     write_to_file(draw_rect(x_start - 10.5, 34, fills[0], 10, 10, opacity))
-    write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(34 - 1.788) + '''" font-size="9" >''' + str(labels[0]) + '''</text>''')
+    write_to_file('''<text text-anchor="start" font-family="Arial" x="''' + str(x_start + 3) + '''" y="''' + str(34 - 1.788) + '''" font-size="8" >''' + str(labels[0]) + '''</text>''')
     write_to_file(draw_rect(x_start - 10.5, 47, fills[1], 10, 10, opacity))
-    write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + '''</text>''')
+    write_to_file('''<text text-anchor="start" font-family="Arial" x="''' + str(x_start + 3) + '''" y="''' + str(47 - 1.788) + '''" font-size="8" >''' + str(labels[1]) + '''</text>''')
 
     if show_plots == "averages":
         write_to_file(draw_rect(x_start - 10.5, 60, fills[0], 10, 10, opacity))
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 3) + '''" y="''' + str(60 - 1.788) + '''" font-size="9" >''' + "Overlap" + '''</text>''')
+        write_to_file('''<text text-anchor="start" font-family="Arial" x="''' + str(x_start + 3) + '''" y="''' + str(60 - 1.788) + '''" font-size="8" >''' + "Overlap" + '''</text>''')
         write_to_file(draw_rect(x_start - 10.5, 60, fills[1], 10, 10, opacity))
 
     if spark == "yes":
         write_to_file(draw_rect(x_start + 59.5, 34, spark_color[1], 10, 10, 0.75))
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 73) + '''" y="''' + str(34 - 1.788) + '''" font-size="9" >''' + str(labels[0]) + ''' up</text>''')
+        write_to_file('''<text text-anchor="start" font-family="Arial" x="''' + str(x_start + 73) + '''" y="''' + str(34 - 1.788) + '''" font-size="8" >''' + str(labels[0]) + ''' up</text>''')
         write_to_file(draw_rect(x_start + 59.5, 47, spark_color[0], 10, 10, 0.75))
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + 73) + '''" y="''' + str(47 - 1.788) + '''" font-size="9" >''' + str(labels[1]) + ''' up</text>''')
+        write_to_file('''<text text-anchor="start" font-family="Arial" x="''' + str(x_start + 73) + '''" y="''' + str(47 - 1.788) + '''" font-size="8" >''' + str(labels[1]) + ''' up</text>''')
+
+# chromosome location
+if args['display_chrom_location'] != "no":
+    if args['display_chrom_location'] == "bottom_left":
+        y_value_chr_label = y_start + 9
+        x_value_chr_label = x_start - 10.5
+        text_anchor = "start"
+    elif args['display_chrom_location'] == "top_left":
+        y_value_chr_label = 66
+        x_value_chr_label = x_start - 10.5
+        text_anchor = "start"
+    elif args['display_chrom_location'] == "bottom_right":
+        y_value_chr_label = y_start + 9
+        x_value_chr_label = x_start + width
+        text_anchor = "end"
+    elif args['display_chrom_location'] == "top_right":
+        y_value_chr_label = 66
+        x_value_chr_label = x_start + width
+        text_anchor = "end"
+    write_to_file('''<text text-anchor="''' + text_anchor + '''''''" font-family="Arial" x="''' + str(x_value_chr_label) + '''" y="''' + str(y_value_chr_label) + '''" font-size="7" >Chr''' + str(region[0]) + ''': ''' + str(f"{region[1]:,}") + '''-''' + str(f"{region[2]:,}") + '''</text>''')
 
 # add bed files
 y_position_bed = 110 + (nr_of_groups - 1) * hight * 1.5 + additional_hight # dirty. y_position_bed is also start for gff genes
@@ -864,7 +896,7 @@ if gff_file is not None:
                                     gene_label = line_split[8].split("gene_name ")[1].split('''"''')[1]
                                 else:
                                     gene_label = gene_or_transcript_name
-                                write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="9" >''' + gene_label + '''</text>''')
+                                write_to_file('''<text text-anchor="start" font-family="Arial" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_genestart + 3) + '''" font-size="8" >''' + gene_label + '''</text>''')
                                 drawhight = 1.0
                             elif line_split[2] == "CDS":
                                 drawhight = 6.0
