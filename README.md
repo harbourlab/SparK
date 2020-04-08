@@ -1,8 +1,5 @@
 # SparK - Publication quality NGS data plotting (Version 2.5)
 
-Update 2.5.1 coming in the next two days fixing some minor spacing alignment between the overlap function and the 
-chromosomal location being plotted!
-
 Please cite our article in bioRxiv:
 https://www.biorxiv.org/content/10.1101/845529v1.full
 Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com or start an issue here on GitHub.
