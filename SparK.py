@@ -1,4 +1,4 @@
-SparK_Version = "2.5"
+SparK_Version = "2.5.1"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -15,7 +15,11 @@ import sys
 def get_gene_name():
     return(line_split[8].split("gene_name ")[1].split('''"''')[1])
 def get_transcript_name():
-    return(line_split[8].split("transcript_id ")[1].split('''"''')[1])
+    try:
+        return(line_split[8].split("transcript_id ")[1].split('''"''')[1])
+    except:
+        print("Error: SparK tried to extract information to plot genes in the selected area from the following line in the gtf file but failed. Please check the format thoroughly, and read the SparK github page for how the gtf needs to be structured for genes to be plotted, or how to change this python script to work with this specific gtf.")
+        print(line_split)
 def draw_line(coordinates, thickness, color):
     output = '''<path d="'''
     for x, i in enumerate(coordinates):
