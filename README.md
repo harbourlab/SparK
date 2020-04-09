@@ -1,4 +1,4 @@
-# SparK - Publication quality NGS data plotting (Version 2.5)
+# SparK - Publication quality NGS data plotting (Version 2.5.1)
 
 Please cite our article in bioRxiv:
 https://www.biorxiv.org/content/10.1101/845529v1.full
