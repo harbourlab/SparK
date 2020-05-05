@@ -1,4 +1,4 @@
-SparK_Version = "2.5.1"
+SparK_Version = "2.6"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -233,7 +233,7 @@ parser.add_argument('-eg','--exclude_groups', help='Exclude groups from the anal
 parser.add_argument('-f','--fills', help='track colors. One or two colors in hex format for control and treatment tracks', required=False, nargs='+', type=str, default=None)
 parser.add_argument('-cs','--custom_y_axis_scales', help='Enter y-axis values for all groups(plots). All groups need a value. Enter "D" for each group no value should be assigned, e.g. to keep autoscaling functionality for some groups', required=False, nargs='+', type=str)
 parser.add_argument('-dc','--display_chrom_location', help='set to "no" if you do not want to plot the chromosomal coordinates', required=False, type=str, default="top_left")
-parser.add_argument('-gff', '--gfffile', help='link gff file for drawing genes here', required=False, type=str)
+parser.add_argument('-gtf', '--gtffile', help='link gtf file for drawing genes here', required=False, type=str)
 parser.add_argument('-tss', '--drawtss', help='set to "no" if TSS sites should not be indicated', required=False, type=str, default="yes")
 parser.add_argument('-genestart', '--draw_genestart', help='set to "yes" if TSS sites should be indicated', required=False, type=str, default="no")
 parser.add_argument('-sp', '--spark', help='display significant change "yes"', required=False, type=str)
@@ -243,8 +243,8 @@ parser.add_argument('-o','--output_name', help='output graph name, str', require
 parser.add_argument('-bed','--bed_files', help='bed files to be plotted', required=False, type=str, nargs='+')
 parser.add_argument('-bedcol','--bed_color', help='colors of bed files in hex', required=False, type=str, nargs='+')
 parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int, default=150)
-parser.add_argument('-dg','--display_genes', help='genes to display from the gff file', nargs='+', required=False, type=str)
-parser.add_argument('-dt','--display_transcripts', help='display custom transcripts. By default, all transcripts annotated in the gff file will be merged and displayed as one gene. Alternatively all can be plotted seperatelly by setting this to "all". Further, Transcript IDs can be listed to plot only certain transcripts', nargs='+', required=False, type=str, default=["mergeall"])
+parser.add_argument('-dg','--display_genes', help='genes to display from the gtf file', nargs='+', required=False, type=str)
+parser.add_argument('-dt','--display_transcripts', help='display custom transcripts. By default, all transcripts annotated in the gtf file will be merged and displayed as one gene. Alternatively all can be plotted seperatelly by setting this to "all". Further, Transcript IDs can be listed to plot only certain transcripts', nargs='+', required=False, type=str, default=["mergeall"])
 parser.add_argument('-wg','--write_genenames', help='write genename instead of transcript ID when transcripts are plotted. Set to "yes".', required=False, type=str, default="no")
 
 parser.add_argument('-scale','--display_scalebar', help='set to "no" to remove scalebar', required=False, type=str, default="yes")
@@ -443,7 +443,7 @@ else:
     print("Excluding following groups: " + str(exclude_groups))
 
 
-gff_file = args['gfffile']
+gff_file = args['gtffile']
 
 if os.path.exists(output_filename):
     os.remove(output_filename)
@@ -778,7 +778,7 @@ if args['display_chrom_location'] != "no":
     write_to_file('''<text text-anchor="''' + text_anchor + '''''''" font-family="Arial" x="''' + str(x_value_chr_label) + '''" y="''' + str(y_value_chr_label) + '''" font-size="7" >Chr''' + str(region[0]) + ''': ''' + str(f"{region[1]:,}") + '''-''' + str(f"{region[2]:,}") + '''</text>''')
 
 # add bed files
-y_position_bed = 110 + (nr_of_groups - 1) * hight * 1.5 + additional_hight # dirty. y_position_bed is also start for gff genes
+y_position_bed = 110 + (nr_of_groups - 1) * hight * 1.5 + additional_hight # dirty. y_position_bed is also start for gtf genes
 if bed_files is not None:
     for nr_bed, bed_file in enumerate(bed_files):
         with open(bed_file) as b:
@@ -804,7 +804,7 @@ if bed_files is not None:
         write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="9" >''' + bed_file + '''</text>''')
         y_position_bed += 8
 
-# add gene plots from gff file
+# add gene plots from gtf file
 if gff_file is not None:
     plot_transcripts = False
 
