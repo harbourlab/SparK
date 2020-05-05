@@ -1,4 +1,4 @@
-# SparK - Publication quality NGS data plotting (Version 2.5.1)
+# SparK - Publication quality NGS data plotting (Version 2.6)
 
 ### IMPORTANT UPDATE: GTF files have to be used as genome references. Not GFF files! Use -gtf instead of -gff
 
