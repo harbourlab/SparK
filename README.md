@@ -1,5 +1,8 @@
 # SparK - Publication quality NGS data plotting (Version 2.5.1)
 
+## IMPORTANT UPDATE: GTF files have to be used as genome references. Not GFF files!
+
+
 Please cite our article in bioRxiv:
 https://www.biorxiv.org/content/10.1101/845529v1.full
 Feature requests are welcome! For help, bug reports, and to request features contact Stefan.Kurtenbach@me.com or start an issue here on GitHub.
@@ -72,8 +75,8 @@ By default, sparc will automatically pick y-axis for all groups.
          amount as bed tracks given. If tracks are overlayed, SparK will add transparancy to the color, 
          leading to a less intense color than anticipated. Transparency is required to see all 
          overlayed tracks, but can be changed with any SVG editor if desired.
--gff     link gff file to show genes. Get here: https://www.gencodegenes.org/human/ Please read the section
-         on gff files below if you encounter errors or want to use a custom gff file.
+-gtf     link gtf file to show genes. Get here: https://www.gencodegenes.org/human/ Please read the section
+         on gtf files below if you encounter errors or want to use a custom gtf file.
 -dg      in case not all genes in the region should be plotted, enter the genes to plot here.
          Usage: "-dg GAPDH RS1" Without this option all genes will be shown.
 -dt      Display transcripts. By default, all available transcripts for a gene will be merged and 
@@ -96,7 +99,7 @@ Code used to generate this plot:
 python SparK.py \
 -pr chr12:6520512-6640512 \
 -cf HepG2_H3K27AC_1_ENCFF495QSO.bigWig.bdg HepG2_H3K27AC_2_ENCFF348RLL.bigWig.bdg HepG2_H3K4me3_1_ENCFF699DRO.bigWig.bdg HepG2_H3K4me3_2_ENCFF400FYO.bigWig.bdg \
--gff gencode.v24.primary_assembly.annotation.txt \
+-gtf gencode.v24.primary_assembly.annotation.txt \
 -gl H3K27AC H3K4me3 H3K27AC-2 H3K4me3-2 \
 -dg GAPDH IFFO1 NOP2 CHD4 LPAR5
 
@@ -117,7 +120,7 @@ python SparK.py \
 -cg 1 1 2 2 \
 -gl H3K27AC H3K4me3 \
 -l HepG2_cells K562_cells \
--gff gencode.v24.primary_assembly.annotation.txt \
+-gtf gencode.v24.primary_assembly.annotation.txt \
 -ps averages \
 -dg GAPDH
 
@@ -136,7 +139,7 @@ python SparK.py \
 -cg 1 1 2 2 \
 -gl H3K27AC RNA-seq \
 -l HepG2_cells K562_cells \
--gff gencode.v24.primary_assembly.annotation.txt \
+-gtf gencode.v24.primary_assembly.annotation.txt \
 -dg GAPDH
 
 
@@ -153,7 +156,7 @@ python SparK.py \
 -cg 1 1 2 2 \
 -gl H3K27AC RNA-seq \
 -l HepG2_cells K562_cells \
--gff gencode.v24.primary_assembly.annotation.txt \
+-gtf gencode.v24.primary_assembly.annotation.txt \
 -ps averages \
 -f CE358B 005CFF \
 -bed bedfile1.bed bedfile2.bed \
@@ -181,7 +184,7 @@ python SparK.py \
 -cg 1 1 2 2 \
 -gl H3K27AC H3K4me3 \
 -l HepG2_cells K562_cells \
--gff gencode.v24.primary_assembly.annotation.txt \
+-gtf gencode.v24.primary_assembly.annotation.txt \
 -f all_grey \
 -sp yes
 
@@ -200,7 +203,7 @@ python SparK.py \
 -cg 1 1 2 2 \
 -gl H3K27AC H3K4me3 \
 -l HepG2_cells K562_cells \
--gff gencode.v24.primary_assembly.annotation.txt \
+-gtf gencode.v24.primary_assembly.annotation.txt \
 -pt STD
 
 Sine plot (experimental). 
@@ -215,7 +218,7 @@ python SparK.py \
 -cg 1 1 2 \
 -gl H3K27AC H3K4me3 \
 -l HepG2_cells K562_cells \
--gff gencode.v24.primary_assembly.annotation.txt \
+-gtf gencode.v24.primary_assembly.annotation.txt \
 -pt sine \
 -o 10_sine
 
@@ -225,7 +228,7 @@ Modify gene annotations:
 
 <img src="https://github.com/harbourlab/SparK/blob/master/summary_genes.png" width="900">  
 
-A: Standard plot settings, all transcript IDs in the gff file will be merged for each gene, and the 
+A: Standard plot settings, all transcript IDs in the gtf file will be merged for each gene, and the 
 first start_codon is annotated
 
 B: All known transcripts can be plotted, using the setting "-dt all"
@@ -241,8 +244,8 @@ but with "-wg yes".
 
 
 
-### Problems with gff files/use of custom gff files:
-SparK will exctract gene and transcript information from column 3 of the gff file. In particular, from rows which have "gene", "CDS", "exon", "transcript", and "start_codon" in column 2. Check if your gff file labels these entries like that if some are missing or problems are encountert; e.g. your gff file doesn't use for instance "mRNA" instead of "transcript". In the latter "mRNA" should be replaced with "transcript".
-Further, SparK expects the gene name, and transcript name to be in column 9 of the gff file. It will try extract the information from ... ; gene_name "XXX"; ... and ... ; transcript_id "XXX"; ... . You can download a standard gff file from the link mentioned above and have a look at how these gff files are built. If encountering problems with your gff file please check if those two entries are present in the same format. If not, download an updated version of your gff files that includes these entries in the same format. If this is not available, e.g. when working with custom genomes, then there are two options: Either those entries need to be added to the file (e.g. with Excel), or, the SparK pyhton file can be easily modified to recognize other formats. Where Python extracts the gene name and transcript ID's is specified in the "get_gene_name" and "get_transcript_name" functions at the beginning of the script. Of note, the  entry transcript_ID is only neccecary if individual transcripts were to be plotted. If only genes are plotted, then a "gene_name" entry is enough in the gff file.
+### Problems with gtf files/use of custom gtf files:
+SparK will exctract gene and transcript information from column 3 of the gtf file. In particular, from rows which have "gene", "CDS", "exon", "transcript", and "start_codon" in column 2. Check if your gtf file labels these entries like that if some are missing or problems are encountert; e.g. your gtf file doesn't use for instance "mRNA" instead of "transcript". In the latter "mRNA" should be replaced with "transcript".
+Further, SparK expects the gene name, and transcript name to be in column 9 of the gtf file. It will try extract the information from ... ; gene_name "XXX"; ... and ... ; transcript_id "XXX"; ... . You can download a standard gtf file from the link mentioned above and have a look at how these gtf files are built. If encountering problems with your gtf file please check if those two entries are present in the same format. If not, download an updated version of your gtf files that includes these entries in the same format. If this is not available, e.g. when working with custom genomes, then there are two options: Either those entries need to be added to the file (e.g. with Excel), or, the SparK pyhton file can be easily modified to recognize other formats. Where Python extracts the gene name and transcript ID's is specified in the "get_gene_name" and "get_transcript_name" functions at the beginning of the script. Of note, the  entry transcript_ID is only neccecary if individual transcripts were to be plotted. If only genes are plotted, then a "gene_name" entry is enough in the gtf file.
 
 
