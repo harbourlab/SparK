@@ -242,6 +242,7 @@ parser.add_argument('-sm', '--smoothen', help='smoothen tracks, int', required=F
 parser.add_argument('-o','--output_name', help='output graph name, str', required=False, type=str)
 parser.add_argument('-bed','--bed_files', help='bed files to be plotted', required=False, type=str, nargs='+')
 parser.add_argument('-bedcol','--bed_color', help='colors of bed files in hex', required=False, type=str, nargs='+')
+parser.add_argument('-bedlab','--bed_labels', help='set labels for bed tracks', required=False, nargs='+', type=str)
 parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int, default=150)
 parser.add_argument('-dg','--display_genes', help='genes to display from the gtf file', nargs='+', required=False, type=str)
 parser.add_argument('-dt','--display_transcripts', help='display custom transcripts. By default, all transcripts annotated in the gtf file will be merged and displayed as one gene. Alternatively all can be plotted seperatelly by setting this to "all". Further, Transcript IDs can be listed to plot only certain transcripts', nargs='+', required=False, type=str, default=["mergeall"])
@@ -272,6 +273,18 @@ display_transcripts = args['display_transcripts']
 plot_gene_name_instead_transcriptID = args['write_genenames']
 if plot_gene_name_instead_transcriptID not in ["yes", "no"]:
     print("Error: 'write_genenames' is not set to 'yes' or 'no'.")
+
+
+bed_labels = args['bed_labels']
+if bed_files is not None:
+    if bed_labels is not None:
+        if len(bed_labels) != len(bed_files):
+            print("Error: Number of bed lables does not match number of bed tracks")
+            sys.exit()
+    else:
+        bed_labels = bed_files
+
+
 if bed_files is not None:
     if bed_color is not None:
         if len(bed_color) == len(bed_files):
@@ -801,7 +814,7 @@ if bed_files is not None:
                             region_to_draw[1] = region[2]
                 if region_to_draw != [0, 0]:
                     write_to_file(draw_rect(x_start + (((region_to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_position_bed - 0.3 + (2 / 2), bed_color[nr_bed], ((region_to_draw[1] - region_to_draw[0]) * total_width) / float(region[2] - region[1]), 2, 1))
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="9" >''' + bed_file + '''</text>''')
+        write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="9" >''' + bed_labels[nr_bed] + '''</text>''')
         y_position_bed += 8
 
 # add gene plots from gtf file
