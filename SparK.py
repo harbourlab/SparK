@@ -814,7 +814,7 @@ if bed_files is not None:
                             region_to_draw[1] = region[2]
                 if region_to_draw != [0, 0]:
                     write_to_file(draw_rect(x_start + (((region_to_draw[0] - region[1]) * total_width) / float((region[2] - region[1]))), y_position_bed - 0.3 + (2 / 2), bed_color[nr_bed], ((region_to_draw[1] - region_to_draw[0]) * total_width) / float(region[2] - region[1]), 2, 1))
-        write_to_file('''<text text-anchor="start" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="9" >''' + bed_labels[nr_bed] + '''</text>''')
+        write_to_file('''<text text-anchor="start" font-family="Arial" x="''' + str(x_start + total_width + 15) + '''" y="''' + str(y_position_bed + 3) + '''" font-size="8" >''' + bed_labels[nr_bed] + '''</text>''')
         y_position_bed += 8
 
 # add gene plots from gtf file
