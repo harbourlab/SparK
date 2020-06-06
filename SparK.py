@@ -1,4 +1,4 @@
-SparK_Version = "2.6.1"
+SparK_Version = "2.6.2"
 # Stefan Kurtenbach
 # Stefan.Kurtenbach@me.com
 
@@ -416,15 +416,23 @@ else:
 
 control_groups = args["control_groups"]
 treat_groups = args["treat_groups"]
-if control_groups == [] and treat_groups == []:
-    nr_of_groups = len(all_treat_files + all_control_files)
-    number = 1
-    for i in range(len(all_control_files)):
-        control_groups.append(number)
-        number += 1
-    for i in range(len(all_treat_files)):
-        treat_groups.append(number)
-        number += 1
+
+if control_groups == [] and treat_groups == []: # this sets the groups when none are defined
+    if show_plots == "averages": # makes only one group in this case
+        nr_of_groups = 1
+        for i in range(len(all_control_files)):
+            control_groups.append(1)
+        for i in range(len(all_treat_files)):
+            treat_groups.append(1)
+    else:
+        nr_of_groups = len(all_treat_files + all_control_files) # plots all individually
+        number = 1
+        for i in range(len(all_control_files)):
+            control_groups.append(number)
+            number += 1
+        for i in range(len(all_treat_files)):
+            treat_groups.append(number)
+            number += 1
 else:
     if treat_groups == []:
         nr_of_groups = max(control_groups)
