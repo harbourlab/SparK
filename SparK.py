@@ -12,6 +12,7 @@ import argparse
 import math
 import sys
 import subprocess
+import gzip
 
 def get_gene_name():
     return(line_split[8].split("gene_name ")[1].split('''"''')[1])
