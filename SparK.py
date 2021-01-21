@@ -11,6 +11,8 @@ import os
 import argparse
 import math
 import sys
+import subprocess
+import gzip
 
 def get_gene_name():
     return(line_split[8].split("gene_name ")[1].split('''"''')[1])
@@ -30,37 +32,84 @@ def draw_line(coordinates, thickness, color):
         output += str(i[1]) + " " + str(y_start - i[0])
     output += '''" style="stroke:'''+ color + '''; stroke-width:'''+ str(thickness) +'''; fill:none "/>'''
     return(output)
+
+def get_lines_tabix(filename, stretch):
+    """
+    helper function for make_raw_data_filled().
+    If a data file is tabix-indexed, retrieve the desired region using tabix.
+    """
+    chromname = stretch[0]
+    if len(stretch) > 3:
+        # Chromosome name was modified. Use original name with
+        # tabix index.
+        chromname = stretch[3]
+    tabix_cmd = subprocess.Popen(['tabix', filename, \
+        '{}:{}-{}'.format(chromname, stretch[1], stretch[2])], \
+        stdout=subprocess.PIPE)
+    out, err = tabix_cmd.communicate()
+    for line in out.decode().strip().split('\n'):
+        if line != "":
+            yield line
+
+def get_lines_stream(filename):
+    """
+    helper function for make_raw_data_filled().
+    If a data file is not tabix-indexed, go through it line by line.
+    """
+    if filename[-3:] == '.gz':
+        f = gzip.open(filename, 'r')
+        for line in f:
+            yield line.rstrip()
+    else:
+        f = open(filename, 'r')
+        for line in f:
+            yield line.rstrip()
+    f.close()
+
 def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
     raw_data_filled = [[0] * (stretch[2] - stretch[1]) for r in range(len(files))]
     for a, datafile2 in enumerate(files):
-        with open(datafile2) as f:
-            found_chromosome = "no"
-            for line in f:
-                line_split = line.split("\t")
-                try:
-                    if line_split[0][:3] == "chr" or line_split[0][:3] == "Chr":
-                        line_split[0] = line_split[0][3:]
-                except:
-                    pass
-                if found_chromosome == "yes" and line_split[0] != stretch[0]:
-                    break
+        # Check to see whether the file is tabix-indexed. If so, use index for
+        # faster processing
+        input_lines = None
+        found_chromosome = False
+        if os.path.isfile('{}.tbi'.format(datafile2)):
+            input_lines = get_lines_tabix(datafile2, stretch)
+            # Lines will already be in the specified interval.
+            found_chromosome = True
+        else:
+            print("WARNING: {} is not tabix-indexed.".format(datafile2), \
+                file=sys.stderr)
+            print("To speed up, compress with bgzip and index with tabix.", \
+                file=sys.stderr)
+            input_lines = get_lines_stream(datafile2)
+        
+        for line in input_lines:
+            line_split = line.split("\t")
+            try:
+                if line_split[0][:3] == "chr" or line_split[0][:3] == "Chr":
+                    line_split[0] = line_split[0][3:]
+            except:
+                pass
+            if found_chromosome and line_split[0] != stretch[0]:
+                break
 
-                if line_split[0] == stretch[0]:
-                    try:
-                        line_split[3] = float(line_split[3].split("\n")[0])
-                    except:
-                        print("Warning! Could not import following row from: " + datafile2)
-                        print(line)
-                        print("Continuing to Import...")
-                        print("")
-                    found_chromosome = "yes"
-                    if int(line_split[2]) >= stretch[1] + offset:
-                        if int(line_split[1]) <= stretch[2] + offset:
-                            for iteration in range(int(line_split[2]) - int(line_split[1])):
-                                try:
-                                    raw_data_filled[a][int(line_split[1]) + iteration - stretch[1] + offset] = line_split[3]
-                                except:
-                                    pass
+            if line_split[0] == stretch[0]:
+                try:
+                    line_split[3] = float(line_split[3].split("\n")[0])
+                except:
+                    print("Warning! Could not import following row from: " + datafile2)
+                    print(line)
+                    print("Continuing to Import...")
+                    print("")
+                found_chromosome = True
+                if int(line_split[2]) >= stretch[1] + offset:
+                    if int(line_split[1]) <= stretch[2] + offset:
+                        for iteration in range(int(line_split[2]) - int(line_split[1])):
+                            try:
+                                raw_data_filled[a][int(line_split[1]) + iteration - stretch[1] + offset] = line_split[3]
+                            except:
+                                pass
 
     # shrink to max_datapoints if bigger
     max_datapoints = 2000
@@ -374,7 +423,11 @@ else:
         sys.exit()
 
     print("Plotting region: " + args['region'])
+    # Store original version of chrom name in region data, if modifying.
+    # If tabix indices for bedGraph files exist, the original chrom
+    # name will be used to retrieve the region(s).
     if region[0][:3] == "chr" or region[0][:3] == "Chr":
+        region.append(region[0])
         region[0] = region[0][3:]
 
 display_scalebar = args['display_scalebar']
