@@ -24,6 +24,8 @@ Requirements:
   - Python 3
   - numpy
 
+Example usage:
+python SparK -cf mybedgraphfile.bdg -pr chr1:10000-200000
 
 Options (Required):
 -cf      control bedgraph files seperated by space
