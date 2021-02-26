@@ -1,7 +1,5 @@
 # SparK - Publication quality NGS data plotting (Version 2.6.2)
 
-### IMPORTANT UPDATE: GTF files have to be used as genome references. Not GFF files! Use -gtf instead of -gff
-
 
 Please cite our article in bioRxiv, a citation can be downloaded here and imported in Endnote or such:
 https://www.biorxiv.org/content/10.1101/845529v1.full
