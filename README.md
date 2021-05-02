@@ -1,4 +1,4 @@
-# SparK - Publication quality NGS data plotting (Version 2.6.2)
+# SparK - Publication quality and pipeline integratable NGS data plotting (Version 2.6.2)
 
 
 Please cite our article in bioRxiv, a citation can be downloaded here and imported in Endnote or such:
