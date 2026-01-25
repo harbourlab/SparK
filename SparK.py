@@ -132,29 +132,35 @@ def make_raw_data_filled(stretch, files, offset):  # files[ctrl,treat]
     # shrink to max_datapoints if bigger
     max_datapoints = max_points
     if stretch[2] - stretch[1] > max_datapoints:
-        binfactor_split = math.modf(float((float(stretch[2] - stretch[1]))/max_datapoints))  # get values after and before period
+        binfactor_split = math.modf(float((float(stretch[2] - stretch[1])) / max_datapoints))  # get values after and before period
         binfactor = sum(binfactor_split)
         temp_data = [[] for u in range(len(files))]  # new data list
         for workingfilenr in range(len(files)):
             for position in range(max_datapoints):
                 start_postition_split = math.modf(position * binfactor)  # after and before period
+                start_idx = int(start_postition_split[1])
+                if point_stat == "max":
+                    end_pos = (position + 1) * binfactor
+                    end_idx = min(len(raw_data_filled[workingfilenr]) - 1, int(math.ceil(end_pos)) - 1)
+                    temp_data[workingfilenr].append(max(raw_data_filled[workingfilenr][start_idx:end_idx + 1]))
+                    continue
 
                 # first add fraction of start position or entire value if no fraction
-                temp_value = float(raw_data_filled[workingfilenr][(int(start_postition_split[1]))] * (1 - start_postition_split[0]))
+                temp_value = float(raw_data_filled[workingfilenr][start_idx] * (1 - start_postition_split[0]))
                 binfactor_left = binfactor - (1 - start_postition_split[0])
 
                 # add all values with no fractions
                 iteration = 0
                 while binfactor_left > 1:
-                    temp_value += raw_data_filled[workingfilenr][int(start_postition_split[1]) + 1 + iteration]
+                    temp_value += raw_data_filled[workingfilenr][start_idx + 1 + iteration]
                     iteration += 1
                     binfactor_left -= 1
 
                 # add last fraction or value if no fraction
                 if binfactor_left > 0:
-                    if float((start_postition_split[1]) + 1 + iteration) < len(raw_data_filled[0]):
-                        temp_value += raw_data_filled[workingfilenr][int(start_postition_split[1]) + 1 + iteration] * binfactor_left
-                        temp_data[workingfilenr].append(temp_value/sum(binfactor_split))
+                    if float(start_idx + 1 + iteration) < len(raw_data_filled[0]):
+                        temp_value += raw_data_filled[workingfilenr][start_idx + 1 + iteration] * binfactor_left
+                        temp_data[workingfilenr].append(temp_value / sum(binfactor_split))
         raw_data_filled = copy.deepcopy(temp_data)
 
     if smoothen_tracks is not None:
@@ -231,22 +237,24 @@ def draw_axis_for_group(y_start_val, max_value_val, has_negative_axis):
 
         write_to_file('''<text text-anchor="end" font-family="Arial" x="''' + str(x_start - 14) + '''" y="''' + str(y_start_val + 4) + '''" font-size="''' + str(font_size_axis_y) + '''" >0</text>''')
         write_to_file('''<text text-anchor="end" font-family="Arial" x="''' + str(x_start - 14) + '''" y="''' + str(y_start_val - hight + 4) + '''" font-size="''' + str(font_size_axis_y) + '''" >''' + str(axis_label) + '''</text>''')
-def draw_sine_axis_for_group(y_start_val, pos_max_value_val, neg_max_value_val):
-    # Separate top/bottom labels derived from positive and negative datasets
-    axis_label_top = round(pos_max_value_val * (1 + (1 - relative_track_hight_percentage)), 1)
-    axis_label_bottom = round(neg_max_value_val * (1 + (1 - relative_track_hight_percentage)), 1)
-    # Draw vertical axis
-    write_to_file('''<line x1="''' + str(x_start - 10) + '''" y1="''' + str(y_start_val + hight) + '''" x2="''' + str(x_start - 10) + '''" y2="''' + str(y_start_val - hight) + '''" stroke="black" stroke-width="1" />''')
-    # 0 tick
-    write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start_val) + '''" x2="''' + str(x_start - 6.5) + '''" y2="''' + str(y_start_val) + '''" stroke="black" stroke-width="1" />''')
-    # Top tick and label
-    write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start_val - hight) + '''" x2="''' + str(x_start - 6.5) + '''" y2="''' + str(y_start_val - hight) + '''" stroke="black" stroke-width="1" />''')
-    write_to_file('''<text text-anchor="end" font-family="Arial" x="''' + str(x_start - 14) + '''" y="''' + str(y_start_val - hight + 4) + '''" font-size="''' + str(font_size_axis_y) + '''" >''' + str(axis_label_top) + '''</text>''')
-    # Bottom tick and label
-    write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start_val + hight) + '''" x2="''' + str(x_start - 6.5) + '''" y2="''' + str(y_start_val + hight) + '''" stroke="black" stroke-width="1" />''')
-    write_to_file('''<text text-anchor="end" font-family="Arial" x="''' + str(x_start - 14) + '''" y="''' + str(y_start_val + hight + 4) + '''" font-size="''' + str(font_size_axis_y) + '''" >-''' + str(axis_label_bottom) + '''</text>''')
+def draw_sine_axis_for_group(y_start_val, shared_max_val):
+    # Shared axis with symmetric labels for positive/negative magnitudes
+    if shared_max_val > 0:
+        axis_height = hight * relative_track_hight_percentage
+        pos_tick_y = y_start_val - axis_height
+        neg_tick_y = y_start_val + axis_height
+        # Draw full shared axis
+        write_to_file('''<line x1="''' + str(x_start - 10) + '''" y1="''' + str(neg_tick_y) + '''" x2="''' + str(x_start - 10) + '''" y2="''' + str(pos_tick_y) + '''" stroke="black" stroke-width="1" />''')
+        # 0 tick
+        write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(y_start_val) + '''" x2="''' + str(x_start - 6.5) + '''" y2="''' + str(y_start_val) + '''" stroke="black" stroke-width="1" />''')
+        # Positive tick and label
+        write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(pos_tick_y) + '''" x2="''' + str(x_start - 6.5) + '''" y2="''' + str(pos_tick_y) + '''" stroke="black" stroke-width="1" />''')
+        write_to_file('''<text text-anchor="end" font-family="Arial" x="''' + str(x_start - 14) + '''" y="''' + str(pos_tick_y + 4) + '''" font-size="''' + str(font_size_axis_y) + '''" >''' + str(round(shared_max_val, 1)) + '''</text>''')
+        # Negative tick and label
+        write_to_file('''<line x1="''' + str(x_start - 10.5) + '''" y1="''' + str(neg_tick_y) + '''" x2="''' + str(x_start - 6.5) + '''" y2="''' + str(neg_tick_y) + '''" stroke="black" stroke-width="1" />''')
+        write_to_file('''<text text-anchor="end" font-family="Arial" x="''' + str(x_start - 14) + '''" y="''' + str(neg_tick_y + 4) + '''" font-size="''' + str(font_size_axis_y) + '''" >-''' + str(round(shared_max_val, 1)) + '''</text>''')
 def draw_standard_spark():
-    summary_func = np.max if point_stat == "max" else np.average
+    summary_func = np.average
     if len(control_data) > 1 and len(treat_data) > 1:
         last_xpos = -1
         coords = []  # y/x, spark color
@@ -351,7 +359,7 @@ parser.add_argument('-bedlab','--bed_labels', help='set labels for bed tracks', 
 parser.add_argument('-w','--track_width', help='width of the track, default = 150, int', required=False, type=int, default=150)
 parser.add_argument('-dg','--display_genes', help='genes to display from the gtf file', nargs='+', required=False, type=str)
 parser.add_argument('--max_points', help='maximum datapoints per plot', required=False, type=int, default=2000)
-parser.add_argument('--point_stat', help='per-point statistic: average or max', required=False, type=str, default='average')
+parser.add_argument('--point_stat', help='per-bin statistic for downsampling: average or max', required=False, type=str, default='average')
 parser.add_argument('--y_scale', help='scale factor for y-axis', required=False, type=float, default=1.0)
 parser.add_argument('--x_scale', help='scale factor for x-axis', required=False, type=float, default=1.0)
 parser.add_argument('-dt','--display_transcripts', help='display custom transcripts. By default, all transcripts annotated in the gtf file will be merged and displayed as one gene. Alternatively all can be plotted seperatelly by setting this to "all". Further, Transcript IDs can be listed to plot only certain transcripts', nargs='+', required=False, type=str, default=["mergeall"])
@@ -745,27 +753,26 @@ for group in range(nr_of_groups):
             print("Error: STD plots require at least 2 control and treatment files per plot")
 
     elif plot_type == "sine": # treat points up, control points down #FIX combined with averages does not work
-        # Compute separate positive/negative maxima for independent axis labels and scaling
+        # Compute shared max so positive/negative sides use the same y-scale
         pos_max_value = 0
         neg_max_value = 0
         if treat_data:
             pos_max_value = max(max(abs(v) for v in data) for data in treat_data)
         if control_data:
             neg_max_value = max(max(abs(v) for v in data) for data in control_data)
+        shared_max_value = max(pos_max_value, neg_max_value)
         # Respect custom scales or group autoscale by overriding both sides equally
         if custom_scales is not None and custom_scales[group] != "D":
-            pos_max_value = float(custom_scales[group])
-            neg_max_value = float(custom_scales[group])
+            shared_max_value = float(custom_scales[group])
         elif group_autoscale == "yes" and ((group + 1) not in group_autoscale_excluded):
-            pos_max_value = max_value
-            neg_max_value = max_value
+            shared_max_value = max_value
 
         if len(control_data) >= 1 and len(treat_data) >= 1:
             for datafile in control_data:
                 coords = []  # y, x
                 for x, value in enumerate(datafile):
                     x_pos = x_start + (x * quantile)
-                    coords.append([-1 * get_relative_hight_custom(value, neg_max_value), x_pos])
+                    coords.append([-1 * get_relative_hight_custom(value, shared_max_value), x_pos])
                 coords[-1][0] = 0
                 coords[0][0] = 0
                 write_to_file(draw_polygon(coords, opacity, fills[0], stroke_width))
@@ -773,7 +780,7 @@ for group in range(nr_of_groups):
                 coords = []  # y, x
                 for x, value in enumerate(datafile):
                     x_pos = x_start + (x * quantile)
-                    coords.append([get_relative_hight_custom(value, pos_max_value), x_pos])
+                    coords.append([get_relative_hight_custom(value, shared_max_value), x_pos])
                 coords[-1][0] = 0
                 coords[0][0] = 0
                 write_to_file(draw_polygon(coords, opacity, fills[1], stroke_width))
@@ -852,8 +859,8 @@ for group in range(nr_of_groups):
                         write_to_file(draw_polygon(coords, 0.8, spark_color[1], stroke_width_spark))
         else:
             print("Error: no input files for treatment and/or control")
-        # Draw y-axis for this group (sine) with independent labels
-        draw_sine_axis_for_group(y_start, pos_max_value, neg_max_value)
+        # Draw y-axis for this group (sine) with shared scale and symmetric labels
+        draw_sine_axis_for_group(y_start, shared_max_value)
 
 # Scalebar
 if display_scalebar == "yes":

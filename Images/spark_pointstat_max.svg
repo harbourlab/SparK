@@ -1,0 +1,9 @@
+<svg style="background:#ffffff" viewBox="0 0 320 210.0" xmlns="http://www.w3.org/2000/svg">
+<polygon points="50.0,100.0 57.5,91.5625 65.0,73.0 72.5,91.5625 80.0,93.86363636363636 87.5,91.5625 95.0,93.86363636363636 102.5,73.0 110.0,93.86363636363636 117.5,91.5625 125.0,93.86363636363636 132.5,73.0 140.0,93.86363636363636 147.5,91.5625 155.0,93.86363636363636 162.5,73.0 170.0,93.86363636363636 177.5,73.0 185.0,93.86363636363636 192.5,100.0" opacity="1" fill="#0000C1" stroke="black" stroke-width="0"/>
+<line x1="40" y1="100.0" x2="40" y2="70.0" stroke="black" stroke-width="1" />
+<line x1="39.5" y1="100.0" x2="43.5" y2="100.0" stroke="black" stroke-width="1" />
+<line x1="39.5" y1="70.0" x2="43.5" y2="70.0" stroke="black" stroke-width="1" />
+<text text-anchor="end" font-family="Arial" x="36" y="104.0" font-size="8" >0</text>
+<text text-anchor="end" font-family="Arial" x="36" y="74.0" font-size="8" >96.8</text>
+<text text-anchor="start" font-family="Arial" x="39.5" y="66.0" font-size="7" >Chr1: 0-1,000</text>
+</svg>
